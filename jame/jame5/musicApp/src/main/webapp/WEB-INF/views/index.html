@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Music App</title>
+    <link rel="stylesheet" href="/assets/bootstrap/v5-0-2/css/bootstrap.min.css">
+</head>
+<body>
+<div>
+    <a class="btn btn-primary btn-outline-light" th:href="@{/music/create}">
+        Create
+    </a>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <table class="table">
+            <thead>
+            <th>Name of Song</th>
+            <th>Name of Singer</th>
+            <th>Type Music</th>
+            <th>Link</th>
+            <th colspan="2" class="text-center">Action</th>
+            </thead>
+            <tbody>
+            <tr  th:each="s : ${Songs}">
+                <td th:text="${s.nameOfSong}"></td>
+                <td th:text="${s.nameOfSinger}"></td>
+                <td th:text="${s.typeOfSong}"></td>
+                <td>
+                    <audio controls>
+                        <source th:src="@{'/music/' + ${s.url}}">
+                    </audio>
+                </td>
+                <td><a th:href="@{/music/update/{nameOfSong}(name=${s.nameOfSong})}" th:text="Update"></a></td>
+                <td><a th:href="@{/music/delete}" th:text="Delete"></a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
