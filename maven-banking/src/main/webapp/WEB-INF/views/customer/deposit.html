@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.css">
+    <script type="text/javascript" src="/bootstrap/js/jquery-3.6.0.js"></script>
+    <script type="text/javascript" src="/bootstrap/js/bootstrap.js"></script>
+</head>
+<style>
+    body {
+        box-sizing: border-box;
+    }
+
+    .w-90 {
+        width: 90%;
+    }
+
+    .margin-left-20 {
+        margin-left: 20px;
+    }
+    .margin-top-20{
+        margin-top: 20px;
+    }
+
+    .table-right {
+        float: right;
+        box-sizing: border-box;
+        margin: 10px 10px;
+    }
+
+    .table-title {
+        height: 100px;
+        box-sizing: border-box;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
+    .table-title-content {
+        padding: 20px 20px;
+    }
+</style>
+
+<body>
+    <div class="container-fluid">
+        <div class="table container-fluid w-90">
+            <div class="bg-primary table-title">
+                <div class="row margin-left-20">
+                    <div class="col-7 table-title-content text-light">
+                        <h2>Deposit money into customer's account</h2>
+                    </div>
+                    <div class="col-5 table-title-content">
+                        <a th:href="@{/customer}" class="btn btn-outline-light table-right">
+                            <i class="fa-solid fa-bars"></i>
+                            <span>List Of Customer</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <form th:object="${deposit}" method="post" class=" table container-fluid w-90">
+            <div class="form-group row">
+                <div class="col-md-6 margin-top-20">
+                    <div class="form-group row">
+                        <label class="form-label font-weight-bold">Customer ID</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="w-100 form-control" id="customerID" readonly th:field="*{customerId}">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 margin-top-20">
+                    <div class="form-group row">
+                        <label class="form-label font-weight-bold">Full Name</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="w-100 form-control" id="fullName" readonly th:field="${customer.fullName}">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 margin-top-20">
+                    <div class="form-group row">
+                        <label class="form-label font-weight-bold">Current balance ($)</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="w-100 form-control" id="current" readonly th:field="${customer.balance}" maxlength="11">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 margin-top-20">
+                    <div class="form-group row">
+                        <label class="form-label font-weight-bold">Transaction Amount ($)</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="w-100 form-control" id="transactionAmount" name="transactionAmount" th:field="*{transactionAmount}">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 margin-top-20">
+                    <button type="submit" class="btn btn-outline-success">
+                        <i class="fa-solid fa-plus"></i>
+                        Deposit
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="footer mb-1">
+        <div id="message-alert">
+            <th:block th:if="${script} == true">
+                <div class="alert-danger">
+                    <h5>Please correct errors below:</h5>
+                    <ul>
+                        <li th:each="err : ${#fields.errors('deposit.*')}" th:text="${err}"></li>
+                    </ul>
+                </div>
+            </th:block>
+            <th:block th:if="${success}">
+                <div class="alert-success">
+                    <h5><span th:text="${success}"></span></h5>
+                </div>
+                <span id="close">X</span>
+                <script th:inline="javascript">
+                    $("#close").on("click", function () {
+                        $(".footer").css("height", 0);
+                        $("#message-alert").empty();
+                    });
+
+                    $(".alert-success").fadeTo(5000, 500).fadeOut(1000, function () {
+                        $(".footer").css("height", 0);
+                        $("#message-alert").empty();
+                    });
+                </script>
+            </th:block>
+        </div>
+    </div>
+</body>
+
+
+</html>

@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="maven-banking:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>maven-banking</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="maven-banking-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="maven-banking:war exploded" />
+    </root>
+  </artifact>
+</component>

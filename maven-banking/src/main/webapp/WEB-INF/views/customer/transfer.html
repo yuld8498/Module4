@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.css">
+    <script type="text/javascript" src="/bootstrap/js/jquery-3.6.0.js"></script>
+    <script type="text/javascript" src="/bootstrap/js/bootstrap.js"></script>
+</head>
+<style>
+    body {
+        box-sizing: border-box;
+    }
+
+    .border-1px{
+        border: 1px solid black;
+    }
+    .w-90 {
+        width: 90%;
+    }
+
+    .margin-left-20 {
+        margin-left: 20px;
+    }
+    .margin-top-20{
+        margin-top: 20px;
+    }
+
+    .table-right {
+        float: right;
+        box-sizing: border-box;
+        margin: 10px 10px;
+    }
+
+    .table-title {
+        height: 100px;
+        box-sizing: border-box;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
+    .table-title-content {
+        padding: 20px 20px;
+    }
+    select>option{
+        border: none;
+        width: 100%;
+    }
+</style>    
+<body>
+    <div class="container-fluid">
+        <div class="table container-fluid w-90">
+            <div class="bg-primary table-title">
+                <div class="row margin-left-20">
+                    <div class="col-7 table-title-content text-light">
+                        <h1>Transfer money Information</h1>
+                    </div>
+                    <div class="col-5 table-title-content">
+                        <a th:href="@{/customer}" class="btn btn-outline-light table-right">
+                            <i class="fa-solid fa-bars"></i>
+                            <span>List Of Customer</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <form th:object="${customer}" class=" table container-fluid w-90" method="post">
+            <div class="form-group row">
+                <div class="col-md-3 margin-top-20">
+                    <div class="form-group row">
+                        <label class="form-label font-weight-bold">Sender ID</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="w-100 form-control" id="senderID" readonly th:field="*{id}">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 margin-top-20">
+                    <div class="form-group row">
+                        <label class="form-label font-weight-bold">Sender Name</label>
+                        <div class="col-sm-12">
+                             <input type="text" class="w-100 form-control" id="senderName" readonly th:field="*{fullName}">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 margin-top-20">
+                    <div class="form-group row">
+                        <label class="form-label font-weight-bold">Email</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="w-100 form-control" id="email" readonly th:field="*{email}">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 margin-top-20">
+                    <div class="form-group row">
+                        <label class="form-label font-weight-bold">Sender balance</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="w-100 form-control" id="senderBalance" readonly th:field="*{balance}">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 margin-top-20">
+                    <div class="form-group row">
+                        <label class="form-label font-weight-bold">Recipient Name</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="w-100 form-control" id="recipientName">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 margin-top-20">
+                    <div class="form-group row">
+                        <label class="form-label font-weight-bold">Transfer Amount ($)</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="w-100 form-control" id="transferAmount">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 margin-top-20">
+                    <div class="form-group row">
+                        <label class="form-label font-weight-bold">Fees (%)</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="w-100 form-control" id="fees" readonly value="10%">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 margin-top-20">
+                    <div class="form-group row">
+                        <label class="form-label font-weight-bold">Total amount of transaction ($)</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="w-100 form-control" id="total" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 margin-top-20">
+                    <button type="submit" class="btn btn-outline-primary">
+                        <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                        Transfer
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>
