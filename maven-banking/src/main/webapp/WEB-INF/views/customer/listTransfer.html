@@ -2,64 +2,9 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
-        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous"> -->
-    <link rel="stylesheet" href="../bootstrap/css/bootstrap.css">
-    <script type="text/javascript" src="../bootstrap/js/jquery-3.6.0.js"></script>
-    <script type="text/javascript" src="../bootstrap/js/bootstrap.bundle.js"></script>
-    <script type="text/javascript" src="../bootstrap/js/popper-v1.16.0.min.js"></script>
-    <script type="text/javascript" src="../bootstrap/js/bootstrap.js"></script>
+    <title>Transfer List</title>
+    <th:block th:replace="/layout/head :: head" />
 </head>
-<style>
-    body {
-        padding: 0;
-        margin: 0;
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-    }
-
-    .table-center {
-        text-align: center;
-    }
-
-    .table-right {
-        float: right;
-        box-sizing: border-box;
-        margin: 10px 10px;
-    }
-
-    .float-right {
-        text-align: right;
-    }
-
-    .float-center {
-        text-align: center;
-    }
-
-    .table-title {
-        height: 100px;
-        box-sizing: border-box;
-        border-top-left-radius: 5px;
-        border-top-right-radius: 5px;
-    }
-
-    .border-1-radius {
-        border: 1px solid black;
-        border-radius: 5px;
-        padding: 10px;
-    }
-
-    .w-90 {
-        width: 90%;
-    }
-
-    .table-title-content {
-        padding: 20px 20px;
-    }
-
-</style>
 
 <body>
 <div>
@@ -101,9 +46,10 @@
                         <td th:text="${item.senderName}"></td>
                         <td th:text="${item.recipientId}" class="text-center"></td>
                         <td th:text="${item.recipientName}"></td>
-                        <td th:text="${item.transferAmount}" class="text-right"></td>
-                        <td th:text="${item.fees}" class="text-center"></td>
-                        <td th:text="${item.feesAmount}" class="text-right"></td>
+                        <td th:text="${#numbers.formatDecimal(item.transferAmount,0,'COMMA',0,'POINT')}" class="text-right"></td>
+                        <td th:text="${#numbers.formatDecimal(item.fees,0,'COMMA',0,'POINT')}" class="text-center"></td>
+<!--                        <td th:text="${item.feesAmount}" class="text-right"></td>-->
+                        <td th:text="${#numbers.formatDecimal(item.feesAmount,0,'COMMA',0,'POINT')}" class="text-right"></td>
                     </tr>
                 </th:block>
                 </tbody>
@@ -111,11 +57,15 @@
         </div>
     </div>
 </div>
-<script src="https://kit.fontawesome.com/dccec83b30.js" crossorigin="anonymous"></script>
+<th:block th:replace="/layout/footer::footer"/>
 </body>
 <script>
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
     })
+    Number.prototype.format = function(n, x) {
+        var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
+        return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
+    };
 </script>
 </html>

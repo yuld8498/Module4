@@ -2,105 +2,10 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
-        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous"> -->
-    <link rel="stylesheet" href="../bootstrap/css/bootstrap.css">
-    <script type="text/javascript" src="../bootstrap/js/jquery-3.6.0.js"></script>
-    <script type="text/javascript" src="../bootstrap/js/bootstrap.bundle.js"></script>
-    <script type="text/javascript" src="../bootstrap/js/popper-v1.16.0.min.js"></script>
-    <script type="text/javascript" src="../bootstrap/js/bootstrap.js"></script>
+    <title>Banking</title>
+    <th:block th:replace="/layout/head :: head" />
 </head>
-<style>
-    body {
-        padding: 0;
-        margin: 0;
-        box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-    }
 
-    .table-center {
-        text-align: center;
-    }
-
-    .table-right {
-        float: right;
-        box-sizing: border-box;
-        margin: 10px 10px;
-    }
-
-    .float-right {
-        text-align: right;
-    }
-
-    .float-center {
-        text-align: center;
-    }
-
-    .table-title {
-        height: 100px;
-        box-sizing: border-box;
-        border-top-left-radius: 5px;
-        border-top-right-radius: 5px;
-    }
-
-    .border-1-radius {
-        border: 1px solid black;
-        border-radius: 5px;
-        padding: 10px;
-    }
-
-    .w-90 {
-        width: 90%;
-    }
-
-    .table-title-content {
-        padding: 20px 20px;
-    }
-
-    .edit-hover:hover {
-        background-color: gray;
-        color: rgb(238, 242, 246);
-        cursor: pointer;
-    }
-
-    .deposit-hover:hover {
-        background-color: rgb(17, 168, 17);
-        color: aliceblue;
-        cursor: pointer;
-    }
-
-    .text-color-blue {
-        color: blue;
-    }
-
-    .text-color-yellow {
-        color: rgb(206, 177, 33);
-    }
-
-    .text-color-red {
-        color: red;
-    }
-
-    .widthdraw-hover:hover {
-        background-color: rgb(206, 177, 33);
-        color: black;
-        cursor: pointer;
-    }
-
-    .transfer-hover:hover {
-        background-color: rgb(82, 96, 249);
-        color: aliceblue;
-        cursor: pointer;
-    }
-
-    .suspended-hover:hover {
-        color: aliceblue;
-        background-color: rgb(201, 23, 23);
-        cursor: pointer;
-    }
-</style>
 
 <body>
 <div>
@@ -145,7 +50,7 @@
                         <td th:text="${customer.email}"></td>
                         <td th:text="${customer.phone}"></td>
                         <td th:text="${customer.address}"></td>
-                        <td th:text="${customer.balance}"></td>
+                        <td th:text="${#numbers.formatDecimal(customer.balance,0,'COMMA',0,'POINT')}"></td>
                         <td class="text-center">
                             <a th:href="@{/customer/deposit/__${customer.getId()}__ }"
                                class="fa-solid fa-plus border-1-radius text-color-blue deposit-hover text-decoration-none"
@@ -177,7 +82,7 @@
         </div>
     </div>
 </div>
-<script src="https://kit.fontawesome.com/dccec83b30.js" crossorigin="anonymous"></script>
+<th:block th:replace="/layout/footer::footer"/>
 </body>
 <script>
     $(function () {

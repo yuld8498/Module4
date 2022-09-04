@@ -2,50 +2,9 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="/bootstrap/css/bootstrap.css">
-    <script type="text/javascript" src="/bootstrap/js/jquery-3.6.0.js"></script>
-    <script type="text/javascript" src="/bootstrap/js/bootstrap.js"></script>
+    <title>WithDraw</title>
+    <th:block th:replace="/layout/head :: head" />
 </head>
-<style>
-    body {
-        box-sizing: border-box;
-    }
-
-    .w-90 {
-        width: 90%;
-    }
-
-    .margin-left-20 {
-        margin-left: 20px;
-    }
-    .margin-top-20{
-        margin-top: 20px;
-    }
-
-    .table-right {
-        float: right;
-        box-sizing: border-box;
-        margin: 10px 10px;
-    }
-
-    .table-title {
-        height: 100px;
-        box-sizing: border-box;
-        border-top-left-radius: 5px;
-        border-top-right-radius: 5px;
-    }
-
-    .table-title-content {
-        padding: 20px 20px;
-    }
-    .margin-bottom-30{
-        margin-bottom: 30px;
-    }
-</style>
 
 <body>
     <div class="container-fluid">
@@ -53,7 +12,7 @@
             <div class="bg-info table-title">
                 <div class="row margin-left-20">
                     <div class="col-7 table-title-content text-light">
-                        <h2>Withdraw money from the customer's account</h2>
+                        <h3>Withdraw money from the customer's account</h3>
                     </div>
                     <div class="col-5 table-title-content">
                         <a th:href="@{/customer}" class="btn btn-outline-light table-right">
@@ -64,33 +23,84 @@
                 </div>
             </div>
         </div>
-        <form class=" table container-fluid w-90">
-            <div class="form-group row input-group-lg">
+        <form class=" table container-fluid w-90" th:object="${withdraw}" method="post">
+            <div class="form-group row">
                 <div class="col-md-6 margin-top-20">
-                    <label class="form-label font-weight-bold">Customer ID</label>
-                    <input type="text" class="w-100 form-control" id="customerID" readonly>
-                </div>
-                <div class="col-md-6 margin-top-20">
-                    <label class="form-label font-weight-bold">Full Name</label>
-                    <input type="text" class="w-100 form-control" id="fullName" readonly>
-                </div>
-                <div class="col-md-6 margin-top-20">
-                    <label class="form-label font-weight-bold">Current balance ($)</label>
-                    <input type="text" class="w-100 form-control" id="currentBalance" readonly>
+                    <div class="form-group row">
+                        <label class="form-label font-weight-bold">Customer ID</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="w-100 form-control" id="customerID" readonly th:field="*{customerId}">
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-6 margin-top-20">
-                    <label class="form-label font-weight-bold">Transaction Amount ($)</label>
-                    <input type="text" class="w-100 form-control" id="transactionAmount">
+                    <div class="form-group row">
+                        <label class="form-label font-weight-bold">Full Name</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="w-100 form-control" id="fullName" readonly th:value="${customer.fullName}">
+                        </div>
+                    </div>
                 </div>
-                <div class="col-12 margin-top-20 ">
-                    <button type="submit" class="btn btn-outline-warning">
-                        <i class="fa-solid fa-minus"></i>
-                        Widthdraw
-                    </button>
+                <div class="col-md-6 margin-top-20">
+                    <div class="form-group row">
+                        <label class="form-label font-weight-bold">Current balance ($)</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="w-100 form-control" id="balance" readonly th:value="${customer.balance}">
+                        </div>
+                    </div>
                 </div>
+                <div class="col-md-6 margin-top-20">
+                    <div class="form-group row">
+                        <label class="form-label font-weight-bold">Transaction Amount ($)</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="w-100 form-control" id="transactionAmount" th:field="*{transaction_amount}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 margin-top-20">
+                <button type="submit" class="btn btn-outline-warning">
+                    <i class="fa-solid fa-minus"></i>
+                    Withdraw
+                </button>
             </div>
         </form>
     </div>
+    <div class="footer w-100" style="bottom: 0" id="footer">
+        <div id="message-alert">
+            <th:block th:if="${errors}!=null">
+                <span class="float-left close" onclick="myFuntion()">X</span>
+                <div class="alert-danger">
+                    <h5>Error message:</h5>
+                    <ul>
+                        <li th:text="${errors}"></li>
+                    </ul>
+                </div>
+            </th:block>
+            <th:block th:if="${script} == true">
+                <span class="float-left" onclick="myFuntion()">X</span>
+                <div class="alert-danger">
+                    <h5>Please correct errors below:</h5>
+                    <ul>
+                        <li th:each="err : ${#fields.errors('withdraw.*')}" th:text="${err}"></li>
+                    </ul>
+                </div>
+            </th:block>
+            <th:block th:if="${success}!=null">
+                <span class="float-left" onclick="myFuntion()">X</span>
+                <div >
+                    <h5 class="alert-success pt-2 pl-2" th:text="${success}" style="height: 100px">
+                    </h5>
+                </div>
+            </th:block>
+        </div>
+    </div>
+    <th:block th:replace="/layout/footer::footer"/>
+    <script>
+        function myFuntion(){
+            document.getElementById("footer").classList.add("d-none");
+        }
+    </script>
 </body>
 
 </html>

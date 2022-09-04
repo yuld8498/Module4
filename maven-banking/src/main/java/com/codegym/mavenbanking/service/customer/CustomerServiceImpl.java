@@ -2,8 +2,10 @@ package com.codegym.mavenbanking.service.customer;
 
 import com.codegym.mavenbanking.model.Customer;
 import com.codegym.mavenbanking.model.Deposit;
+import com.codegym.mavenbanking.model.Withdraw;
 import com.codegym.mavenbanking.repository.ICustomerRepository;
 import com.codegym.mavenbanking.repository.IDepositRepository;
+import com.codegym.mavenbanking.repository.IWithdrawRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,8 @@ public class CustomerServiceImpl implements ICustomerService{
     private ICustomerRepository customerRepository;
     @Autowired
     private IDepositRepository depositRepository;
+    @Autowired
+    private IWithdrawRepository withdrawRepository;
 
     @Override
     public Iterable findAll() {
@@ -54,6 +58,12 @@ public class CustomerServiceImpl implements ICustomerService{
     public void doTransfer(Long senderID, Long recipientID, BigDecimal transactionAmount, BigDecimal transferAmount) {
         customerRepository.incrementBalance(transferAmount,recipientID);
         customerRepository.reduceBalance(transactionAmount,senderID);
+    }
+
+    @Override
+    public void doWithdraw(Withdraw withdraw) {
+        withdrawRepository.save(withdraw);
+        customerRepository.reduceBalance(withdraw.getTransaction_amount(), withdraw.getCustomerId());
     }
 
     @Override

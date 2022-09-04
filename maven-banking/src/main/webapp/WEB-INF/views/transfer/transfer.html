@@ -59,7 +59,7 @@
                         <h1>Transfer money Information</h1>
                     </div>
                     <div class="col-5 table-title-content">
-                        <a th:href="@{/WEB-INF/views/customer}" class="btn btn-outline-light table-right">
+                        <a th:href="@{/customer}" class="btn btn-outline-light table-right">
                             <i class="fa-solid fa-bars"></i>
                             <span>List Of Customer</span>
                         </a>
@@ -97,7 +97,7 @@
                     <div class="form-group row">
                         <label class="form-label font-weight-bold">Sender balance</label>
                         <div class="col-sm-12">
-                            <input type="text" class="w-100 form-control" id="senderBalance" readonly th:value="${customer.balance}">
+                            <input type="text" class="w-100 form-control" id="senderBalance" readonly th:value="${#numbers.formatDecimal(customer.balance,0,'COMMA',0,'POINT')}">
                         </div>
                     </div>
                 </div>

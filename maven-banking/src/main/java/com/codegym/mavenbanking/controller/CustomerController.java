@@ -4,6 +4,7 @@ import com.codegym.mavenbanking.model.Customer;
 import com.codegym.mavenbanking.model.Deposit;
 import com.codegym.mavenbanking.model.Items.TransferItem;
 import com.codegym.mavenbanking.model.Transfer;
+import com.codegym.mavenbanking.model.Withdraw;
 import com.codegym.mavenbanking.repository.IDepositRepository;
 import com.codegym.mavenbanking.service.customer.ICustomerService;
 import com.codegym.mavenbanking.service.transfer.ITransferService;
@@ -82,11 +83,39 @@ public class CustomerController {
         }
     }
 
+    //withdraw
     @GetMapping("/withdraw/{id}")
     public ModelAndView showFormWithdraw(@PathVariable Long id){
         ModelAndView modelAndView = new ModelAndView("/customer/withdraw");
-        Optional<Customer> customer = customerService.findById(id);
-        modelAndView.addObject("customer", customer.get());
+        Customer customer = customerService.findById(id).get();
+        Withdraw withdraw = new Withdraw();
+        withdraw.setCustomerId(customer.getId());
+        modelAndView.addObject("customer",customer);
+        modelAndView.addObject("withdraw",withdraw);
+        return modelAndView;
+    }
+
+    @PostMapping("/withdraw/{id}")
+    public ModelAndView doWithdraw(@PathVariable Long id,
+                                  @Validated @ModelAttribute("withdraw") Withdraw withdraw, BindingResult bindingResult){
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        ModelAndView modelAndView = new ModelAndView("/customer/withdraw");
+        modelAndView.addObject("customer", customerService.findById(id).get());
+        modelAndView.addObject("withdraw", withdraw);
+
+        if (bindingResult.hasFieldErrors()){
+            modelAndView.addObject("script",true);
+            return modelAndView;
+        }else {
+            if (customerService.findById(id).get().getBalance().compareTo(withdraw.getTransaction_amount())<0){
+                modelAndView.addObject("errors","insufficient balance");
+                return modelAndView;
+            }
+        }
+        withdraw.setCreated_at(timestamp);
+        customerService.doWithdraw(withdraw);
+        System.out.println(withdraw.toString());
+        modelAndView.addObject("success","Withdraw is successfully");
         return modelAndView;
     }
 

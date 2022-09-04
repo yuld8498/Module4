@@ -36,6 +36,12 @@ public class TransferController {
         transferItem.setSenderId(customer.getId());
         transferItem.setFees(10);
         transferItem.setSenderName(customer.getFullName());
+        for (Customer customer1 :customerList){
+            if (customer1.getId().equals(id)){
+                customerList.remove(customer1);
+                break;
+            }
+        }
         modelAndView.addObject("transferItem",transferItem);
         modelAndView.addObject("customer", customer);
         modelAndView.addObject("customerList", customerList);

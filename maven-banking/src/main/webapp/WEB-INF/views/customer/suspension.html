@@ -2,50 +2,9 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="/bootstrap/css/bootstrap.css">
-    <script type="text/javascript" src="/bootstrap/js/jquery-3.6.0.js"></script>
-    <script type="text/javascript" src="/bootstrap/js/bootstrap.js"></script>
+    <title>Suspension</title>
+    <th:block th:replace="/layout/head :: head" />
 </head>
-<style>
-    body {
-        box-sizing: border-box;
-    }
-
-    .w-90 {
-        width: 90%;
-    }
-
-    .margin-left-20 {
-        margin-left: 20px;
-    }
-    .margin-top-20{
-        margin-top: 20px;
-    }
-
-    .table-right {
-        float: right;
-        box-sizing: border-box;
-        margin: 10px 10px;
-    }
-
-    .table-title {
-        height: 100px;
-        box-sizing: border-box;
-        border-top-left-radius: 5px;
-        border-top-right-radius: 5px;
-    }
-
-    .table-title-content {
-        padding: 20px 20px;
-    }
-    .margin-bottom-30{
-        margin-bottom: 30px;
-    }
-</style>
 
 <body>
     <div class="container-fluid">
@@ -116,6 +75,7 @@
             </h5>
         </div>
     </th:block>
+    <th:block th:replace="/layout/footer::footer"/>
 </div>
 </body>
 
