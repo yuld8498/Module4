@@ -2,6 +2,8 @@ package com.codegym.mavenbanking.configuration;
 
 import com.codegym.mavenbanking.service.customer.CustomerServiceImpl;
 import com.codegym.mavenbanking.service.customer.ICustomerService;
+import com.codegym.mavenbanking.service.transfer.ITransferService;
+import com.codegym.mavenbanking.service.transfer.TranferService;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
@@ -49,6 +51,11 @@ public class AppConfig implements WebMvcConfigurer, ApplicationContextAware {
     public ICustomerService customerService(){
         return new CustomerServiceImpl();
     }
+    @Bean
+    public ITransferService transferService(){
+        return new TranferService();
+    }
+
 
     // Thymeleaf Configuration
     @Bean

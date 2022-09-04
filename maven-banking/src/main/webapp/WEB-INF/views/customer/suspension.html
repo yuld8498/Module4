@@ -50,7 +50,7 @@
 <body>
     <div class="container-fluid">
         <div class="table container-fluid w-90">
-            <div class="bg-primary table-title">
+            <div class="bg-info table-title">
                 <div class="row margin-left-20">
                     <div class="col-7 table-title-content text-light">
                         <h1>Suspension of customers</h1>
@@ -109,6 +109,14 @@
             </div>
         </form>
     </div>
+<div class="footer w-100" style="bottom: 0; position: fixed">
+    <th:block th:if="${success}!=null">
+        <div >
+            <h5 class="alert-success pt-2 pl-2" th:text="${success}" style="height: 100px">
+            </h5>
+        </div>
+    </th:block>
+</div>
 </body>
 
 </html>

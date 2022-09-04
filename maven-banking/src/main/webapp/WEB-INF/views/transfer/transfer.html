@@ -53,13 +53,13 @@
 <body>
     <div class="container-fluid">
         <div class="table container-fluid w-90">
-            <div class="bg-primary table-title">
+            <div class="bg-info table-title">
                 <div class="row margin-left-20">
                     <div class="col-7 table-title-content text-light">
                         <h1>Transfer money Information</h1>
                     </div>
                     <div class="col-5 table-title-content">
-                        <a th:href="@{/customer}" class="btn btn-outline-light table-right">
+                        <a th:href="@{/WEB-INF/views/customer}" class="btn btn-outline-light table-right">
                             <i class="fa-solid fa-bars"></i>
                             <span>List Of Customer</span>
                         </a>
@@ -105,7 +105,12 @@
                     <div class="form-group row">
                         <label class="form-label font-weight-bold">Recipient Name</label>
                         <div class="col-sm-12">
-                            <input type="text" class="w-100 form-control" id="recipientName">
+                            <select name="recipientName" id="recipientName" class="w-100 form-control">
+                                <th:block th:each="customersInlist : ${customerList}">
+                                    <option th:value="${customersInlist.fullName}" th:text="${customersInlist.fullName}"></option>
+                                </th:block>
+                            </select>
+<!--                            <input type="text" class="w-100 form-control" id="recipientName">-->
                         </div>
                     </div>
                 </div>

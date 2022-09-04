@@ -20,8 +20,14 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotEmpty(message = "The Full Name is required")
     private String fullName;
+
+    @NotEmpty(message = "The phone number is required.")
+    @Column(unique = true, nullable = false)
     private String phone;
+
+    @NotEmpty(message = "The address is required")
     private String address;
 
     @Digits(integer =  9, fraction = 0)

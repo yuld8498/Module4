@@ -7,6 +7,6 @@ import com.codegym.mavenbanking.service.IGeneralService;
 import java.math.BigDecimal;
 
 public interface ICustomerService extends IGeneralService<Customer> {
-    void doDeposit(Long customerId, BigDecimal transactionAmount, Deposit deposit);
-
+    Deposit doDeposit(Long customerId, BigDecimal transactionAmount, Deposit deposit);
+    Boolean existsByEmail(String email);
 }

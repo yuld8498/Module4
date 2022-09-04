@@ -1,15 +1,13 @@
 package com.codegym.mavenbanking.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.Date;
 
 
 @Entity
@@ -18,6 +16,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 public class Deposit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,8 +25,10 @@ public class Deposit {
     @Column(name = "customer_id")
     private Long customerId;
 
+    private Date createdAt;
+
     @NotNull(message = "The transaction amount is required")
     @DecimalMin(value = "49", message = "Transaction Amount must be greater than or equal to 50", inclusive = false)
     @DecimalMax(value = "10000001", message = "Transaction Amount must be less than or equal to 10.000.000", inclusive = false)
-    private BigDecimal transactionAmount;
+    private BigDecimal transaction_amount;
 }

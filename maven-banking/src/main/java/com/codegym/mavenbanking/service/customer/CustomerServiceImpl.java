@@ -3,11 +3,13 @@ package com.codegym.mavenbanking.service.customer;
 import com.codegym.mavenbanking.model.Customer;
 import com.codegym.mavenbanking.model.Deposit;
 import com.codegym.mavenbanking.repository.ICustomerRepository;
+import com.codegym.mavenbanking.repository.IDepositRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.Optional;
 
 @Service
@@ -16,6 +18,8 @@ public class CustomerServiceImpl implements ICustomerService{
 
     @Autowired
     private ICustomerRepository customerRepository;
+    @Autowired
+    private IDepositRepository depositRepository;
 
     @Override
     public Iterable findAll() {
@@ -39,7 +43,15 @@ public class CustomerServiceImpl implements ICustomerService{
     }
 
     @Override
-    public void doDeposit(Long customerId, BigDecimal transactionAmount, Deposit deposit) {
+    public Deposit doDeposit(Long customerId, BigDecimal transactionAmount, Deposit deposit) {
+        customerRepository.incrementBalance(transactionAmount,customerId);
+        System.out.println(deposit.toString());
+        depositRepository.save(deposit);
+        return deposit;
+    }
 
+    @Override
+    public Boolean existsByEmail(String email) {
+        return customerRepository.existsByEmail(email);
     }
 }

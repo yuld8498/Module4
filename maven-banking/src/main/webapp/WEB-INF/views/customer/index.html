@@ -106,7 +106,7 @@
 <div>
     <div class="table container-fluid w-90">
         <div class="table-header">
-            <div class="bg-primary table-title">
+            <div class="bg-info table-title">
                 <div class="row">
                     <div class="col-5 table-title-content">
                         <h1>List Of Customer</h1>
@@ -126,7 +126,7 @@
         </div>
         <div class="table-tab">
             <table class="w-100">
-                <thead class="w-100 border-none bg-success align-middle">
+                <thead class="w-100 border-none align-middle" style="background-color: #4CAF50">
                 <tr class="float-center">
                     <th>#</th>
                     <th>Full Name</th>
@@ -140,7 +140,7 @@
                 <tbody class="w-100 align-middle">
                 <th:block th:each="customer : ${customers}">
                     <tr>
-                        <td th:text="${customer.id}"></td>
+                        <td th:text="${customerStat.index+1}"></td>
                         <td th:text="${customer.fullName}"></td>
                         <td th:text="${customer.email}"></td>
                         <td th:text="${customer.phone}"></td>
@@ -159,7 +159,7 @@
                             ></a>
                         </td>
                         <td class="text-center">
-                            <a th:href="@{/customer/transfer/__${customer.getId()}__ }"
+                            <a th:href="@{/transfer/__${customer.getId()}__ }"
                                class="fa-solid fa-arrow-right-arrow-left border-1-radius text-color-blue transfer-hover text-decoration-none"
                                data-toggle="tooltip" data-placement="top" title="Transfer">
                             </a>

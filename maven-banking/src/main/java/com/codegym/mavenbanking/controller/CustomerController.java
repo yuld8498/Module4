@@ -2,12 +2,21 @@ package com.codegym.mavenbanking.controller;
 
 import com.codegym.mavenbanking.model.Customer;
 import com.codegym.mavenbanking.model.Deposit;
+import com.codegym.mavenbanking.model.Items.TransferItem;
+import com.codegym.mavenbanking.model.Transfer;
+import com.codegym.mavenbanking.repository.IDepositRepository;
 import com.codegym.mavenbanking.service.customer.ICustomerService;
+import com.codegym.mavenbanking.service.transfer.ITransferService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -15,6 +24,8 @@ import java.util.Optional;
 public class CustomerController {
     @Autowired
     private ICustomerService customerService;
+    @Autowired
+    private ITransferService transferService;
 
     @GetMapping("")
     public ModelAndView showListCustomer(){
@@ -25,16 +36,29 @@ public class CustomerController {
     @GetMapping("/create")
     public ModelAndView showFormCreate(){
         ModelAndView modelAndView = new ModelAndView("/customer/CreateCustomer");
+        modelAndView.addObject("customer", new Customer());
         return modelAndView;
     }
     @PostMapping("/create")
-    public ModelAndView saveCustomer(@ModelAttribute("customer") Customer customer) {
-        customerService.save(customer);
+    public ModelAndView saveCustomer(@Validated @ModelAttribute("customer") Customer customer, BindingResult bindingResult) {
         ModelAndView modelAndView = new ModelAndView("/customer/CreateCustomer");
-        modelAndView.addObject("customer", new Customer());
-        modelAndView.addObject("message", "New customer created successfully");
-        return modelAndView;
+        if (bindingResult.hasFieldErrors()){
+            modelAndView.addObject("script", true);
+            modelAndView.addObject("customer",customer);
+            return modelAndView;
+        }else if (customerService.existsByEmail(customer.getEmail())){
+            modelAndView.addObject("errors", "Email is already exists");
+            modelAndView.addObject("customer",  customer);
+            return modelAndView;
+            }else {
+            modelAndView.addObject("customer", new Customer());
+            modelAndView.addObject("success", "New customer created successfully");
+            customerService.save(customer);
+            return modelAndView;
+        }
     }
+
+    //Deposit
     @GetMapping("/deposit/{id}")
     public ModelAndView showFormDeposit(@PathVariable Long id){
         ModelAndView modelAndView = new ModelAndView("/customer/deposit");
@@ -44,13 +68,20 @@ public class CustomerController {
         modelAndView.addObject("deposit", deposit);
         return modelAndView;
     }
-    @GetMapping("/transfer/{id}")
-    public ModelAndView showFormTransfer(@PathVariable Long id){
-        ModelAndView modelAndView = new ModelAndView("/customer/transfer");
-        Optional<Customer> customer = customerService.findById(id);
-        modelAndView.addObject("customer", customer.get());
-        return modelAndView;
+    @PostMapping("/deposit/{id}")
+    public ModelAndView confirmDeposit(@Validated @ModelAttribute("deposit")Deposit deposit, BindingResult bindingResult){
+        ModelAndView modelAndView = new ModelAndView("/customer/deposit");
+        modelAndView.addObject("customer", customerService.findById(deposit.getCustomerId()).get());
+        if (bindingResult.hasFieldErrors()){
+            modelAndView.addObject("script", true);
+            return modelAndView;
+        }else {
+            modelAndView.addObject("success", "Successful deposit transaction");
+            customerService.doDeposit(deposit.getCustomerId(), deposit.getTransaction_amount(), deposit);
+            return modelAndView;
+        }
     }
+
     @GetMapping("/withdraw/{id}")
     public ModelAndView showFormWithdraw(@PathVariable Long id){
         ModelAndView modelAndView = new ModelAndView("/customer/withdraw");
@@ -58,6 +89,8 @@ public class CustomerController {
         modelAndView.addObject("customer", customer.get());
         return modelAndView;
     }
+
+    //Suspended
     @GetMapping("/suspended/{id}")
     public ModelAndView showFormSuspension(@PathVariable Long id){
         ModelAndView modelAndView = new ModelAndView("/customer/suspension");
@@ -72,7 +105,25 @@ public class CustomerController {
         ModelAndView modelAndView = new ModelAndView("/customer/suspension");
         modelAndView.addObject("customer",customer);
         modelAndView.addObject("suspended","complete");
-        modelAndView.addObject("message", "Customer suspended successfully");
+        modelAndView.addObject("success", "Customer suspended successfully");
+        return modelAndView;
+    }
+    //List Transfer
+    @GetMapping("/transfer")
+    public ModelAndView showListTransfer(){
+        List<TransferItem> items = new ArrayList<>();
+        ModelAndView modelAndView = new ModelAndView("/customer/listTransfer");
+
+        List<Transfer> transferList = (List<Transfer>) transferService.findAll();
+        for (Transfer transfer : transferList){
+            TransferItem transferItem = new TransferItem(transfer.getSenderId(),
+                    transfer.getRecipientId(),transfer.getTransferAmount(),transfer.getFees(),transfer.getFeesAmount());
+            transferItem.setSenderName(customerService.findById(transfer.getSenderId()).get().getFullName());
+            transferItem.setRecipientName(customerService.findById(transfer.getRecipientId()).get().getFullName());
+            items.add(transferItem);
+        }
+        modelAndView.addObject("items", items);
+
         return modelAndView;
     }
 }
