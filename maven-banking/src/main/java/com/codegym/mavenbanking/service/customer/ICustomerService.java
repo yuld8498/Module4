@@ -8,5 +8,6 @@ import java.math.BigDecimal;
 
 public interface ICustomerService extends IGeneralService<Customer> {
     Deposit doDeposit(Long customerId, BigDecimal transactionAmount, Deposit deposit);
+    void doTransfer(Long senderID, Long recipientID, BigDecimal transactionAmount, BigDecimal transferAmount);
     Boolean existsByEmail(String email);
 }

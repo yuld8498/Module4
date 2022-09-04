@@ -51,6 +51,12 @@ public class CustomerServiceImpl implements ICustomerService{
     }
 
     @Override
+    public void doTransfer(Long senderID, Long recipientID, BigDecimal transactionAmount, BigDecimal transferAmount) {
+        customerRepository.incrementBalance(transferAmount,recipientID);
+        customerRepository.reduceBalance(transactionAmount,senderID);
+    }
+
+    @Override
     public Boolean existsByEmail(String email) {
         return customerRepository.existsByEmail(email);
     }

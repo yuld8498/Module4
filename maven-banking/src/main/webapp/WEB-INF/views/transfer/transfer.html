@@ -67,13 +67,13 @@
                 </div>
             </div>
         </div>
-        <form th:object="${customer}" class=" table container-fluid w-90" method="post">
+        <form th:object="${transferItem}" class=" table container-fluid w-90" method="post">
             <div class="form-group row">
                 <div class="col-md-3 margin-top-20">
                     <div class="form-group row">
                         <label class="form-label font-weight-bold">Sender ID</label>
                         <div class="col-sm-12">
-                            <input type="text" class="w-100 form-control" id="senderID" readonly th:field="*{id}">
+                            <input type="text" class="w-100 form-control" id="senderID" readonly th:field="*{senderId}">
                         </div>
                     </div>
                 </div>
@@ -81,7 +81,7 @@
                     <div class="form-group row">
                         <label class="form-label font-weight-bold">Sender Name</label>
                         <div class="col-sm-12">
-                             <input type="text" class="w-100 form-control" id="senderName" readonly th:field="*{fullName}">
+                             <input type="text" class="w-100 form-control" id="senderName" readonly th:field="*{senderName}">
                         </div>
                     </div>
                 </div>
@@ -89,7 +89,7 @@
                     <div class="form-group row">
                         <label class="form-label font-weight-bold">Email</label>
                         <div class="col-sm-12">
-                            <input type="text" class="w-100 form-control" id="email" readonly th:field="*{email}">
+                            <input type="text" class="w-100 form-control" id="email" readonly th:value="${customer.email}">
                         </div>
                     </div>
                 </div>
@@ -97,7 +97,7 @@
                     <div class="form-group row">
                         <label class="form-label font-weight-bold">Sender balance</label>
                         <div class="col-sm-12">
-                            <input type="text" class="w-100 form-control" id="senderBalance" readonly th:field="*{balance}">
+                            <input type="text" class="w-100 form-control" id="senderBalance" readonly th:value="${customer.balance}">
                         </div>
                     </div>
                 </div>
@@ -105,9 +105,9 @@
                     <div class="form-group row">
                         <label class="form-label font-weight-bold">Recipient Name</label>
                         <div class="col-sm-12">
-                            <select name="recipientName" id="recipientName" class="w-100 form-control">
+                            <select name="recipientName" id="recipientName" class="w-100 form-control" th:field="*{recipientId}">
                                 <th:block th:each="customersInlist : ${customerList}">
-                                    <option th:value="${customersInlist.fullName}" th:text="${customersInlist.fullName}"></option>
+                                    <option th:value="${customersInlist.id}" th:text="${customersInlist.fullName}"></option>
                                 </th:block>
                             </select>
 <!--                            <input type="text" class="w-100 form-control" id="recipientName">-->
@@ -118,7 +118,7 @@
                     <div class="form-group row">
                         <label class="form-label font-weight-bold">Transfer Amount ($)</label>
                         <div class="col-sm-12">
-                            <input type="text" class="w-100 form-control" id="transferAmount">
+                            <input type="text" class="w-100 form-control" id="transferAmount" th:field="*{transferAmount}" onkeyup="totalAmount()">
                         </div>
                     </div>
                 </div>
@@ -126,7 +126,7 @@
                     <div class="form-group row">
                         <label class="form-label font-weight-bold">Fees (%)</label>
                         <div class="col-sm-12">
-                            <input type="text" class="w-100 form-control" id="fees" readonly value="10%">
+                            <input type="text" class="w-100 form-control" id="fees" readonly value="10%" th:field="*{fees}">
                         </div>
                     </div>
                 </div>
@@ -134,7 +134,7 @@
                     <div class="form-group row">
                         <label class="form-label font-weight-bold">Total amount of transaction ($)</label>
                         <div class="col-sm-12">
-                            <input type="text" class="w-100 form-control" id="total" readonly>
+                            <input type="text" class="w-100 form-control" id="total" readonly th:field="*{transactionAmount}">
                         </div>
                     </div>
                 </div>
@@ -147,6 +147,46 @@
             </div>
         </form>
     </div>
+    <div class="footer w-100" style="bottom: 0; position: fixed" id="footer">
+        <div id="message-alert">
+            <th:block th:if="${errors}!=null">
+                <span class="float-left close" onclick="myFuntion()">X</span>
+                <div class="alert-danger">
+                    <h5>Error message:</h5>
+                    <ul>
+                        <li th:text="${errors}"></li>
+                    </ul>
+                </div>
+            </th:block>
+            <th:block th:if="${script} == true">
+                <span class="float-left" onclick="myFuntion()">X</span>
+                <div class="alert-danger">
+                    <h5>Please correct errors below:</h5>
+                    <ul>
+                        <li th:each="err : ${#fields.errors('transferItem.*')}" th:text="${err}"></li>
+                    </ul>
+                </div>
+            </th:block>
+            <th:block th:if="${success}!=null">
+                <span class="float-left" onclick="myFuntion()">X</span>
+                <div >
+                    <h5 class="alert-success pt-2 pl-2" th:text="${success}" style="height: 100px">
+                    </h5>
+                </div>
+            </th:block>
+        </div>
+    </div>
+    <script>
+        function myFuntion(){
+            document.getElementById("footer").classList.add("d-none");
+        }
+        function totalAmount(){
+            var transferAmount = parseInt(document.getElementById("transferAmount").value);
+            var fees = parseInt(document.getElementById("fees").value);
+            var transactionAmount = parseInt(transferAmount+transferAmount*(fees/100));
+            document.getElementById("total").setAttribute("value", transactionAmount);
+        }
+    </script>
 </body>
 
 </html>

@@ -22,4 +22,5 @@ public interface ICustomerRepository extends JpaRepository<Customer, Long> {
     void reduceBalance(@Param("transactionAmount") BigDecimal transactionAmount, @Param("id") Long id);
 
     Boolean existsByEmail(String email);
+    Customer findCustomerByFullName(String fullName);
 }

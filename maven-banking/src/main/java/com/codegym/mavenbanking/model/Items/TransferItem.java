@@ -1,15 +1,22 @@
 package com.codegym.mavenbanking.model.Items;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 public class TransferItem {
+
+    @NotNull(message = "Sender ID is required")
     private Long senderId;
     private String senderName;
+    @NotNull(message = "Recipient ID is required")
     private Long recipientId;
     private String recipientName;
+    @NotNull(message = "Transfer Amount is required")
     private BigDecimal transferAmount;
     private int fees;
     private BigDecimal feesAmount;
+    private BigDecimal transactionAmount;
 
     public TransferItem() {
     }
@@ -30,6 +37,26 @@ public class TransferItem {
         this.transferAmount = transferAmount;
         this.fees = fees;
         this.feesAmount = feesAmount;
+    }
+
+    public TransferItem(Long senderId, String senderName, Long recipientId,
+                        String recipientName, BigDecimal transferAmount, int fees, BigDecimal feesAmount, BigDecimal transactionAmount) {
+        this.senderId = senderId;
+        this.senderName = senderName;
+        this.recipientId = recipientId;
+        this.recipientName = recipientName;
+        this.transferAmount = transferAmount;
+        this.fees = fees;
+        this.feesAmount = feesAmount;
+        this.transactionAmount = transactionAmount;
+    }
+
+    public BigDecimal getTransactionAmount() {
+        return transactionAmount;
+    }
+
+    public void setTransactionAmount(BigDecimal transactionAmount) {
+        this.transactionAmount = transactionAmount;
     }
 
     public Long getSenderId() {
@@ -86,5 +113,19 @@ public class TransferItem {
 
     public void setFeesAmount(BigDecimal feesAmount) {
         this.feesAmount = feesAmount;
+    }
+
+    @Override
+    public String toString() {
+        return "TransferItem{" +
+                "senderId=" + senderId +
+                ", senderName='" + senderName + '\'' +
+                ", recipientId=" + recipientId +
+                ", recipientName='" + recipientName + '\'' +
+                ", transferAmount=" + transferAmount +
+                ", fees=" + fees +
+                ", feesAmount=" + feesAmount +
+                ", transactionAmount=" + transactionAmount +
+                '}';
     }
 }

@@ -1,14 +1,13 @@
 package com.codegym.mavenbanking.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Entity
 @Table(name = "transfers")
@@ -16,15 +15,18 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 public class Transfer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty
+    @NotNull
     private Long senderId;
 
-    @NotEmpty
+    private Date created_at;
+
+    @NotNull
     private Long recipientId;
 
     private int fees;
@@ -35,4 +37,12 @@ public class Transfer {
     @Column(updatable = false)
     private BigDecimal transferAmount;
     private BigDecimal transactionAmount;
+
+    public Transfer(Long senderId, Long recipientId, int fees, BigDecimal feesAmount, BigDecimal transferAmount) {
+        this.senderId = senderId;
+        this.recipientId = recipientId;
+        this.fees = fees;
+        this.feesAmount = feesAmount;
+        this.transferAmount = transferAmount;
+    }
 }
