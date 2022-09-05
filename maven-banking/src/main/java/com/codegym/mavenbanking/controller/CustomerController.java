@@ -134,11 +134,12 @@ public class CustomerController {
     }
     @PostMapping("/suspended/{id}")
     public ModelAndView Suspended(@PathVariable Long id,@ModelAttribute("customer") Customer customer) {
-        for (Transfer transfer: transferService.findAll()){
-            if (transfer.getSenderId().equals(customer.getId())||transfer.getRecipientId().equals(customer.getId())){
-                transferService.updateDeleted(transfer.getId());
-            }
-        }
+//        for (Transfer transfer: transferService.findAll()){
+//            if (transfer.getSenderId().equals(customer.getId())||transfer.getRecipientId().equals(customer.getId())){
+//                transferService.updateDeleted(transfer.getId());
+//            }
+//        }
+        transferService.updateDeleted(customer.getId());
         customerService.remove(id);
         ModelAndView modelAndView = new ModelAndView("/customer/suspension");
         modelAndView.addObject("customer",customer);

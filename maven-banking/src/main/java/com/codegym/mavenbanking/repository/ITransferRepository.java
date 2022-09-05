@@ -17,4 +17,7 @@ public interface ITransferRepository extends JpaRepository<Transfer, Long> {
     @Modifying(flushAutomatically = true)
     @Query("UPDATE Transfer t SET t.deleted = 1  WHERE t.id = :id ")
     void setDeleted(@Param("id") Long id);
+    @Modifying(flushAutomatically = true)
+    @Query("UPDATE Transfer t SET t.deleted = 1  WHERE t.senderId = :id or t.recipientId =:id ")
+    void setDeletedById(@Param("id") Long id);
 }

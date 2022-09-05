@@ -49,7 +49,8 @@ public class TranferService implements ITransferService{
 
     @Override
     public void updateDeleted(Long customerId) {
-        transferRepository.setDeleted(customerId);
+//        transferRepository.setDeleted(customerId);
+        transferRepository.setDeletedById(customerId);
     }
 
 }
