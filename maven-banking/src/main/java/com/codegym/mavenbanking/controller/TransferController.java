@@ -70,8 +70,10 @@ public class TransferController {
                 modelAndView.addObject("errors","insufficient balance");
                 return modelAndView;
             }
-            transferService.save(transfer);
             customerService.doTransfer(transfer.getSenderId(), transfer.getRecipientId(), transfer.getTransactionAmount(),transfer.getTransferAmount());
+            transferService.save(transfer);
+            customer = customerService.findById(id).get();
+            modelAndView.addObject("customer", customer);
             modelAndView.addObject("success","Transfer is successfully");
             return modelAndView;
         }

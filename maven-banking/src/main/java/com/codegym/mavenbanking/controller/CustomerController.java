@@ -15,6 +15,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +53,7 @@ public class CustomerController {
             modelAndView.addObject("customer",  customer);
             return modelAndView;
             }else {
+            customer.setBalance(new BigDecimal(0));
             modelAndView.addObject("customer", new Customer());
             modelAndView.addObject("success", "New customer created successfully");
             customerService.save(customer);
@@ -72,13 +74,14 @@ public class CustomerController {
     @PostMapping("/deposit/{id}")
     public ModelAndView confirmDeposit(@Validated @ModelAttribute("deposit")Deposit deposit, BindingResult bindingResult){
         ModelAndView modelAndView = new ModelAndView("/customer/deposit");
-        modelAndView.addObject("customer", customerService.findById(deposit.getCustomerId()).get());
         if (bindingResult.hasFieldErrors()){
+            modelAndView.addObject("customer", customerService.findById(deposit.getCustomerId()).get());
             modelAndView.addObject("script", true);
             return modelAndView;
         }else {
-            modelAndView.addObject("success", "Successful deposit transaction");
             customerService.doDeposit(deposit.getCustomerId(), deposit.getTransaction_amount(), deposit);
+            modelAndView.addObject("customer", customerService.findById(deposit.getCustomerId()).get());
+            modelAndView.addObject("success", "Successful deposit transaction");
             return modelAndView;
         }
     }
@@ -100,21 +103,22 @@ public class CustomerController {
                                   @Validated @ModelAttribute("withdraw") Withdraw withdraw, BindingResult bindingResult){
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         ModelAndView modelAndView = new ModelAndView("/customer/withdraw");
-        modelAndView.addObject("customer", customerService.findById(id).get());
         modelAndView.addObject("withdraw", withdraw);
 
         if (bindingResult.hasFieldErrors()){
+            modelAndView.addObject("customer", customerService.findById(id).get());
             modelAndView.addObject("script",true);
             return modelAndView;
         }else {
             if (customerService.findById(id).get().getBalance().compareTo(withdraw.getTransaction_amount())<0){
+                modelAndView.addObject("customer", customerService.findById(id).get());
                 modelAndView.addObject("errors","insufficient balance");
                 return modelAndView;
             }
         }
         withdraw.setCreated_at(timestamp);
         customerService.doWithdraw(withdraw);
-        System.out.println(withdraw.toString());
+        modelAndView.addObject("customer", customerService.findById(id).get());
         modelAndView.addObject("success","Withdraw is successfully");
         return modelAndView;
     }
@@ -130,6 +134,11 @@ public class CustomerController {
     }
     @PostMapping("/suspended/{id}")
     public ModelAndView Suspended(@PathVariable Long id,@ModelAttribute("customer") Customer customer) {
+        for (Transfer transfer: transferService.findAll()){
+            if (transfer.getSenderId().equals(customer.getId())||transfer.getRecipientId().equals(customer.getId())){
+                transferService.updateDeleted(transfer.getId());
+            }
+        }
         customerService.remove(id);
         ModelAndView modelAndView = new ModelAndView("/customer/suspension");
         modelAndView.addObject("customer",customer);
@@ -142,17 +151,20 @@ public class CustomerController {
     public ModelAndView showListTransfer(){
         List<TransferItem> items = new ArrayList<>();
         ModelAndView modelAndView = new ModelAndView("/customer/listTransfer");
-
-        List<Transfer> transferList = (List<Transfer>) transferService.findAll();
+        BigDecimal total = new BigDecimal(0.0);
+        List<Transfer> transferList = transferService.findAllNotDeleted();
         for (Transfer transfer : transferList){
-            TransferItem transferItem = new TransferItem(transfer.getSenderId(),
-                    transfer.getRecipientId(),transfer.getTransferAmount(),transfer.getFees(),transfer.getFeesAmount());
-            transferItem.setSenderName(customerService.findById(transfer.getSenderId()).get().getFullName());
-            transferItem.setRecipientName(customerService.findById(transfer.getRecipientId()).get().getFullName());
-            items.add(transferItem);
+           if (transfer.getDeleted()<1){
+               TransferItem transferItem = new TransferItem(transfer.getSenderId(),
+                       transfer.getRecipientId(),transfer.getTransferAmount(),transfer.getFees(),transfer.getFeesAmount());
+               transferItem.setSenderName(customerService.findById(transfer.getSenderId()).get().getFullName());
+               transferItem.setRecipientName(customerService.findById(transfer.getRecipientId()).get().getFullName());
+               items.add(transferItem);
+               total=total.add(transfer.getFeesAmount());
+           }
         }
         modelAndView.addObject("items", items);
-
+        modelAndView.addObject("total", total);
         return modelAndView;
     }
 }

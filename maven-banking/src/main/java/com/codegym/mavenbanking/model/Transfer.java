@@ -26,6 +26,7 @@ public class Transfer {
 
     private Date created_at;
 
+    private int deleted;
     @NotNull
     private Long recipientId;
 
@@ -33,7 +34,6 @@ public class Transfer {
 
     private BigDecimal feesAmount;
 
-    @Digits(integer =  9, fraction = 0)
     @Column(updatable = false)
     private BigDecimal transferAmount;
     private BigDecimal transactionAmount;

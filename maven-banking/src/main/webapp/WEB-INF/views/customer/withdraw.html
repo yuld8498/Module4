@@ -66,35 +66,7 @@
             </div>
         </form>
     </div>
-    <div class="footer w-100" style="bottom: 0" id="footer">
-        <div id="message-alert">
-            <th:block th:if="${errors}!=null">
-                <span class="float-left close" onclick="myFuntion()">X</span>
-                <div class="alert-danger">
-                    <h5>Error message:</h5>
-                    <ul>
-                        <li th:text="${errors}"></li>
-                    </ul>
-                </div>
-            </th:block>
-            <th:block th:if="${script} == true">
-                <span class="float-left" onclick="myFuntion()">X</span>
-                <div class="alert-danger">
-                    <h5>Please correct errors below:</h5>
-                    <ul>
-                        <li th:each="err : ${#fields.errors('withdraw.*')}" th:text="${err}"></li>
-                    </ul>
-                </div>
-            </th:block>
-            <th:block th:if="${success}!=null">
-                <span class="float-left" onclick="myFuntion()">X</span>
-                <div >
-                    <h5 class="alert-success pt-2 pl-2" th:text="${success}" style="height: 100px">
-                    </h5>
-                </div>
-            </th:block>
-        </div>
-    </div>
+    <th:block th:replace="/layout/notification-withdraw::notification"></th:block>
     <th:block th:replace="/layout/footer::footer"/>
     <script>
         function myFuntion(){

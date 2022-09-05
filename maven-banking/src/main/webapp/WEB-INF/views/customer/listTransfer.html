@@ -52,6 +52,11 @@
                         <td th:text="${#numbers.formatDecimal(item.feesAmount,0,'COMMA',0,'POINT')}" class="text-right"></td>
                     </tr>
                 </th:block>
+                <tr class="w-100">
+                    <td colspan="5"></td>
+                    <td class="text-right">Total Fees Amount:</td>
+                    <td colspan="2" th:text="${#numbers.formatDecimal(total,0,'COMMA',0,'POINT')}" class="text-right"></td>
+                </tr>
                 </tbody>
             </table>
         </div>

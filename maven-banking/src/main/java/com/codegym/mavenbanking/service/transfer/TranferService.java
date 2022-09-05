@@ -5,7 +5,9 @@ import com.codegym.mavenbanking.repository.ITransferRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -34,4 +36,20 @@ public class TranferService implements ITransferService{
     public void remove(Long id) {
         transferRepository.deleteById(id);
     }
+
+    @Override
+    public void deletedTransfer(Long senderId, Long recipientId) {
+        transferRepository.deleteBySenderIdOrRecipientId(senderId,recipientId);
+    }
+
+    @Override
+    public List<Transfer> findAllNotDeleted() {
+        return (List<Transfer>) transferRepository.searchAllByDeletedLessThan(1);
+    }
+
+    @Override
+    public void updateDeleted(Long customerId) {
+        transferRepository.setDeleted(customerId);
+    }
+
 }
