@@ -33,7 +33,10 @@ public class Customer {
 
     @Digits(integer =  9, fraction = 0)
     @Column(updatable = false)
+    //không cập nhật bằng save
     private BigDecimal balance;
+
+    private boolean deleted;
 
     @NotEmpty(message = "The email address is required.")
     @Email(message = "The email address is invalid.")

@@ -7,7 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import javax.validation.constraints.NotEmpty;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Repository
 public interface ICustomerRepository extends JpaRepository<Customer, Long> {
@@ -23,4 +25,10 @@ public interface ICustomerRepository extends JpaRepository<Customer, Long> {
 
     Boolean existsByEmail(String email);
     Customer findCustomerByFullName(String fullName);
+     @Modifying(flushAutomatically = true)
+    @Query("UPDATE Customer t SET t.deleted = 1  WHERE t.id = :id")
+    void setDeletedById(@Param("id") Long id);
+
+     List<Customer> searchAllByDeletedIsFalse();
+     boolean existsByPhone(@NotEmpty(message = "The phone number is required.") String phone);
 }

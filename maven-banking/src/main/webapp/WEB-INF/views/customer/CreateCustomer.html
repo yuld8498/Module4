@@ -22,7 +22,7 @@
             </div>
         </div>
     </div>
-    <form th:object="${customer}" method="post" class="table container-fluid w-90" id="editForm">
+    <form id="frmCreateCustomer" th:object="${customer}" method="post" class="table container-fluid w-90">
         <div class="form-group row">
             <div class="col-md-6 margin-top-20">
                 <label class="form-label font-weight-bold">Full Name</label>
@@ -72,7 +72,7 @@
                 </ul>
             </div>
         </th:block>
-        <th:block th:if="${script} == true">
+        <th:block th:if="${script}==true">
             <span class="float-left" onclick="myFuntion()">X</span>
             <div class="alert-danger">
                 <h5>Please correct errors below:</h5>
@@ -90,6 +90,18 @@
         </th:block>
     </div>
 </div>
+</th:block>
+<div class="alert-danger hide">
+    <h5>Please correct errors below FE:</h5>
+</div>
+<th:block th:if="${error}">
+    <div class="alert-danger">
+        <h5>Error message:</h5>
+        <ul>
+            <li th:text="${error}"></li>
+        </ul>
+    </div>
+</th:block>
 <script>
     function myFuntion(){
         document.getElementById("footer").classList.add("d-none");
@@ -97,5 +109,4 @@
 </script>
 <th:block th:replace="/layout/footer::footer"/>
 </body>
-
 </html>

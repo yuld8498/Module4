@@ -12,11 +12,14 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @Transactional
-public class CustomerServiceImpl implements ICustomerService{
+public class CustomerServiceImpl implements ICustomerService {
+    @Autowired
+    private ICustomerService customerService;
 
     @Autowired
     private ICustomerRepository customerRepository;
@@ -49,15 +52,18 @@ public class CustomerServiceImpl implements ICustomerService{
     @Override
     public Deposit doDeposit(Long customerId, BigDecimal transactionAmount, Deposit deposit) {
         customerRepository.incrementBalance(transactionAmount,customerId);
-        System.out.println(deposit.toString());
+//        Customer customer = customerService.findById(customerId).get();
+//        customer.setBalance(customer.getBalance().add(deposit.getTransaction_amount()));
+//        customerRepository.save(customer);
+//        customerService.save(customer);
         depositRepository.save(deposit);
         return deposit;
     }
 
     @Override
     public void doTransfer(Long senderID, Long recipientID, BigDecimal transactionAmount, BigDecimal transferAmount) {
-        customerRepository.incrementBalance(transferAmount,recipientID);
-        customerRepository.reduceBalance(transactionAmount,senderID);
+        customerRepository.incrementBalance(transferAmount, recipientID);
+        customerRepository.reduceBalance(transactionAmount, senderID);
     }
 
     @Override
@@ -69,5 +75,15 @@ public class CustomerServiceImpl implements ICustomerService{
     @Override
     public Boolean existsByEmail(String email) {
         return customerRepository.existsByEmail(email);
+    }
+
+    @Override
+    public void doDeleted(Long id) {
+        customerRepository.setDeletedById(id);
+    }
+
+    @Override
+    public List<Customer> selectAllCustomer() {
+        return customerRepository.searchAllByDeletedIsFalse();
     }
 }

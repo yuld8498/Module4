@@ -30,29 +30,31 @@ public class CustomerController {
     private ITransferService transferService;
 
     @GetMapping("")
-    public ModelAndView showListCustomer(){
+    public ModelAndView showListCustomer() {
         ModelAndView modelAndView = new ModelAndView("customer/index");
-        modelAndView.addObject("customers", customerService.findAll());
+        modelAndView.addObject("customers", customerService.selectAllCustomer());
         return modelAndView;
     }
+
     @GetMapping("/create")
-    public ModelAndView showFormCreate(){
+    public ModelAndView showFormCreate() {
         ModelAndView modelAndView = new ModelAndView("/customer/CreateCustomer");
         modelAndView.addObject("customer", new Customer());
         return modelAndView;
     }
+
     @PostMapping("/create")
     public ModelAndView saveCustomer(@Validated @ModelAttribute("customer") Customer customer, BindingResult bindingResult) {
         ModelAndView modelAndView = new ModelAndView("/customer/CreateCustomer");
-        if (bindingResult.hasFieldErrors()){
+        if (bindingResult.hasFieldErrors()) {
             modelAndView.addObject("script", true);
-            modelAndView.addObject("customer",customer);
+            modelAndView.addObject("customer", customer);
             return modelAndView;
-        }else if (customerService.existsByEmail(customer.getEmail())){
+        } else if (customerService.existsByEmail(customer.getEmail())) {
             modelAndView.addObject("errors", "Email is already exists");
-            modelAndView.addObject("customer",  customer);
+            modelAndView.addObject("customer", customer);
             return modelAndView;
-            }else {
+        } else {
             customer.setBalance(new BigDecimal(0));
             modelAndView.addObject("customer", new Customer());
             modelAndView.addObject("success", "New customer created successfully");
@@ -63,7 +65,7 @@ public class CustomerController {
 
     //Deposit
     @GetMapping("/deposit/{id}")
-    public ModelAndView showFormDeposit(@PathVariable Long id){
+    public ModelAndView showFormDeposit(@PathVariable Long id) {
         ModelAndView modelAndView = new ModelAndView("/customer/deposit");
         modelAndView.addObject("customer", customerService.findById(id));
         Deposit deposit = new Deposit();
@@ -71,14 +73,15 @@ public class CustomerController {
         modelAndView.addObject("deposit", deposit);
         return modelAndView;
     }
+
     @PostMapping("/deposit/{id}")
-    public ModelAndView confirmDeposit(@Validated @ModelAttribute("deposit")Deposit deposit, BindingResult bindingResult){
+    public ModelAndView confirmDeposit(@Validated @ModelAttribute("deposit") Deposit deposit, BindingResult bindingResult) {
         ModelAndView modelAndView = new ModelAndView("/customer/deposit");
-        if (bindingResult.hasFieldErrors()){
+        if (bindingResult.hasFieldErrors()) {
             modelAndView.addObject("customer", customerService.findById(deposit.getCustomerId()).get());
             modelAndView.addObject("script", true);
             return modelAndView;
-        }else {
+        } else {
             customerService.doDeposit(deposit.getCustomerId(), deposit.getTransaction_amount(), deposit);
             modelAndView.addObject("customer", customerService.findById(deposit.getCustomerId()).get());
             modelAndView.addObject("success", "Successful deposit transaction");
@@ -88,81 +91,83 @@ public class CustomerController {
 
     //withdraw
     @GetMapping("/withdraw/{id}")
-    public ModelAndView showFormWithdraw(@PathVariable Long id){
+    public ModelAndView showFormWithdraw(@PathVariable Long id) {
         ModelAndView modelAndView = new ModelAndView("/customer/withdraw");
         Customer customer = customerService.findById(id).get();
         Withdraw withdraw = new Withdraw();
         withdraw.setCustomerId(customer.getId());
-        modelAndView.addObject("customer",customer);
-        modelAndView.addObject("withdraw",withdraw);
+        modelAndView.addObject("customer", customer);
+        modelAndView.addObject("withdraw", withdraw);
         return modelAndView;
     }
 
     @PostMapping("/withdraw/{id}")
     public ModelAndView doWithdraw(@PathVariable Long id,
-                                  @Validated @ModelAttribute("withdraw") Withdraw withdraw, BindingResult bindingResult){
+                                   @Validated @ModelAttribute("withdraw") Withdraw withdraw, BindingResult bindingResult) {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         ModelAndView modelAndView = new ModelAndView("/customer/withdraw");
         modelAndView.addObject("withdraw", withdraw);
 
-        if (bindingResult.hasFieldErrors()){
+        if (bindingResult.hasFieldErrors()) {
             modelAndView.addObject("customer", customerService.findById(id).get());
-            modelAndView.addObject("script",true);
+            modelAndView.addObject("script", true);
             return modelAndView;
-        }else {
-            if (customerService.findById(id).get().getBalance().compareTo(withdraw.getTransaction_amount())<0){
+        } else {
+            if (customerService.findById(id).get().getBalance().compareTo(withdraw.getTransaction_amount()) < 0) {
                 modelAndView.addObject("customer", customerService.findById(id).get());
-                modelAndView.addObject("errors","insufficient balance");
+                modelAndView.addObject("errors", "insufficient balance");
                 return modelAndView;
             }
         }
         withdraw.setCreated_at(timestamp);
         customerService.doWithdraw(withdraw);
         modelAndView.addObject("customer", customerService.findById(id).get());
-        modelAndView.addObject("success","Withdraw is successfully");
+        modelAndView.addObject("success", "Withdraw is successfully");
         return modelAndView;
     }
 
     //Suspended
     @GetMapping("/suspended/{id}")
-    public ModelAndView showFormSuspension(@PathVariable Long id){
+    public ModelAndView showFormSuspension(@PathVariable Long id) {
         ModelAndView modelAndView = new ModelAndView("/customer/suspension");
         Optional<Customer> customer = customerService.findById(id);
 //        modelAndView.addObject("suspended",null);
         modelAndView.addObject("customer", customer.get());
         return modelAndView;
     }
+
     @PostMapping("/suspended/{id}")
-    public ModelAndView Suspended(@PathVariable Long id,@ModelAttribute("customer") Customer customer) {
+    public ModelAndView Suspended(@PathVariable Long id, @ModelAttribute("customer") Customer customer) {
 //        for (Transfer transfer: transferService.findAll()){
 //            if (transfer.getSenderId().equals(customer.getId())||transfer.getRecipientId().equals(customer.getId())){
 //                transferService.updateDeleted(transfer.getId());
 //            }
 //        }
         transferService.updateDeleted(customer.getId());
-        customerService.remove(id);
+        customerService.doDeleted(id);
         ModelAndView modelAndView = new ModelAndView("/customer/suspension");
-        modelAndView.addObject("customer",customer);
-        modelAndView.addObject("suspended","complete");
+        modelAndView.addObject("customer", customer);
+        modelAndView.addObject("suspended", "complete");
         modelAndView.addObject("success", "Customer suspended successfully");
         return modelAndView;
     }
+
     //List Transfer
     @GetMapping("/transfer")
-    public ModelAndView showListTransfer(){
+    public ModelAndView showListTransfer() {
         List<TransferItem> items = new ArrayList<>();
         ModelAndView modelAndView = new ModelAndView("/customer/listTransfer");
         BigDecimal total = new BigDecimal(0.0);
         List<Transfer> transferList = transferService.findAllNotDeleted();
-        for (Transfer transfer : transferList){
-           if (transfer.getDeleted()<1){
-               TransferItem transferItem = new TransferItem(transfer.getSenderId(),
-                       transfer.getRecipientId(),transfer.getTransferAmount(),transfer.getFees(),transfer.getFeesAmount());
-               transferItem.setSenderName(customerService.findById(transfer.getSenderId()).get().getFullName());
-               transferItem.setRecipientName(customerService.findById(transfer.getRecipientId()).get().getFullName());
-               items.add(transferItem);
-               total=total.add(transfer.getFeesAmount());
-           }
+        for (Transfer transfer : transferList) {
+            if (transfer.getDeleted() < 1) {
+                TransferItem transferItem = new TransferItem(transfer.getSenderId(),
+                        transfer.getRecipientId(), transfer.getTransferAmount(), transfer.getFees(), transfer.getFeesAmount());
+                transferItem.setSenderName(customerService.findById(transfer.getSenderId()).get().getFullName());
+                transferItem.setRecipientName(customerService.findById(transfer.getRecipientId()).get().getFullName());
+                items.add(transferItem);
+                total = total.add(transfer.getFeesAmount());
+            }
         }
         modelAndView.addObject("items", items);
         modelAndView.addObject("total", total);

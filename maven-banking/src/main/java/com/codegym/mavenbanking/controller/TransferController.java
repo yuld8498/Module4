@@ -30,7 +30,7 @@ public class TransferController {
     @GetMapping("/{id}")
     public ModelAndView showFormTransfer(@PathVariable Long id) {
         ModelAndView modelAndView = new ModelAndView("/transfer/transfer");
-        List<Customer> customerList = (List<Customer>) customerService.findAll();
+        List<Customer> customerList = (List<Customer>) customerService.selectAllCustomer();
         TransferItem transferItem = new TransferItem();
         Customer customer = customerService.findById(id).get();
         transferItem.setSenderId(customer.getId());
