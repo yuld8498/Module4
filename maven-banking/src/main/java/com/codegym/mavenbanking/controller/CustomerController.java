@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.math.BigDecimal;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +33,11 @@ public class CustomerController {
 
     @GetMapping("")
     public ModelAndView showListCustomer() {
+        try {
+            System.out.println(InetAddress.getLocalHost());
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
+        }
         ModelAndView modelAndView = new ModelAndView("customer/index");
         modelAndView.addObject("customers", customerService.selectAllCustomer());
         return modelAndView;
@@ -55,6 +62,7 @@ public class CustomerController {
             modelAndView.addObject("customer", customer);
             return modelAndView;
         } else {
+            System.out.println(customer);
             customer.setBalance(new BigDecimal(0));
             modelAndView.addObject("customer", new Customer());
             modelAndView.addObject("success", "New customer created successfully");

@@ -11,7 +11,6 @@
     <script type="text/javascript" src="../bootstrap/js/bootstrap.bundle.js"></script>
     <script type="text/javascript" src="../bootstrap/js/popper-v1.16.0.min.js"></script>
     <script type="text/javascript" src="../bootstrap/js/bootstrap.js"></script>
-    <!-- <script src="index.js"></script> -->
 </head>
 <style>
     body {
@@ -148,25 +147,25 @@
                         <td th:text="${customer.address}"></td>
                         <td th:text="${customer.balance}"></td>
                         <td class="text-center">
-                            <a th:href="@{/customer/deposit/(id=${customer.id})}"
+                            <a th:href="@{/customer/deposit/__${customer.getId()}__ }"
                                class="fa-solid fa-plus border-1-radius text-color-blue deposit-hover text-decoration-none"
                                data-toggle="tooltip" data-placement="top" title="Deposit"
                             ></a>
                         </td>
                         <td class="text-center">
-                            <a th:href="@{/customer/withdraw/(id=${customer.id})}"
+                            <a th:href="@{/customer/withdraw/__${customer.getId()}__ }"
                                class="fa-solid fa-minus border-1-radius text-color-yellow widthdraw-hover text-decoration-none"
                                data-toggle="tooltip" data-placement="top" title="Withdraw"
                             ></a>
                         </td>
                         <td class="text-center">
-                            <a th:href="@{/customer/transfer/(id=${customer.id})}"
+                            <a th:href="@{/customer/transfer/__${customer.getId()}__ }"
                                class="fa-solid fa-arrow-right-arrow-left border-1-radius text-color-blue transfer-hover text-decoration-none"
-                               data-toggle="tooltip" data-placement="top" title="Transfer"
-                               onclick=goTranferPage()></a>
+                               data-toggle="tooltip" data-placement="top" title="Transfer">
+                            </a>
                         </td>
                         <td class="text-center">
-                            <a th:href="@{/customer/suspended/(id=${customer.id})}"
+                            <a th:href="@{/customers/suspended/__${customer.getId()}__ }"
                                class="fa-solid fa-ban border-1-radius text-color-red suspended-hover text-decoration-none"
                                data-toggle="tooltip" data-placement="top" title="Suspended"
                             ></a>

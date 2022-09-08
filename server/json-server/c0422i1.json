@@ -1,0 +1,123 @@
+{
+  "customers": [
+    {
+      "fullName": "NV1",
+      "email": "nv1@gmail.com",
+      "phone": "123467",
+      "address": "28 nguyen tri phuong",
+      "balance": "88000",
+      "deleted": "0",
+      "id": 3
+    },
+    {
+      "fullName": "NV1",
+      "email": "nv1@gmail.com",
+      "phone": "123467",
+      "address": "28 nguyen tri phuong",
+      "balance": "1000",
+      "deleted": "0",
+      "id": 4
+    },
+    {
+      "id": 2,
+      "fullName": "NV1",
+      "email": "nv1@gmail.com",
+      "phone": "123467",
+      "address": "28 nguyen tri phuong",
+      "balance": "2000",
+      "deleted": "0"
+    },
+    {
+      "fullName": "NV2",
+      "email": "nv1@gmail.com",
+      "phone": "123467",
+      "address": "28 nguyen tri phuong",
+      "balance": "100000110000",
+      "deleted": "1",
+      "id": 5
+    },
+    {
+      "fullName": "Herrod Jacobson",
+      "email": "jokofamydi@mailinator.com",
+      "phone": "Coby Potter",
+      "address": "Dolores dolor velit",
+      "deleted": "1",
+      "id": 24
+    },
+    {
+      "fullName": "Phyllis Cortez",
+      "email": "byqaryzez@mailinator.com",
+      "phone": "+1 (702) 332-3634",
+      "address": "Quisquam asperiores ",
+      "deleted": "1",
+      "id": 25,
+      "balance": "undefined110000"
+    },
+    {
+      "fullName": "Stephanie Salazar",
+      "email": "loqyh@mailinator.com",
+      "phone": "+1 (846) 443-8694",
+      "address": "Modi consectetur ul",
+      "balance": "0",
+      "deleted": "1",
+      "id": 26
+    },
+    {
+      "fullName": "Quynn Gray",
+      "email": "cozozoges@mailinator.com",
+      "phone": "+1 (215) 343-4349",
+      "address": "Ad quia deserunt quo",
+      "balance": "0",
+      "deleted": "1",
+      "id": 27
+    },
+    {
+      "fullName": "Melissa Jones",
+      "email": "ferovoq@mailinator.com",
+      "phone": "+1 (315) 151-7208",
+      "address": "Distinctio Pariatur",
+      "balance": "0",
+      "deleted": "1",
+      "id": 28
+    },
+    {
+      "fullName": "Lois Glass",
+      "email": "winequ@mailinator.com",
+      "phone": "+1 (843) 171-9208",
+      "address": "Tempore est quia ac",
+      "balance": 0,
+      "deleted": 1,
+      "id": 32
+    },
+    {
+      "fullName": "Mari Thornton",
+      "email": "nolujok@mailinator.com",
+      "phone": "+1 (863) 486-7235",
+      "address": "Rem mollit fugiat la",
+      "balance": "0",
+      "deleted": "1",
+      "id": 33
+    },
+    {
+      "fullName": "",
+      "email": "",
+      "phone": "",
+      "address": "",
+      "deleted": "1",
+      "balance": "0",
+      "id": 34
+    },
+    {
+      "fullName": "Kirestin Perez",
+      "email": "cebani@mailinator.com",
+      "phone": "+1 (635) 193-3819",
+      "address": "Ut dignissimos in co",
+      "deleted": "0",
+      "balance": "11000",
+      "id": 35
+    }
+  ],
+  "deposits": [],
+  "withdraws": [],
+  "transfers": []
+}

@@ -88,7 +88,7 @@ $(function () {
             }
         },
         errorLabelContainer: ".alert-danger",
-        errorPlacement: function (error, element) {
+        errorPlacement: function (error) {
             error.appendTo(".alert-danger");
         },
         showErrors: function(errorMap, errorList) {

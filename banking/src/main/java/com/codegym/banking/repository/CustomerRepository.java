@@ -1,6 +1,7 @@
 package com.codegym.banking.repository;
 
 import com.codegym.banking.model.Customer;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -9,7 +10,7 @@ import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import java.util.List;
 
-@Transactional
+@Repository
 public class CustomerRepository implements ICustomerRepository{
     @PersistenceContext
     private EntityManager entityManager;
@@ -47,4 +48,5 @@ public class CustomerRepository implements ICustomerRepository{
             entityManager.remove(customer);
         }
     }
+
 }

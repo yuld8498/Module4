@@ -81,4 +81,16 @@ public class Customer {
     public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "id=" + id +
+                ", fullName='" + fullName + '\'' +
+                ", phone='" + phone + '\'' +
+                ", address='" + address + '\'' +
+                ", balance=" + balance +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }
