@@ -6,17 +6,18 @@ class App {
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it !",
-      cancelButtonText: "Cancel",
+      confirmButtonText: "Yes, delete it !"
     });
   };
 
   static showSuccessAlert(t) {
     Swal.fire({
-      icon: "success",
+      position: 'center',
+      icon: 'success',
       title: t,
-      timer: 5000
-    });
+      showConfirmButton: true,
+      timer: 5000,
+    })
   };
 
   static showErrorAlert(t) {
@@ -26,17 +27,23 @@ class App {
       text: t,
     });
   };
+
+  
 }
 
 class Customer {
-  constructor(id, fullName, email, phone, province) {
+  constructor(id, fullName, email, phone, address, balance = 0, deleted = 0) {
     this.id = id;
     this.fullName = fullName;
     this.email = email;
     this.phone = phone;
-    this.province = province;
-  }
+    this.address = address;
+    this.balance = balance;
+    this.deleted = deleted;
 }
+}
+
+
 
 // $(function() {
 //     $(".num-space").number(true, 0, ',', ' ');
