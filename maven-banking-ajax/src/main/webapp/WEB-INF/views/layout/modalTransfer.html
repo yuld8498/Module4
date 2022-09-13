@@ -1,0 +1,63 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<th:block th:fragment="modalTransfer">
+    <div class="modal fade " id="mdTransfer" tabindex="-1" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Transfer</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-alert-danger hide">
+                    </div>
+                    <form id="frmTransfer">
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <label>Sender ID</label>
+                                <input type="text" id="senderId" readonly class="form-control">
+                            </div>
+                            <div class="col-lg-3">
+                                <label>Sender Name</label>
+                                <input type="text" id="senderName" readonly class="form-control">
+                            </div>
+                            <div class="col-lg-3">
+                                <label>Email</label>
+                                <input type="email" id="senderEmail" name="senderEmail" class="form-control" readonly>
+                            </div>
+                            <div class="col-lg-3">
+                                <label>Sender Balance</label>
+                                <input type="text" id="senderBalance" readonly class="form-control">
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-lg-3">
+                                <!-- <input type="hidden" id="recipientId"> -->
+                                <label>Recipient Name</label>
+                                <select type="select" id="recipientId" class="form-control">
+                                </select>
+                            </div>
+                            <div class="col-lg-3">
+                                <label for="transferAmount">Transfer Amount ($)</label>
+                                <input type="text" id="transferAmount" name="transferAmount" class="form-control">
+                            </div>
+                            <div class="col-lg-3">
+                                <label for="fees">Fees(%)</label>
+                                <input type="text" id="fees" name="fees" class="form-control" readonly value=10>
+                            </div>
+                            <div class="col-lg-3">
+                                <label for="totalAmount">Total amount($)</label>
+                                <input type="text" id="totalAmount" name="totalAmount" class="form-control" readonly>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" id="btnTransfer" class="btn btn-outline-primary">Transfer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
