@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Repository
 public interface ICustomerRepository extends JpaRepository<Customer, Long> {
@@ -17,4 +18,9 @@ public interface ICustomerRepository extends JpaRepository<Customer, Long> {
     @Modifying(clearAutomatically=true, flushAutomatically = true)
     @Query("UPDATE Customer c SET c.balance = c.balance - :transactionAmount WHERE c.id = :id ")
     void reduceBalance(@Param("transactionAmount") BigDecimal transactionAmount, @Param("id") Long id);
+
+   List<Customer> searchAllByDeletedIsFalse();
+   Customer findCustomerByEmail(String email);
+    boolean existsByEmail(String email);
+    boolean existsByPhone(String phone);
 }

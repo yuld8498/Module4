@@ -1,0 +1,117 @@
+body {
+    box-sizing: border-box;
+}
+
+.w-90 {
+    width: 90%;
+}
+
+.margin-left-20 {
+    margin-left: 20px;
+}
+
+.margin-top-20 {
+    margin-top: 20px;
+}
+
+.table-right {
+    float: right;
+    box-sizing: border-box;
+    margin: 10px 10px;
+}
+
+.table-title {
+    height: 100px;
+    box-sizing: border-box;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.table-title-content {
+    padding: 20px 20px;
+}
+
+#message-alert {
+    width: 100vw;
+    position: fixed;
+    bottom: 0;
+}
+
+.hide {
+    display: none;
+}
+
+.alert-danger {
+    padding: 1rem 135px;
+}
+
+.alert-danger>label {
+    display: list-item;
+}
+
+.valid {
+    color: blue;
+    list-style-type: none;
+}
+.border-1-radius {
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 10px;
+}
+.deposit-hover:hover {
+    background-color: rgb(17, 168, 17);
+    color: aliceblue;
+    cursor: pointer;
+}
+.text-color-blue {
+    color: blue;
+}
+
+.text-color-yellow {
+    color: rgb(206, 177, 33);
+}
+
+.text-color-red {
+    color: red;
+}
+
+.withdraw-hover:hover {
+    background-color: rgb(206, 177, 33);
+    color: black;
+    cursor: pointer;
+}
+
+.transfer-hover:hover {
+    background-color: rgb(82, 96, 249);
+    color: aliceblue;
+    cursor: pointer;
+}
+
+.suspended-hover:hover {
+    color: aliceblue;
+    background-color: rgb(201, 23, 23);
+    cursor: pointer;
+}
+.hidenpage{
+    position: absolute;
+    width: 100%;
+    height: 710px;
+    background-color: rgb(186, 188, 190,0.3);
+    top: 0px;
+}
+.box-create{
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    top: 150px;
+    left: 350px;
+    background-color: rgb(186, 188, 190);
+}
+.box-deposit{
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    top: 150px;
+    left: 300px;
+    background-color: rgb(186, 188, 190);
+}

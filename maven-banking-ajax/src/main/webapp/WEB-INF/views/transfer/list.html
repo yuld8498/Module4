@@ -1,0 +1,90 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <th:block th:replace="/layout/headerCSS :: headerCSS"/>
+    <title>Banking Maven Ajax</title>
+</head>
+
+<body class="position-relative">
+<div class="table container">
+    <div class="table-header">
+        <div class="bg-info table-title">
+            <div class="row">
+                <div class="col-7 table-title-content">
+                    <h1>Transfer money Information</h1>
+                </div>
+                <div class="col-5 table-title-content">
+                    <a href="http://localhost:8080/customers" class="btn btn-outline-light mr-4 mt-2 float-right">
+                        <i class="fa-solid fa-bars"></i>
+                        <span>List Customer</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <div class="table-tab">
+            <table class="w-100" id="listTransfer">
+                <thead class="w-100 border-none align-middle" style="background-color: #4CAF50">
+                <tr class="float-center">
+                    <th>#</th>
+                    <th>Sender ID</th>
+                    <th>Sender Name</th>
+                    <th>Recipient ID</th>
+                    <th>Recipient Name</th>
+                    <th>Transfer Amount ($)</th>
+                    <th>Fees (%)</th>
+                    <th>Fees Amount ($)</th>
+                </tr>
+                </thead>
+                <tbody class="w-100 align-middle">
+                </tbody>
+            </table>
+            <div id="footer" class="row">
+                <h5 class="col-md-8 text-right">Total Fees Amount:</h5>
+                <h5 id="totalFees" class="col-md-4 text-right"></h5>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:replace="/layout/footerJS :: footerJS"/>
+<script>
+    let fees = 10;
+    let totalFeesAmount = 0;
+
+    function loadList() {
+        $.ajax({
+            header: {
+                Accept: 'application/json',
+                contentType: 'application/json'
+            },
+            url: "http://localhost:8080/api/transfers",
+            type: "GET",
+        }).done((data) => {
+            console.log("hello")
+            $.each(data, (i, item) => {
+                totalFeesAmount += Number(item.feesAmount);
+                let str = `
+            <tr>
+            <td class="index">${i}</td>
+            <td class="senderId text-center">${item.senderId}</td>
+            <td class="senderName">${item.senderName}</td>
+            <td class="recipientId text-center">${item.recipientId}</td>
+            <td class="recipientName">${item.recipientName}</td>
+            <td class="transferAmount text-right">${item.transferAmount}</td>
+            <td class="fees">${fees}</td>\`;
+            <td class="feesAmount" class="text-right">${item.feesAmount}</td>
+</tr>
+            `;
+                $("#listTransfer tbody").prepend(str);
+            })
+            document.getElementById("totalFees").innerText = totalFeesAmount.toLocaleString('vi', {style : 'currency', currency : 'VND'});
+        }).fail((error) => {
+            console.log(error);
+        })
+    }
+
+    loadList();
+</script>
+</body>
+</html>

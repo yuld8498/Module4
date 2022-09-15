@@ -1,6 +1,8 @@
 package com.codegym.mavenbankingajax.model;
 
+import com.codegym.mavenbankingajax.model.dto.TransferDTO;
 import lombok.*;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -11,6 +13,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Accessors(chain = true)
 public class Transfer extends BasicInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,4 +37,31 @@ public class Transfer extends BasicInfo {
     private BigDecimal feesAmount;
 
     private int fees;
+
+    @Override
+    public String toString() {
+        return "Transfer{" +
+                "id=" + id +
+                ", sender=" + sender +
+                ", recipient=" + recipient +
+                ", transferAmount=" + transferAmount +
+                ", totalTransfer=" + totalTransfer +
+                ", feesAmount=" + feesAmount +
+                ", fees=" + fees +
+                "} ";
+    }
+
+    public TransferDTO transferDTO(){
+        return new TransferDTO()
+                .setSenderId(sender.getId())
+                .setSenderName(sender.getFullName())
+                .setSenderBalance(sender.getBalance())
+                .setRecipientId(recipient.getId())
+                .setRecipientName(recipient.getFullName())
+                .setRecipientBalance(recipient.getBalance())
+                .setFees(fees)
+                .setFeesAmount(feesAmount)
+                .setTransferAmount(transferAmount)
+                .setTotalTransfer(totalTransfer);
+    }
 }
