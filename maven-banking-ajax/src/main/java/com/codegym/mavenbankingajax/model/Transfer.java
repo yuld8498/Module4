@@ -1,29 +1,37 @@
 package com.codegym.mavenbankingajax.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Date;
 
-@Data
+@Getter
+@Setter
 @Table(name = "transfers")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Transfer {
+@Entity
+public class Transfer extends BasicInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "sender_id", referencedColumnName = "id", nullable = false)
     private Customer sender;
+
+    @ManyToOne
+    @JoinColumn(name = "recipient_id", referencedColumnName = "id", nullable = false)
     private Customer recipient;
+
+    @Column(name = "transfer_amount", nullable = false)
     private BigDecimal transferAmount;
+
+    @Column(name = "total", nullable = false)
     private BigDecimal totalTransfer;
+
+    @Column(name = "fees_amount")
     private BigDecimal feesAmount;
+
     private int fees;
-    private Date createAt;
 }

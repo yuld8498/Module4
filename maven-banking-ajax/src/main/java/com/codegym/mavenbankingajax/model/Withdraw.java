@@ -1,25 +1,26 @@
 package com.codegym.mavenbankingajax.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.codegym.mavenbankingajax.model.dto.WithdrawDTO;
+import lombok.*;
+import lombok.experimental.Accessors;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Date;
 
-@Data
+@Getter
+@Setter
 @Table(name = "withdraws")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Withdraw {
+@Entity
+@Accessors(chain = true)
+public class Withdraw extends BasicInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
     private BigDecimal transactionAmount;
-    private Date createAt;
 }
