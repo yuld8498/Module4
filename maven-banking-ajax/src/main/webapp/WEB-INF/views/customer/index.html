@@ -291,7 +291,7 @@
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                url: "http://localhost:8080/api/customers/deposits",
+                url: "http://localhost:8080/api/deposits",
                 type: "POST",
                 data: JSON.stringify(deposit)
             }).done((data) => {
@@ -321,7 +321,7 @@
                         App.showSuccessAlert("Deposit is successfully");
                         rewrite(customer);
                     }).catch((error) => {
-                        App.showErrorAlert("Deposit is fail");
+                        App.showErrorAlert(error.responseText);
                         console.log(error)
                     })
                 }).catch(() => {
@@ -386,7 +386,7 @@
                             'Accept': 'application/json',
                             'Content-Type': 'application/json'
                         },
-                        url: "http://localhost:8080/api/customers/transfer",
+                        url: "http://localhost:8080/api/transfers",
                         type: "POST",
                         data: JSON.stringify(transfer)
                     }).done((data) => {
@@ -413,7 +413,6 @@
                     App.showErrorAlert("The sender's balance is not enough to make the transfer");
                     return;
                 }
-                ;
                 findCustomerById(recipientId).then((data) => {
                     recipient = data;
                     transfer.senderId = sender.id;
@@ -436,8 +435,8 @@
                         $("#transferAmount").val("");
                         $("#recipientId").val("");
                         $("#mdTransfer").modal("hide");
-                    }).catch(() => {
-                        App.showErrorAlert("Transfer is failed, please try again later")
+                    }).catch((error) => {
+                        App.showErrorAlert(error.responseText.toString())
                     })
                 }).catch(() => {
                     App.showErrorAlert("can't find Sender id, please check input again.")

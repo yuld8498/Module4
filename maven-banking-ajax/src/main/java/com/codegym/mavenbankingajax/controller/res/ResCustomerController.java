@@ -105,17 +105,8 @@ public class ResCustomerController {
        }
     }
 
-    //deposit form depositDTO
-    @PostMapping("/deposits")
-    public ResponseEntity<?> doDepositFromDepositDTO(@RequestBody DepositDTO depositDTO) {
-        Customer customer = customerService.findById(depositDTO.getCustomerId()).get();
-        Deposit deposit = depositDTO.toDeposit(customer);
-        depositService.save(deposit);
-        DepositDTO newDepositDTO = customerService.doDeposit(depositDTO);
-        return new ResponseEntity<>(newDepositDTO, HttpStatus.OK);
-    }
 
-    //withdraw form depositDTO
+    //withdraw form withdrawDTO
     @PostMapping("/withdraw")
     public ResponseEntity<?> doWithdrawFromWithdrawDTO(@RequestBody WithdrawDTO withdrawDTO) {
         Customer customer = customerService.findById(withdrawDTO.getCustomerId()).get();
@@ -127,25 +118,5 @@ public class ResCustomerController {
             return new ResponseEntity<>(customer.toCustomerDTO(), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    }
-
-    //transfer from transferDTO
-    @PostMapping("/transfer")
-    public ResponseEntity<List<?>> doTransferFromTransferDTO(@RequestBody TransferDTO transferDTO) {
-        Customer sender = customerService.findById(transferDTO.getSenderId()).get();
-        Customer recipient = customerService.findById(transferDTO.getRecipientId()).get();
-        if (sender.getBalance().compareTo(transferDTO.getTotalTransfer()) >= 0) {
-            Transfer transfer = transferDTO.toTransfer(sender, recipient);
-            transferService.save(transfer);
-            TransferDTO newTransferDTO = customerService.doTransfer(transferDTO);
-             sender = customerService.findById(transferDTO.getSenderId()).get();
-              recipient = customerService.findById(transferDTO.getRecipientId()).get();
-            List<CustomerDTO> list = new ArrayList<>();
-            list.add(sender.toCustomerDTO());
-            list.add(recipient.toCustomerDTO());
-            return new ResponseEntity<>(list, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
     }
 }
