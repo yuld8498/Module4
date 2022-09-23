@@ -1,0 +1,35 @@
+body{
+    border: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.hei-100{
+    height: 100px;
+}
+.hei-200{
+    height: 200px;
+}
+.hei-150{
+    height: 150px;
+}
+.hei-75{
+    height: 75px;
+}
+.hei-250{
+    height: 250px;
+}
+.hei-300{
+    height: 300px;
+}
+.hei-350{
+    height: 350px;
+}
+.hei-400{
+    height: 400px;
+}
+.hei-450{
+   height: 450px;
+}
+ul li{
+    list-style: none;
+}

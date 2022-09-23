@@ -7,7 +7,7 @@
                 <div class="row bd">
                     <!-- star logo -->
                     <div class="col-lg-3 col-md-12">
-                        <img src="/logo.jpg" alt="" class="w-100">
+                        <img src="/access/logo.jpg" alt="" class="w-100">
                     </div>
                     <!-- end logo -->
                     <!-- star search -->
@@ -34,7 +34,7 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li class="btn btn-secondary"><i class="fa-solid fa-user"></i> Login</li>
+                            <a class="btn btn-secondary" href="http://localhost:8080/login"><i class="fa-solid fa-user"></i></a>
                         </ul>
                     </div>
                     <!-- end search -->
@@ -43,25 +43,20 @@
             <!-- end header -->
             <div class="nav nav-tabs">
                 <ul class="list-group list-group-horizontal-lg float-left justify-content-around w-100 bg-secondary">
-                    <li class="btn btn-secondary">Home</li>
+                    <a class="btn btn-secondary" href="http://localhost:8080/products">Home</a>
                     <li class="btn btn-secondary">Introduce</li>
                     <li class="dropdown">
-                        <ul class="btn btn-secondary" type="button" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">Products
-                            <li class="dropdown-menu" id="list-type-products">
-
-                            </li>
-                        </ul>
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Product
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2" id="productCategories">
+                        </div>
                     </li>
                     <li class="btn btn-secondary">Contact</li>
                 </ul>
             </div>
         </div>
     </div>
-    <script>
-        $('.dropdown-toggle').dropdown()
-        $('.carousel').carousel()
-    </script>
 </th:block>
 
 </html>

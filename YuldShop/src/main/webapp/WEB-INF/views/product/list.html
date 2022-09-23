@@ -1,0 +1,45 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <th:block th:replace="/layout/header :: header"/>
+    <title>Wellcome to Yuld Shop</title>
+</head>
+<body>
+<div>
+    <div th:if="${user != null}">
+        <div th:if="${role.getCode().equalsIgnoreCase('user')}">
+            <th:block th:replace="/layout/navBar-login::navBar-login"/>
+        </div>
+        <div th:if="${role.getCode().equalsIgnoreCase('admin')}">
+            <th:block th:replace="/layout/headerAdmin::headerAdmin"/>
+        </div>
+    </div>
+<!--    <div th:if="${user != null}">-->
+<!--        <th:block th:replace="/layout/navBar-login::navBar-login"/>-->
+<!--    </div>-->
+    <div th:if="${user == null}">
+        <th:block th:replace="/layout/navBar::navBar"/>
+    </div>
+</div>
+<div>
+    <th:block th:replace="/product/listProducts :: listProducts"/>
+</div>
+<div>
+    <th:block th:replace="/layout/footerJS::footerJS"/>
+</div>
+<script>
+    $('.dropdown-toggle').dropdown()
+    $.ajax({
+        url: "http://localhost:8080/api/categories",
+        type: "GET"
+    }).done((data) => {
+        let str = ``;
+        $.each(data, (i, item) => {
+            str += `<a class="dropdown-item" href="http://localhost:8080/api/products?category=${item.id}">${item.category}</a>`
+        })
+        document.getElementById("productCategories").innerHTML = str;
+    }).fail((error) => {
+
+    })
+</script>
+</body>
+</html>

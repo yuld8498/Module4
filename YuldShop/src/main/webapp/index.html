@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/access/boostrap/v4.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/access/boostrap/sweetalert2/sweetalert2.min.css">
+    <link rel="stylesheet" href="/access/boostrap/v4.6/css/style.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="log-in ptb-100 ptb-sm-60">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="well">
+                        <div class="return-customer">
+                            <h3 class="mb-1 custom-title">REGISTER ACCOUNT</h3>
+                            <p class="mb-1"><strong>If you already have an account with us, please login at the login
+                                    page.</strong></p>
+                            <form action="#" class="form-register" id="form-create">
+                                <h5>Your Personal Details</h5>
+                                <div class="form-group">
+                                    <label>Full Name</label>
+                                    <input type="text" name="fullName" placeholder="Enter your full name..."
+                                        id="fullName" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    <input type="email" name="email" placeholder="Enter your email..." id="email"
+                                        class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Phone</label>
+                                    <input type="tel" name="phone" placeholder="Enter your phone number..." id="phone"
+                                        class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <div for="province">province/city</div>
+                                    <select name="province" id="province" class="w-25">
+                                        <option value="#">--Province--</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <div for="districts">Districts, towns</div>
+                                    <select name="districts" id="districts" class="w-25">
+                                        <option value="#">--Districts--</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <div for="ward">ward</div>
+                                    <select name="ward" id="ward" class="w-25">
+                                        <option value="#">--Ward--</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <div for="address">Address</div>
+                                    <input type="text" name="address" id="address" class="w-25">
+                                        
+                                    </input>
+                                </div>
+                                <h5>Account</h5>
+                                <div class="form-group">
+                                    <label>User Name</label>
+                                    <input type="text" name="userName" placeholder="Enter your user name..."
+                                        id="userName" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Password</label>
+                                    <input type="password" name="password" placeholder="Enter your password..."
+                                        id="password" class="form-control">
+                                </div>
+                                <input type="button" value="Register" class="btn btn-md btn-info" id="btn-create">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- Returning Customer End -->
+            </div>
+            <!-- Row End -->
+        </div>
+        <!-- Container End -->
+    </div>
+    <script src="/access/boostrap/v4.6/js/app.js"></script>
+    <script src="/access/boostrap/v4.6/js/jquery-3.6.0.js"></script>
+    <script src="/access/boostrap/v4.6/js/jquery.validate-1.19.3.min.js"></script>
+    <script src="/access/boostrap/sweetalert2/sweetalert2.min.js"></script>
+    <script src="/access/boostrap/v4.6/js/bootstrap.min.js"></script>
+    <script src="/access/boostrap/v4.6/js/bootstrap.bundle.min.js"></script>
+    <script src="/access/boostrap/v4.6/js/popper-v1.16.0.min.js"></script>
+    <script src="https://kit.fontawesome.com/dccec83b30.js" crossorigin="anonymous"></script>
+
+    <script>
+        let customer = new Customer();
+        let locationRegion = new LocationRegion();
+        function loadProvince() {
+            let str = `<option value="#">--Province--</option>`;
+            $.ajax({
+                url: "https://vapi.vnappmob.com/api/province/",
+                type: "GET"
+            }).done((data) => {
+                $.each(data.results, (i, item) => {
+                    str += `<option value="${item.province_id}">${item.province_name}</option>`
+                });
+                document.getElementById("province").innerHTML = str;
+            }).fail((error) => {
+
+            })
+        }
+        loadProvince();
+        $("#province").on('change', function () {
+            let district = $("#province").val();
+            let str = `<option value="#">--Districts--</option>`;
+            $.ajax({
+                url: "https://vapi.vnappmob.com/api/province/district/" + district,
+                type: "GET"
+            }).done((data) => {
+                $.each(data.results, (i, item) => {
+                    str += `<option value="${item.district_id}">${item.district_name}</option>`
+                });
+                document.getElementById("districts").innerHTML = str;
+            }).fail((error) => {
+
+            })
+        })
+        $("#districts").on('change', function () {
+            let ward = $("#districts").val();
+            let str = `<option value="#">--Ward--</option>`;
+            $.ajax({
+                url: "https://vapi.vnappmob.com/api/province/ward/" + ward,
+                type: "GET"
+            }).done((data) => {
+                $.each(data.results, (i, item) => {
+                    str += `<option value="${item.ward_id}">${item.ward_name}</option>`
+                });
+                document.getElementById("ward").innerHTML = str;
+            }).fail((error) => {
+
+            })
+        })
+        $("#form-create").validate({
+            rules: {
+                fullName: {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 25
+                },
+                email: {
+                    required: true,
+                    email: true,
+                    minlength: 5,
+                    maxlength: 30
+                },
+                phone: {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 25
+                },
+                userName: {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 25
+                },
+                password: {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 25
+                },
+                address: {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 25
+                }
+            },
+            message: {
+                fullName: {
+                    required: "Vui lòng nhập tên đầy đủ",
+                    minlength: "Độ dài tối thiểu là 5 ký tự",
+                    maxlength: "Độ dài tối đa là 35 ký tự"
+                },
+                email: {
+                    required: "Vui lòng nhập email đầy đủ",
+                    minlength: "Độ dài tối thiểu là 5 ký tự",
+                    maxlength: "Độ dài tối đa là 35 ký tự",
+                    email: "Vui lòng nhập đúng định dạng email"
+                },
+                phone: {
+                    required: "Vui lòng nhập số điện thoại",
+                    minlength: "Độ dài tối thiểu là 5 ký tự",
+                    maxlength: "Độ dài tối đa là 35 ký tự"
+                },
+                userName: {
+                    required: "Vui lòng nhập tên tài khoản",
+                    minlength: "Độ dài tối thiểu là 5 ký tự",
+                    maxlength: "Độ dài tối đa là 35 ký tự"
+                },
+                password: {
+                    required: "Vui lòng nhập mật khẩu",
+                    minlength: "Độ dài tối thiểu là 5 ký tự",
+                    maxlength: "Độ dài tối đa là 35 ký tự"
+                },
+                address: {
+                    required: "Vui lòng nhập địa chỉ",
+                    minlength: "Độ dài tối thiểu là 5 ký tự",
+                    maxlength: "Độ dài tối đa là 35 ký tự"
+                }
+            },
+            submitHandler:function(){
+                doCreateCustomer();
+            }
+        })
+        $("#btn-create").on('click',()=>{
+            $("#form-create").submit();
+        })
+        function doCreateCustomer(){
+            customer.fullName = $("#fullName").val();
+            customer.phone = $("#phone").val();
+            customer.email = $("#email").val();
+            customer.userName = $("#userName").val();
+            customer.password = $("#password").val();
+            locationRegion.address = $("#address").val();
+            locationRegion.provinceId = $("#province").val();
+            locationRegion.districtId = $("#districts").val();
+            locationRegion.wardId = $("#ward").val();
+            locationRegion.provinceName = $("#province option:selected").text();
+            locationRegion.districtName = $("#province option:selected").text();
+            locationRegion.wardName = $("#province option:selected").text();
+            customer.locationRegion = locationRegion;
+            console.log(JSON.stringify(customer));
+            console.log(locationRegion);
+            $.ajax({
+                headers:{
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                url:"http://localhost:8080/api/customers",
+                type:"POST",
+                data:JSON.stringify(customer)
+            }).done((data)=>{
+                console.log(data);
+            }).fail((error)=>{
+                console.log(error);
+            })
+        }
+    </script>
+</body>
+
+</html>

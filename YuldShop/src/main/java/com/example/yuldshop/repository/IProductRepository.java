@@ -1,4 +1,16 @@
 package com.example.yuldshop.repository;
 
-public interface IProductRepository {
+import com.example.yuldshop.model.DTO.ProductDTO;
+import com.example.yuldshop.model.Product;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
+import java.math.BigDecimal;
+import java.util.List;
+
+@Repository
+public interface IProductRepository extends JpaRepository<Product, Long> {
+    List<Product> findAllByDeletedIsFalse();
+
 }

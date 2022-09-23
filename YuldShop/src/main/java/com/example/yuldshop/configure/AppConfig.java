@@ -1,7 +1,20 @@
 package com.example.yuldshop.configure;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+import com.example.yuldshop.service.LocationRegion.ILocationRegionService;
+import com.example.yuldshop.service.LocationRegion.LocationRegionService;
+import com.example.yuldshop.service.Role.IRoleService;
+import com.example.yuldshop.service.Role.RoleService;
+import com.example.yuldshop.service.category.CategoryService;
+import com.example.yuldshop.service.category.ICategoryService;
 import com.example.yuldshop.service.customer.CustomerServiceImp;
 import com.example.yuldshop.service.customer.ICustomerService;
+import com.example.yuldshop.service.product.IProductService;
+import com.example.yuldshop.service.product.ProductService;
+import com.example.yuldshop.service.user.IUserService;
+import com.example.yuldshop.service.user.UserService;
+import lombok.NonNull;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
@@ -10,13 +23,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -33,13 +49,14 @@ import java.util.Properties;
 @Configuration
 @EnableWebMvc
 @EnableTransactionManagement
-@ComponentScan("com.example.yuldshop.controller")
+@ComponentScan("com.example.yuldshop")
 @EnableJpaRepositories("com.example.yuldshop.repository")
+@EnableSpringDataWebSupport
 public class AppConfig implements WebMvcConfigurer, ApplicationContextAware {
     private ApplicationContext applicationContext;
 
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    public void setApplicationContext(@NonNull ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }
 
@@ -47,6 +64,30 @@ public class AppConfig implements WebMvcConfigurer, ApplicationContextAware {
     public ICustomerService customerService(){
         return new CustomerServiceImp();
     }
+    @Bean
+    public ILocationRegionService locationRegionService(){
+        return new LocationRegionService();
+    }
+    @Bean
+    public IProductService productService(){
+        return new ProductService();
+    }
+    @Bean
+    public ICategoryService categoryService(){
+        return new CategoryService();
+    }
+    @Bean
+    public IRoleService roleService(){
+        return new RoleService();
+    }
+//    @Bean
+//    public IUserService userService(){
+//        return new UserService();
+//    }
+//    @Bean
+//    public IRoleService roleService(){
+//        return new RoleService();
+//    }
 //    @Bean
 //    public ITransferService transferService(){
 //        return new TransferServiceImp();
@@ -66,7 +107,7 @@ public class AppConfig implements WebMvcConfigurer, ApplicationContextAware {
     public SpringResourceTemplateResolver templateResolver() {
         SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
         templateResolver.setApplicationContext(applicationContext);
-        templateResolver.setPrefix("/WEB-INF/views/");
+        templateResolver.setPrefix("/WEB-INF/views");
         templateResolver.setSuffix(".html");
         templateResolver.setTemplateMode(TemplateMode.HTML);
         templateResolver.setCharacterEncoding("UTF-8");
@@ -99,7 +140,7 @@ public class AppConfig implements WebMvcConfigurer, ApplicationContextAware {
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource());
-        em.setPackagesToScan("com.codegym.mavenbankingajax.model");
+        em.setPackagesToScan("com.example.yuldshop.model");
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
         em.setJpaProperties(additionalProperties());
@@ -126,7 +167,9 @@ public class AppConfig implements WebMvcConfigurer, ApplicationContextAware {
     Properties additionalProperties() {
         Properties properties = new Properties();
         properties.setProperty("hibernate.hbm2ddl.auto", "update");
-        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
+        properties.setProperty("hibernate.show_sql", "true");
+        properties.setProperty("hibernate.format_sql", "true");
+        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect");
         return properties;
     }
 
@@ -141,4 +184,23 @@ public class AppConfig implements WebMvcConfigurer, ApplicationContextAware {
 //        messageSource.setBasenames("validation-message");
 //        return messageSource;
 //    }
+//@Bean
+//public CommonsMultipartResolver multipartResolver() {
+//        int maxUploadSizeInMb = 10 * 1024 * 1024;     //10mb
+//    CommonsMultipartResolver resolver = new CommonsMultipartResolver();
+//    resolver.setDefaultEncoding("UTF-8");
+//    resolver.setMaxUploadSize(maxUploadSizeInMb * 2);
+//    resolver.setMaxUploadSizePerFile(maxUploadSizeInMb); //bytes
+//    return resolver;
+//}
+@Bean
+    public Cloudinary cloudinary(){
+    Cloudinary cloudinary =new Cloudinary(ObjectUtils.asMap(
+            "cloud_name","dkm0vpby1",
+            "api_key","526871447322655",
+            "api_secret","YKXgHVCCh-qqaFSOLOUv_6qXDr8",
+            "secure", true
+    ));
+    return cloudinary;
+}
 }
