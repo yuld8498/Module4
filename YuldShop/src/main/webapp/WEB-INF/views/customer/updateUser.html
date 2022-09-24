@@ -17,10 +17,8 @@
             <div class="col-md-12">
                 <div class="well">
                     <div class="return-customer">
-                        <h3 class="mb-1 custom-title">REGISTER ACCOUNT</h3>
-                        <p class="mb-1"><strong>If you already have an account with us, please login at the login
-                            page.</strong></p>
-                        <form action="#" class="form-register" id="form-create">
+                        <h3 class="mb-1 custom-title">UPDATE INFOMATION</h3>
+                        <form action="#" class="form-register" id="form-create" enctype="multipart/form-data">
                             <h5>Your Personal Details</h5>
                             <div class="form-group">
                                 <label>Full Name</label>
@@ -58,8 +56,10 @@
                             <div class="form-group">
                                 <div for="address">Address</div>
                                 <input type="text" name="address" id="address" class="w-25">
-
-                                </input>
+                            </div>
+                            <div class="form-group">
+                                <label>Avatar</label>
+                                <input type="file" name="avatar" id="avatar" class="form-control">
                             </div>
                             <input type="button" value="Register" class="btn btn-md btn-info" id="btn-create">
                         </form>

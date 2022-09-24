@@ -184,15 +184,15 @@ public class AppConfig implements WebMvcConfigurer, ApplicationContextAware {
 //        messageSource.setBasenames("validation-message");
 //        return messageSource;
 //    }
-//@Bean
-//public CommonsMultipartResolver multipartResolver() {
-//        int maxUploadSizeInMb = 10 * 1024 * 1024;     //10mb
-//    CommonsMultipartResolver resolver = new CommonsMultipartResolver();
-//    resolver.setDefaultEncoding("UTF-8");
-//    resolver.setMaxUploadSize(maxUploadSizeInMb * 2);
-//    resolver.setMaxUploadSizePerFile(maxUploadSizeInMb); //bytes
-//    return resolver;
-//}
+@Bean
+public CommonsMultipartResolver multipartResolver() {
+        int maxUploadSizeInMb = 10 * 1024 * 1024;     //10mb
+    CommonsMultipartResolver resolver = new CommonsMultipartResolver();
+    resolver.setDefaultEncoding("UTF-8");
+    resolver.setMaxUploadSize(maxUploadSizeInMb * 2);
+    resolver.setMaxUploadSizePerFile(maxUploadSizeInMb); //bytes
+    return resolver;
+}
 @Bean
     public Cloudinary cloudinary(){
     Cloudinary cloudinary =new Cloudinary(ObjectUtils.asMap(

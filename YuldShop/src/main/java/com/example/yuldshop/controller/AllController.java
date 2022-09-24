@@ -1,5 +1,6 @@
 package com.example.yuldshop.controller;
 
+import com.example.yuldshop.model.DTO.UserDTO;
 import com.example.yuldshop.model.Role;
 import com.example.yuldshop.model.User;
 import com.example.yuldshop.service.Role.IRoleService;
@@ -15,8 +16,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Set;
-import java.util.TreeSet;
 
 @Controller
 public class AllController {
@@ -44,10 +43,12 @@ public class AllController {
 
     //get role
 
-    private Role getRole(String userName){
+    private UserDTO getUserDTO(String userName){
         User user = userService.findByUsername(userName).get();
         Role role = user.getRole();
-        return role;
+        UserDTO userDTO = user.toUserDTO();
+        userDTO.setRole(role.toRoleDTO());
+        return userDTO;
     }
 
     //products
@@ -56,8 +57,8 @@ public class AllController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("/product/list");
         if (!getPrincipal().equals("")){
-            modelAndView.addObject("user", userService.findUserDTOByUsername(getPrincipal()).get());
-           modelAndView.addObject("role",getRole(getPrincipal()));
+            modelAndView.addObject("user", getUserDTO(getPrincipal()));
+           modelAndView.addObject("role",getUserDTO(getPrincipal()).getRole());
         }else {
             modelAndView.addObject("user", null);
             modelAndView.addObject("role", null);
@@ -110,14 +111,14 @@ public class AllController {
 
     //users
 
-    @GetMapping("/register")
+    @GetMapping("/users/register")
     public ModelAndView beginToPageRegister(){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("/user/register");
         return modelAndView;
     }
 
-    @GetMapping("/update")
+    @GetMapping("/users/update")
     public ModelAndView createNewUser(){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("/customer/updateUser");

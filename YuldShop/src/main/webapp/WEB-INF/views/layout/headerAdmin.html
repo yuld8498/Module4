@@ -10,7 +10,16 @@
             <img src="/access/logo.jpg" alt="" class="w-100">
           </div>
           <div class="col-lg-9 col-md-12">
-            <a class="btn btn-secondary float-right" href="http://localhost:8080/login"><i class="fa-solid fa-user"></i></a>
+            <div class="dropdown float-right">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <li class="fa-solid fa-user"></li>
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#" th:text="${'hello ' + user.username}"></a>
+                <a class="dropdown-item" href="http://localhost:8080/products/create">Create Products</a>
+                <a class="dropdown-item" href="http://localhost:8080/logout">Log Out</a>
+              </div>
+            </div>
           </div>
           <!-- end logo -->
         </div>
