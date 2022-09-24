@@ -7,14 +7,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.Transient;
 import javax.validation.Valid;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.math.BigDecimal;
 
 @Getter
@@ -25,9 +23,11 @@ import java.math.BigDecimal;
 public class ProductDTO {
     @NotNull(message = "ID of product is not null")
     private Long id;
-    @NotEmpty(message = "product Name is not empty")
+    @NotBlank(message = "product Name is not empty")
+    @Length(min = 3, max = 20, message = "product Name have from 3 character to 20 character")
     private String productName;
-    @NotEmpty(message = "Product description is not empty")
+    @NotBlank(message = "Product description is not empty")
+    @Length(min = 10, max = 100, message = "product Name have from 10 character to 100 character")
     private String description;
     @NotNull(message = "quantity is not null")
     @Min(value = 1, message = "quantity is great than 0")

@@ -17,23 +17,23 @@
                         <form action="#" class="form-register" id="form-create">
                             <h5>Product Information</h5>
                             <div class="form-group">
-                                <label>Product Name</label>
+                                <label for="productNameCe">Product Name</label>
                                 <input type="text" name="productNameCe" placeholder="Enter product name..."
                                        id="productNameCe" class="form-control">
                             </div>
                             <div class="form-group">
-                                <label>Description</label>
+                                <label for="descriptionCe">Description</label>
                                 <input type="text" name="descriptionCe" placeholder="Enter product description..."
                                        id="descriptionCe"
                                        class="form-control">
                             </div>
                             <div class="form-group">
-                                <label>Quantity</label>
+                                <label for="quantityCe">Quantity</label>
                                 <input type="number" name="quantityCe" placeholder="Enter quantity..." id="quantityCe"
                                        class="form-control">
                             </div>
                             <div class="form-group">
-                                <div for="price">Price</div>
+                                <label for="priceCe">Price</label>
                                 <input type="text" name="priceCe" id="priceCe" placeholder="Enter price..."
                                        class="form-control">
                             </div>
@@ -79,33 +79,63 @@
         console.log(error)
     })
 
-    $("#btn-create-product").on('click', () => {
+    function createNewProduct() {
+            product.id = 0;
+            product.productName = $("#productNameCe").val();
+            product.description = $("#descriptionCe").val();
+            product.quantity = $("#quantityCe").val();
+            product.price = $("#priceCe").val();
+            category.id = $("#categoriesCe").val();
+            category.category = $("#categoriesCe option:selected").text();
+            product.category = category;
+            $.ajax({
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                url: "http://localhost:8080/api/products",
+                type: "POST",
+                data: JSON.stringify(product)
+            }).done((data) => {
+                App.showSuccessAlert("Create New Product is success !")
+                console.log(data)
+            }).fail((error) => {
+                App.showErrorAlert(error.responseText)
+                console.log(error)
+            })
+    }
 
-        product.id=0;
-        product.productName=$("#productNameCe").val();
-        product.description =$("#descriptionCe").val();
-        product.quantity =$("#quantityCe").val();
-        product.price =$("#priceCe").val();
-        category.id =$("#categoriesCe").val();
-        category.category = $("#categoriesCe option:selected").text();
-        product.category=category;
-        $.ajax({
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
+    $("#form-create").validate({
+        rules: {
+            productNameCe: {
+                required: true,
+                minlength: 3,
+                maxlength: 20
             },
-            url: "http://localhost:8080/api/products",
-            type: "POST",
-            data: JSON.stringify(product)
-        }).done((data)=>{
-            App.showSuccessAlert("Create New Product is success !")
-            console.log(data)
-        }).fail((error)=>{
-            App.showErrorAlert("Create new product is fail, please check input again !")
-            console.log(error)
-        })
+            descriptionCe: {
+                required: true,
+                minlength: 10,
+                maxlength: 100
+            },
+            priceCe: {
+                required: true,
+                min: 1000,
+                max: 1000000000
+            },
+            quantityCe: {
+                required: true,
+                min: 1,
+                max: 1000
+            }
+        },
+        submitHandler: function () {
+            createNewProduct();
+        }
     })
 
+    $("#btn-create-product").on('click',()=>{
+        $("#form-create").submit();
+    })
 </script>
 </body>
 </html>

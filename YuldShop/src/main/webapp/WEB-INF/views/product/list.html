@@ -40,6 +40,45 @@
     }).fail((error) => {
 
     })
+
+    function renderProduct(product){
+       let str =`
+                        <div class="col-lg-3 col-md-6 col-sm-12 hei-350 mt-3">
+                            <div class="p-3 h-100 w-100">
+                                <div class="h-75 w-100 p-2">
+                                    <image class="h-100 m-auto ml-auto mr-auto"
+                                     src="https://www.bootbarn.com/dw/image/v2/BCCF_PRD/on/demandware.static/-/Sites-master-product-catalog-shp/default/dw662d2f3e/images/843/2000335843_200_P1.JPG?sw=600&sh=600&sm=fit&q=50">
+                                    </image>
+                                </div>
+                                <div class="text-center">${product.productName}</div>
+                                <div class="text-center">${'$ '+product.price}</div>
+<!--                                <div class="row w-100 justify-content-around">-->
+<!--                                    <button class="btn btn-outline-success w-50 hei-50">Show Info</button>-->
+<!--                                    <button class="btn btn-outline-success w-50 hei-50">Add to Cart</button>-->
+<!--                                </div>-->
+                            </div>
+                        </div>`
+        $("#list-products").prepend(str);
+    }
+
+    function loadProduct(){
+        $.ajax({
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            url: "http://localhost:8080/api/products",
+            type: "GET"
+        }).done((data)=>{
+            $.each(data,(i,item)=>{
+                renderProduct(item);
+            })
+        }).fail((error)=>{
+            console.log(error)
+        })
+    }
+
+    loadProduct();
 </script>
 </body>
 </html>
