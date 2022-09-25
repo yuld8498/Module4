@@ -4,9 +4,11 @@ import com.example.yuldshop.model.DTO.ProductDTO;
 import com.example.yuldshop.model.Product;
 import com.example.yuldshop.repository.IProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.awt.print.Pageable;
 import java.util.Optional;
 
 @Service
@@ -38,5 +40,4 @@ public class ProductService implements IProductService{
     public Iterable<Product> findAllByDeletedIsFalse() {
         return productRepository.findAllByDeletedIsFalse();
     }
-
 }

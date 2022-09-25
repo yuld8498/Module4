@@ -13,9 +13,6 @@
             <th:block th:replace="/layout/headerAdmin::headerAdmin"/>
         </div>
     </div>
-<!--    <div th:if="${user != null}">-->
-<!--        <th:block th:replace="/layout/navBar-login::navBar-login"/>-->
-<!--    </div>-->
     <div th:if="${user == null}">
         <th:block th:replace="/layout/navBar::navBar"/>
     </div>
@@ -46,8 +43,8 @@
                         <div class="col-lg-3 col-md-6 col-sm-12 hei-350 mt-3">
                             <div class="p-3 h-100 w-100">
                                 <div class="h-75 w-100 p-2">
-                                    <image class="h-100 m-auto ml-auto mr-auto"
-                                     src="https://www.bootbarn.com/dw/image/v2/BCCF_PRD/on/demandware.static/-/Sites-master-product-catalog-shp/default/dw662d2f3e/images/843/2000335843_200_P1.JPG?sw=600&sh=600&sm=fit&q=50">
+                                    <image class="w-100 m-auto ml-auto mr-auto"
+                                     src="http://localhost:8080/file/img/${product.img.name}">
                                     </image>
                                 </div>
                                 <div class="text-center">${product.productName}</div>

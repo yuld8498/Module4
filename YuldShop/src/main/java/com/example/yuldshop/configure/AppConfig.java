@@ -4,6 +4,8 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.example.yuldshop.service.LocationRegion.ILocationRegionService;
 import com.example.yuldshop.service.LocationRegion.LocationRegionService;
+import com.example.yuldshop.service.ProductImgService.IProductImgService;
+import com.example.yuldshop.service.ProductImgService.ProductImgServiceImp;
 import com.example.yuldshop.service.Role.IRoleService;
 import com.example.yuldshop.service.Role.RoleService;
 import com.example.yuldshop.service.category.CategoryService;
@@ -79,6 +81,10 @@ public class AppConfig implements WebMvcConfigurer, ApplicationContextAware {
     @Bean
     public IRoleService roleService(){
         return new RoleService();
+    }
+    @Bean
+    public IProductImgService productImgService(){
+        return new ProductImgServiceImp();
     }
 //    @Bean
 //    public IUserService userService(){

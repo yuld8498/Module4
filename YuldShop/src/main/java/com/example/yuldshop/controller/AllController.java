@@ -1,10 +1,12 @@
 package com.example.yuldshop.controller;
 
 import com.example.yuldshop.model.DTO.UserDTO;
+import com.example.yuldshop.model.Product;
 import com.example.yuldshop.model.Role;
 import com.example.yuldshop.model.User;
 import com.example.yuldshop.service.Role.IRoleService;
 import com.example.yuldshop.service.jwt.JwtService;
+import com.example.yuldshop.service.product.IProductService;
 import com.example.yuldshop.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,9 +18,13 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @Controller
 public class AllController {
+
+    @Autowired
+    private IProductService productService;
 
     @Autowired
     private IUserService userService;
@@ -77,6 +83,13 @@ public class AllController {
     public ModelAndView beginToPage(){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("/customer/login");
+        if (!getPrincipal().equals("")){
+            modelAndView.addObject("user", getUserDTO(getPrincipal()));
+            modelAndView.addObject("role",getUserDTO(getPrincipal()).getRole());
+        }else {
+            modelAndView.addObject("user", null);
+            modelAndView.addObject("role", null);
+        }
         return modelAndView;
     }
     @GetMapping("/customers/password")
@@ -122,6 +135,13 @@ public class AllController {
     public ModelAndView createNewUser(){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("/customer/updateUser");
+        if (!getPrincipal().equals("")){
+            modelAndView.addObject("user", getUserDTO(getPrincipal()));
+            modelAndView.addObject("role",getUserDTO(getPrincipal()).getRole());
+        }else {
+            modelAndView.addObject("user", null);
+            modelAndView.addObject("role", null);
+        }
         return modelAndView;
     }
 }

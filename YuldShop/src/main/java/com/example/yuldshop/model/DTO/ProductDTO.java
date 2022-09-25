@@ -40,6 +40,8 @@ public class ProductDTO {
     @Valid
     private CategoryDTO category;
 
+    private ImgDTO img;
+
     @Override
     public String toString() {
         return "ProductDTO{" +
@@ -49,6 +51,7 @@ public class ProductDTO {
                 ", description='" + description + '\'' +
                 ", price=" + price +
                 ", categoryDTO=" + category +
+                ", img=" + img +
                 '}';
     }
     public Product toProduct(){

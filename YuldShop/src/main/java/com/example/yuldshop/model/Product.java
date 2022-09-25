@@ -38,7 +38,6 @@ public class Product extends BasicEntity {
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private ProductCategory category;
 
-
     @Override
     public String toString() {
         return "Product{" +

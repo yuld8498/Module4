@@ -5,7 +5,19 @@
 </head>
 <body>
 
-<th:block th:replace="/layout/navBar :: navBar"/>
+<div>
+    <div th:if="${user != null}">
+        <div th:if="${role.getCode().equalsIgnoreCase('user')}">
+            <th:block th:replace="/layout/navBar-login::navBar-login"/>
+        </div>
+        <div th:if="${role.getCode().equalsIgnoreCase('admin')}">
+            <th:block th:replace="/layout/headerAdmin::headerAdmin"/>
+        </div>
+    </div>
+    <div th:if="${user == null}">
+        <th:block th:replace="/layout/navBar::navBar"/>
+    </div>
+</div>
 
 <div class="log-in ptb-100 ptb-sm-60">
     <div class="container">
@@ -14,7 +26,7 @@
                 <div class="well">
                     <div class="return-customer">
                         <h3 class="mb-1 custom-title">CREATE NEW PRODUCT</h3>
-                        <form action="#" class="form-register" id="form-create">
+                        <form action="#" class="form-register" id="form-create" enctype="multipart/form-data">
                             <h5>Product Information</h5>
                             <div class="form-group">
                                 <label for="productNameCe">Product Name</label>
@@ -35,6 +47,11 @@
                             <div class="form-group">
                                 <label for="priceCe">Price</label>
                                 <input type="text" name="priceCe" id="priceCe" placeholder="Enter price..."
+                                       class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="fileCe">Price</label>
+                                <input type="file" name="fileCe" id="fileCe" placeholder="Enter price..."
                                        class="form-control">
                             </div>
                             <div class="form-group">
@@ -60,6 +77,7 @@
 <script>
     let product = new Product();
     let category = new Categories();
+    let img = new Img();
 
     $('.dropdown-toggle').dropdown()
     $.ajax({
@@ -80,29 +98,38 @@
     })
 
     function createNewProduct() {
-            product.id = 0;
-            product.productName = $("#productNameCe").val();
-            product.description = $("#descriptionCe").val();
-            product.quantity = $("#quantityCe").val();
-            product.price = $("#priceCe").val();
-            category.id = $("#categoriesCe").val();
-            category.category = $("#categoriesCe option:selected").text();
-            product.category = category;
-            $.ajax({
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                url: "http://localhost:8080/api/products",
-                type: "POST",
-                data: JSON.stringify(product)
-            }).done((data) => {
-                App.showSuccessAlert("Create New Product is success !")
-                console.log(data)
-            }).fail((error) => {
-                App.showErrorAlert(error.responseText)
-                console.log(error)
-            })
+        product.id = 0;
+        product.productName = $("#productNameCe").val();
+        product.description = $("#descriptionCe").val();
+        product.quantity = $("#quantityCe").val();
+        product.price = $("#priceCe").val();
+        category.id = $("#categoriesCe").val();
+        category.category = $("#categoriesCe option:selected").text();
+        product.category = category;
+        product.img = img;
+        $.ajax({
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            url: "http://localhost:8080/api/products",
+            type: "POST",
+            data: JSON.stringify(product),
+        }).done((data) => {
+            product =data;
+            App.showSuccessAlert("Create New Product is success !")
+            console.log(data)
+            var img = new FormData();
+            img.append("image", document.getElementById("fileCe").files[0]);
+            img.append("data", product.id);
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "http://localhost:8080/file/img");
+            xhr.send(img);
+            alert(img.values());
+        }).fail((error) => {
+            App.showErrorAlert("error")
+            console.log(error)
+        })
     }
 
     $("#form-create").validate({

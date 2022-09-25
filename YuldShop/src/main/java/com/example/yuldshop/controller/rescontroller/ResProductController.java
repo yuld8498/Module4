@@ -1,10 +1,10 @@
 package com.example.yuldshop.controller.rescontroller;
 
 import com.cloudinary.Cloudinary;
-import com.cloudinary.utils.ObjectUtils;
 import com.example.yuldshop.model.DTO.ProductDTO;
-import com.example.yuldshop.model.ImageProduct;
 import com.example.yuldshop.model.Product;
+import com.example.yuldshop.model.ProductImg;
+import com.example.yuldshop.repository.IProductImgRepository;
 import com.example.yuldshop.service.product.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,11 +15,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletContext;
-import java.io.IOException;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/products")
@@ -32,13 +29,18 @@ public class ResProductController {
 
     @Autowired
     private Cloudinary cloudinary;
+    @Autowired
+    private IProductImgRepository productImgRepository;
 
     @GetMapping
     public ResponseEntity<List<?>> findAllProduct() {
         List<Product> products = (List<Product>) productService.findAllByDeletedIsFalse();
         List<ProductDTO> productDTOS = new ArrayList<>();
         for (Product product : products) {
-            productDTOS.add(product.toProductDTO());
+            ProductImg productImg=productImgRepository.findByProductId(product.getId());
+            ProductDTO productDTO = product.toProductDTO();
+            productDTO.setImg(productImg.toImgDTO());
+            productDTOS.add(productDTO);
         }
         return new ResponseEntity<>(productDTOS, HttpStatus.OK);
     }
@@ -47,6 +49,7 @@ public class ResProductController {
     public ResponseEntity<?> findProductById(@PathVariable Long id) {
         Product product = productService.findById(id).get();
         ProductDTO productDTO = product.toProductDTO();
+//        productDTO.setImg(productImgRepository.findByProductId(id).toImgDTO());
         return new ResponseEntity<>(productDTO, HttpStatus.OK);
     }
 
