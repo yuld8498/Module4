@@ -206,12 +206,14 @@
             type:"POST",
             data:JSON.stringify(customer)
         }).done((data)=>{
-            console.log(data);
+            App.showSuccessAlert("Update information is successfully")
         }).fail((error)=>{
-            console.log(error);
+            App.showErrorAlert("Update is fail, please check input again")
         })
     }
+
     $('.dropdown-toggle').dropdown()
+
     $.ajax({
         url: "http://localhost:8080/api/categories",
         type: "GET"

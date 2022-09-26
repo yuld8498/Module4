@@ -1,0 +1,61 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<th:block th:fragment="modalUpdate">
+  <div class="modal fade overflow-auto" id="modalUpdate" tabindex="-1" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Update Product</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-alert-danger hide">
+          </div>
+          <div class="return-customer" data-spy="scroll">
+            <h3 class="mb-1 custom-title">UPDATE PRODUCT</h3>
+            <form class="form-register" id="form-updateP" enctype="multipart/form-data">
+              <h5>Product Information</h5>
+              <div class="form-group">
+                <label for="productNameUp">Product Name</label>
+                <input type="text" name="productNameUp" placeholder="Enter product name..."
+                       id="productNameUp" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="descriptionUp">Description</label>
+                <input type="text" name="descriptionUp" placeholder="Enter product description..."
+                       id="descriptionUp"
+                       class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="quantityUp">Quantity</label>
+                <input type="number" name="quantityUp" placeholder="Enter quantity..." id="quantityUp"
+                       class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="priceUp">Price</label>
+                <input type="text" name="priceUp" id="priceUp" placeholder="Enter price..."
+                       class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="fileUp">Img Url</label>
+                <input type="text" name="fileUp" id="fileUp" placeholder="Enter Img Url..."
+                       class="form-control">
+              </div>
+              <div class="form-group">
+                <div for="categoriesUp">Categories</div>
+                <select name="categoriesUp" id="categoriesUp" class="w-25">
+                </select>
+              </div>
+              <input class="btn btn-outline-secondary formCreateCategory" value="Add New Category">
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+          <button type="button" id="btnUpdateByAdmin" class="btn btn-outline-primary">Update Product</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</th:block>

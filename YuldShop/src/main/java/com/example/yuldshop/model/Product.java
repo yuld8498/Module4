@@ -38,6 +38,9 @@ public class Product extends BasicEntity {
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private ProductCategory category;
 
+    private String imgUrl;
+
+
     @Override
     public String toString() {
         return "Product{" +
@@ -45,6 +48,7 @@ public class Product extends BasicEntity {
                 ", productName='" + productName + '\'' +
                 ", description='" + description + '\'' +
                 ", price=" + price +
+                ", imgUrl=" + imgUrl +
                 ", quantity=" + quantity +
                 ", category=" + category +
                 "} ";
@@ -57,6 +61,7 @@ public class Product extends BasicEntity {
                 .setProductName(productName)
                 .setCategory(category.toCategoryDTO())
                 .setPrice(price)
+                .setImgUrl(imgUrl)
                 .setQuantity(quantity);
     }
 }

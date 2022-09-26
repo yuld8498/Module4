@@ -6,7 +6,9 @@ import com.example.yuldshop.service.IGenericService;
 import org.springframework.data.domain.Page;
 
 import java.awt.print.Pageable;
+import java.util.List;
 
 public interface IProductService extends IGenericService<Product> {
-    public Iterable<Product> findAllByDeletedIsFalse();
+     Iterable<Product> findAllByDeletedIsFalse();
+    List<Product> findByCategory(Long id);
 }

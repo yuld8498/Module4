@@ -90,7 +90,7 @@ let user = new User();
             console.log(user)
             window.location.href="/products";
         }).fail((error)=>{
-            console.log(error)
+            App.showErrorAlert("User name or password is wrong, please check again !")
         })
     })
 

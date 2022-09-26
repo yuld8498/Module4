@@ -9,12 +9,6 @@ class LocationRegion{
         this.address=address;
     }
 }
-class Img{
-    constructor(id, name) {
-        this.id=id;
-        this.name =name;
-    }
-}
 
 class Categories{
     constructor(id,category) {
@@ -49,14 +43,15 @@ class Customer{
 }
 
 class Product{
-    constructor(id,productName,description,quantity,price,category, img) {
+    constructor(id,productName,description,quantity,price,category, imgUrl,deleted) {
         this.id=id;
         this.productName=productName;
         this.description=description;
         this.quantity=quantity;
         this.price=price;
         this.category=category;
-        this.img =img;
+        this.imgUrl =imgUrl;
+        this.deleted = deleted;
     }
 }
 

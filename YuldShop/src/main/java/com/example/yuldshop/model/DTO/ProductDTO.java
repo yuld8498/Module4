@@ -37,10 +37,11 @@ public class ProductDTO {
     @Min(value = 1000, message = "price is great than 1000")
     @Max(value = 1000000000, message = "quantity is Less than or Equal 1 billion")
     private BigDecimal price;
+
+    private String imgUrl;
     @Valid
     private CategoryDTO category;
 
-    private ImgDTO img;
 
     @Override
     public String toString() {
@@ -50,8 +51,8 @@ public class ProductDTO {
                 ", quantity=" + quantity +
                 ", description='" + description + '\'' +
                 ", price=" + price +
+                ", imgUrl=" + imgUrl +
                 ", categoryDTO=" + category +
-                ", img=" + img +
                 '}';
     }
     public Product toProduct(){
@@ -61,6 +62,7 @@ public class ProductDTO {
                 .setDescription(description)
                 .setPrice(price)
                 .setQuantity(quantity)
+                .setImgUrl(imgUrl)
                 .setCategory(category.toProductCategory());
     }
 }

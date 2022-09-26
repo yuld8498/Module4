@@ -16,7 +16,8 @@
               </button>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="dropdown-item" href="#" th:text="${'hello ' + user.username}"></a>
-                <a class="dropdown-item" href="http://localhost:8080/products/create">Create Products</a>
+                <a class="dropdown-item"  id="create-products">Create Products</a>
+                <a class="dropdown-item"  id="manager-products" href="http://localhost:8080/products/admin">Manager Products</a>
                 <a class="dropdown-item" href="http://localhost:8080/logout">Log Out</a>
               </div>
             </div>

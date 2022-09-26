@@ -7,18 +7,12 @@ import lombok.experimental.Accessors;
 import javax.persistence.*;
 import java.util.Arrays;
 
-@Entity
+
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
-@Table(name = "product_img")
-@Builder
-@Accessors(chain = true)
 public class ProductImg {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;

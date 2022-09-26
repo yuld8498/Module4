@@ -71,6 +71,21 @@ public class AllController {
         }
         return modelAndView;
     }
+
+    @GetMapping("/products/admin")
+    public ModelAndView showListProductAdmin(){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("/product/listProductsAdmin");
+        if (!getPrincipal().equals("")){
+            modelAndView.addObject("user", getUserDTO(getPrincipal()));
+            modelAndView.addObject("role",getUserDTO(getPrincipal()).getRole());
+        }else {
+            modelAndView.addObject("user", null);
+            modelAndView.addObject("role", null);
+        }
+        return modelAndView;
+    }
+
     @GetMapping("/products/create")
     public ModelAndView showFormCreate(){
         ModelAndView modelAndView = new ModelAndView();
