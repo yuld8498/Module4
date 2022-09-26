@@ -25,6 +25,9 @@
 <th:block th:replace="/modal/Create :: modalCreate"/>
 <!--modal create category-->
 <th:block th:replace="/modal/createCategories :: modalCreateCategory"/>
+
+<!--modal info-->
+<th:block th:replace="/modal/modalInfo :: modalInfo"/>
 <!--end modal-->
 <div>
     <th:block th:replace="/layout/footerJS::footerJS"/>
@@ -91,6 +94,7 @@
 
 
     function renderProduct(product) {
+        unbinAll();
         let str = `
                         <div class="col-lg-3 col-md-6 col-sm-12 hei-450 mt-3 product-items">
                             <div class="p-3 h-100 w-100">
@@ -100,8 +104,8 @@
                                          <div class="w-100 m-auto ml-auto mr-auto content slide-down row zoom">
                                                  <div class="w-100 h-75">${product.description}</div>
                                                 <div class="w-100 text-center row">
-                                                        <button class="btn btn-outline-primary col-lg-6 col-md-12">More Info</button>
-                                                        <button class="btn btn-outline-primary col-lg-6 col-md-12">Add to Cart</button>
+                                                        <button class="btn btn-outline-primary col-lg-6 col-md-12 btnShowInfo">More Info</button>
+                                                        <button class="btn btn-outline-primary col-lg-6 col-md-12 btnAddToCart">Add to Cart</button>
                                                 </div>
                                         </div>
                                 </div>
@@ -110,6 +114,7 @@
                             </div>
                         </div>`
         $("#list-products").prepend(str);
+        handlerOnFunction();
     }
 
     function loadProduct() {
@@ -150,13 +155,27 @@
     loadProduct();
 
     //showCreateForm
-    function showBoxCreate() {
-        $("#mdCreate").modal("show");
-    }
 
+    function showModalInfo(){
+        $("#mdInfo").modal("show");
+    }
+    function showBoxCreate() {
+        $(".btnShowInfo").on("click",()=>{
+            $("#mdInfo").modal("show");
+        })
+
+    }
     $("#create-products").on('click', () => {
         showBoxCreate();
     })
+
+    function handlerOnFunction(){
+        showBoxCreate();
+    }
+
+    function unbinAll(){
+        $(".btnShowInfo").off("click");
+    }
 
     //create new product
     function createNewProduct() {

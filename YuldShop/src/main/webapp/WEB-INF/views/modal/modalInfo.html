@@ -1,0 +1,35 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<th:block th:fragment="modalInfo">
+    <div class="modal fade overflow-auto" id="mdInfo" tabindex="-1" data-backdrop="static" data-keyboard="false" hide>
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="exampleModalLabel">PRODUCT INFORMATION</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-alert-danger show">
+                    </div>
+                    <div class="return-customer row" data-spy="scroll">
+                        <div class="col-lg-6 col-md-12 text-center">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTo0JRBOvPtanS8uvJhkC-IJWIicSn9heMHA&usqp=CAU" alt="#">
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <h4 class="mb-1 custom-title" id="product-information"></h4>
+                            <div id="product-info-price"></div>
+                            <div id="product-info-description"></div>
+                            <div id="product-info-type"></div>
+                            <div>
+                                <button>ADD to card</button>
+                                <button>ADD to Order</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+</html>
