@@ -40,12 +40,12 @@
         }).done((data) => {
             $.each(data, (i, item) => {
                 product = item;
-                renderProduct(product);
+                renderProductAdmin(product);
             })
         })
     }
 
-    function renderProduct(product) {
+    function renderProductAdmin(product) {
         unbindAll();
         let str = ` <tr id="${'tr_' + product.id}">
                 <td>${product.id}</td>
@@ -73,16 +73,35 @@
             url: "http://localhost:8080/api/categories",
             type: "GET"
         }).done((data) => {
-            let str = `<button class="dropdown-item btn-category" onclick="loadProductByCategory(-1)">ALL</button>`;
+            let str = `<button class="dropdown-item btn-category" onclick="loadProductByCategoryAdmin(-1)">ALL</button>`;
             let list = `<option value="#">--categories--</option>`;
             $.each(data, (i, item) => {
-                str += `<button class="dropdown-item btn-category" onclick="loadProductByCategory(${item.id})">${item.category}</button>`
+                str += `<button class="dropdown-item btn-category" onclick="loadProductByCategoryAdmin(${item.id})">${item.category}</button>`
                 list += `<option value="${item.id}">${item.category}</option>`
             })
             document.getElementById("productCategories").innerHTML = str;
             document.getElementById("categoriesUp").innerHTML = list;
             document.getElementById("categoriesCe").innerHTML = list;
         }).fail((error) => {
+        })
+    }
+
+    function loadProductByCategoryAdmin(id) {
+        let url = "http://localhost:8080/api/products/category/" + id;
+        if (id === -1) {
+            url = "http://localhost:8080/api/products"
+        }
+        $.ajax({
+            url: url,
+            type: "GET",
+        }).done((data) => {
+            $("#table-products tbody tr").remove()
+            $.each(data, (i, item) => {
+                product =item;
+                renderProductAdmin(product);
+            })
+        }).fail((error) => {
+            console.log(error)
         })
     }
 
@@ -231,16 +250,16 @@
             data: JSON.stringify(product),
         }).done((data)=>{
             product =data;
-            renderProduct(product);
+            renderProductAdmin(product);
             App.showSuccessAlert("Create new product is successfully !")
         }).fail((err)=>{
             console.log(err)
         })
     }
     $(".formCreateCategory").on("click",()=>{
-        showBoxCreateCategoryUp();
+        showBoxCreateCategory();
     })
-    function showBoxCreateCategoryUp(){
+    function showBoxCreateCategory(){
         $("#mdCreateCategory").modal("show");
     }
     $("#btn-create-category").on('click', ()=>{
@@ -265,6 +284,7 @@
             console.log(err)
         })
     })
+
     //showCreateForm
     function showBoxCreate() {
         $("#mdCreate").modal("show");

@@ -167,9 +167,9 @@
         console.log($(this).data("id"))
         cartItems.id = 0;
         cartItems.productId = $(this).data("id");
-        cartItems.productName = $("#product-info-name").val();
-        cartItems.price = $("#product-info-price").val();
-        cartItems.quantity = $("#product-info-quantity").val();
+        cartItems.productName = $("#nameIf").val();
+        cartItems.price = $("#priceIf").val();
+        cartItems.quantity = $("#quantityIf").val();
         cartItems.amount = cartItems.quantity * cartItems.price;
         $.ajax({
             headers: {
@@ -196,11 +196,11 @@
             findProductById(id).then((result) => {
                 product = result;
                 console.log(product)
-                $("#img-info").attr("src", product.imgUrl);
-                $("#product-info-name").val(product.productName)
-                $("#product-info-price").val(product.price)
-                $("#product-info-type").val(product.category.category)
-                $("#product-info-description").val(product.description)
+                $("#imgIf").attr("src", product.imgUrl);
+                $("#nameIf").val(product.productName)
+                $("#priceIf").val(product.price)
+                $("#typeIf").val(product.category.category)
+                $("#descriptionIf").val(product.description)
                 $("#btn-add2cart").data("id", product.id)
             })
             $("#mdInfo").modal("show");

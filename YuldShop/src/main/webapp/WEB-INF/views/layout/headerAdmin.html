@@ -10,7 +10,8 @@
             <img src="/access/logo.jpg" alt="" class="w-100">
           </div>
           <div class="col-lg-9 col-md-12">
-            <div class="dropdown dropdown col-lg-6 col-md-6">
+              <!--user icon-->
+            <div class="float-right">
               <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <li class="fa-solid fa-user"></li>
               </button>
@@ -19,6 +20,21 @@
                 <a class="dropdown-item"  id="create-products">Create Products</a>
                 <a class="dropdown-item"  id="manager-products" href="http://localhost:8080/products/admin">Manager Products</a>
                 <a class="dropdown-item" href="http://localhost:8080/logout">Log Out</a>
+              </div>
+            </div>
+            <!-- cart icon-->
+            <div class="float-right mr-2">
+              <div class="btn-group dropleft">
+                <button type="button" class="btn btn-secondary dropdown-toggle"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <li class=" fa-solid fa-cart-shopping"></li>
+                </button>
+                <div class="dropdown-menu">
+                  <div class="dropdown-item wid-200">
+                    <h4 class="dropdown-item">Cart Items</h4>
+                    <a href="#" style="text-decoration: none">Cart Management</a>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
