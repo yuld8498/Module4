@@ -36,6 +36,9 @@
 
     let product = new Product();
     let category = new Categories();
+    let cartItems = new CartItems();
+
+
     $('.dropdown-toggle').dropdown()
 
 
@@ -104,8 +107,8 @@
                                          <div class="w-100 m-auto ml-auto mr-auto content slide-down row zoom">
                                                  <div class="w-100 h-75">${product.description}</div>
                                                 <div class="w-100 text-center row">
-                                                        <button class="btn btn-outline-primary col-lg-6 col-md-12 btnShowInfo">More Info</button>
-                                                        <button class="btn btn-outline-primary col-lg-6 col-md-12 btnAddToCart">Add to Cart</button>
+                                                        <button class="btn btn-outline-primary col-lg-6 col-md-12 btnShowInfo" data-id="${product.id}">More Info</button>
+                                                        <button class="btn btn-outline-primary col-lg-6 col-md-12 btnAddToCart" data-id="${product.id}">Add to Cart</button>
                                                 </div>
                                         </div>
                                 </div>
@@ -156,25 +159,103 @@
 
     //showCreateForm
 
-    function showModalInfo(){
+    function showModalInfo() {
         $("#mdInfo").modal("show");
     }
+
+    $("#btn-add2cart").on("click", function () {
+        console.log($(this).data("id"))
+        cartItems.id = 0;
+        cartItems.productId = $(this).data("id");
+        cartItems.productName = $("#product-info-name").val();
+        cartItems.price = $("#product-info-price").val();
+        cartItems.quantity = $("#product-info-quantity").val();
+        cartItems.amount = cartItems.quantity * cartItems.price;
+        $.ajax({
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            url: "http://localhost:8080/api/cart",
+            type: "POST",
+            data: JSON.stringify(cartItems)
+        }).done((data) => {
+            App.showSuccessAlert("Add to cart is successfully !")
+        }).fail((error) => {
+            App.showConfirmDialog("Sign in to add to cart, Do you want to login to add to cart?").then((result => {
+                if (result.isConfirmed) {
+                    window.location.href = "/login";
+                }
+            }))
+        })
+    })
+
     function showBoxCreate() {
-        $(".btnShowInfo").on("click",()=>{
+        $(".btnShowInfo").on("click", function () {
+            let id = $(this).data("id");
+            findProductById(id).then((result) => {
+                product = result;
+                console.log(product)
+                $("#img-info").attr("src", product.imgUrl);
+                $("#product-info-name").val(product.productName)
+                $("#product-info-price").val(product.price)
+                $("#product-info-type").val(product.category.category)
+                $("#product-info-description").val(product.description)
+                $("#btn-add2cart").data("id", product.id)
+            })
             $("#mdInfo").modal("show");
         })
-
     }
+
     $("#create-products").on('click', () => {
         showBoxCreate();
     })
 
-    function handlerOnFunction(){
-        showBoxCreate();
+    function add2Cart() {
+        $(".btnAddToCart").on("click", function () {
+            let idProduct = $(this).data("id");
+            App.showConfirmDialog("You wanna add this product to cart?").then(result => {
+                if (result.isConfirmed) {
+                    findProductById(idProduct).then(result => {
+                        product = result;
+                        cartItems.id = 0;
+                        cartItems.price = product.price
+                        cartItems.quantity = 1;
+                        cartItems.amount = product.price;
+                        cartItems.productName = product.productName;
+                        cartItems.productId = product.id;
+                        console.log(cartItems)
+                        $.ajax({
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            },
+                            url: "http://localhost:8080/api/cart",
+                            type: "POST",
+                            data: JSON.stringify(cartItems)
+                        }).done((data) => {
+                            App.showSuccessAlert("Add to cart is successfully !")
+                        }).fail((error) => {
+                            App.showConfirmDialog("Sign in to add to cart, Do you want to login to add to cart?").then((result => {
+                                if (result.isConfirmed) {
+                                    window.location.href = "/login";
+                                }
+                            }))
+                        })
+                    })
+                }
+            })
+        })
     }
 
-    function unbinAll(){
+    function handlerOnFunction() {
+        showBoxCreate();
+        add2Cart();
+    }
+
+    function unbinAll() {
         $(".btnShowInfo").off("click");
+        $(".btnAddToCart").off("click");
     }
 
     //create new product
@@ -253,13 +334,12 @@
     })
 
     //find and render
-    function findAndrender(id) {
-        $.ajax({
+    function findProductById(id) {
+        return $.ajax({
             url: "http://localhost:8080/api/products/" + id,
             type: "GET"
         }).done((data) => {
             product = data;
-            renderProduct(product);
         }).fail((error) => {
             App.showErrorAlert("Load file is fail, please reload page !")
         })

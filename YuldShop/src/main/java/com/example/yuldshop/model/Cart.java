@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Getter
@@ -17,9 +19,14 @@ public class Cart extends BasicEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(columnDefinition = "Integer default 1")
-    private int quantity;
-    @ManyToOne
-    @JoinColumn(name = "customer_id",referencedColumnName = "id")
-    private Customer customer;
+
+    @Column(precision = 12, scale = 0, nullable = false)
+    private BigDecimal totalAmount;
+
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
+
+    @OneToMany(mappedBy = "cart")
+    private List<CartItem> cartItems;
 }
