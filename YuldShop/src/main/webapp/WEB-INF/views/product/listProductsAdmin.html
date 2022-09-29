@@ -7,11 +7,12 @@
 <th:block th:replace="/layout/headerAdmin::headerAdmin"/>
 <div id="list-products-admin" class="container">
     <h4 class="mt-3">Product Management</h4>
-    <table class="w-100  mt-3 table table-hover" id="table-products">
+    <table class="w-100  mt-3 table table-hover table-striped" id="table-products">
         <thead>
         <th>#</th>
         <th>Image</th>
         <th>Product Name</th>
+        <th>Product Type</th>
         <th>Description</th>
         <th>Price</th>
         <th>Quantity</th>
@@ -51,6 +52,7 @@
                 <td>${product.id}</td>
                 <td><img src="${product.imgUrl}" alt="" style="width: 150px"></td>
                 <td>${product.productName}</td>
+                <td>${product.category.category}</td>
                 <td>${product.description}</td>
                 <td class="text-center">${product.price}</td>
                 <td>${product.quantity}</td>
@@ -185,6 +187,7 @@
                 <td>${product.id}</td>
                 <td><img src="${product.imgUrl}" alt="" style="width: 150px"></td>
                 <td>${product.productName}</td>
+                 <td>${product.category.category}</td>
                 <td>${product.description}</td>
                 <td class="text-center">${product.price}</td>
                 <td>${product.quantity}</td>
@@ -196,6 +199,13 @@
                 unbindAll();
                 handlerFunction();
                 App.showSuccessAlert("Update is successfully !")
+                $("#productNameUp").val("");
+                $("#priceUp").val("");
+                $("#quantityUp").val("");
+                $("#descriptionUp").val("");
+                $("#fileUp").val("");
+                $("#categoriesUp").val(data.category)
+                $("#modalUpdate").modal("hide");
             }).fail((err) => {
                 console.log(err);
             })
@@ -351,6 +361,28 @@
                 }))
         })
     }
+
+    // $(document).ready(function () {
+    //     $('#table-products').DataTable({
+    //       ajax:{
+    //           url:"/api/products",
+    //           dataSrc: ''
+    //       },
+    //         columns:[
+    //             {data : "id"},
+    //             { data: "imgUrl" ,
+    //                 "render": function ( data) {
+    //                     return '<img src=data width="150px">';}
+    //             },
+    //             {data :"productName"},
+    //             {data :"category.category"},
+    //             {data: "description"},
+    //             {data: "price"},
+    //             {data:"quantity"}
+    //         ]
+    //     });
+    //
+    // });
 </script>
 </body>
 </html>

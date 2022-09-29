@@ -38,6 +38,7 @@ public class Product extends BasicEntity {
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private ProductCategory category;
 
+    @Column(columnDefinition = "Varchar(1024) default 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYf_NT5oCBOdYJXDPpk4bQsmltVjofk0NpAg&usqp=CAU'")
     private String imgUrl;
 
 

@@ -190,7 +190,7 @@
         })
     })
 
-    function showBoxCreate() {
+    function showBoxInfo() {
         $(".btnShowInfo").on("click", function () {
             let id = $(this).data("id");
             findProductById(id).then((result) => {
@@ -208,7 +208,7 @@
     }
 
     $("#create-products").on('click', () => {
-        showBoxCreate();
+        $("#mdCreate").modal("show");
     })
 
     function add2Cart() {
@@ -249,7 +249,7 @@
     }
 
     function handlerOnFunction() {
-        showBoxCreate();
+        showBoxInfo();
         add2Cart();
     }
 
