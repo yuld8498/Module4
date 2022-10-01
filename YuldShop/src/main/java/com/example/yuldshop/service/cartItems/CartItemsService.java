@@ -39,4 +39,19 @@ public class CartItemsService implements ICartItemsService{
     public List<CartItem> findByCartId(Long cartId) {
         return cartItemsRepository.findByCartId(cartId);
     }
+
+    @Override
+    public Optional<CartItem> findByProductId(Long id) {
+        return cartItemsRepository.findByProductId(id);
+    }
+
+    @Override
+    public Optional<CartItem> findByProductIdAndUserId(Long productId, Long userId) {
+        return cartItemsRepository.findByProductIdAndUserId(productId,userId);
+    }
+
+    @Override
+    public Iterable<CartItem> findByCheckedIsTrue() {
+        return cartItemsRepository.findByCheckedIsTrue();
+    }
 }

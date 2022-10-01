@@ -55,7 +55,15 @@ public class ResUserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginByUser(@RequestBody User user) {
+    public ResponseEntity<?> loginByUser(@Validated @RequestBody User user, BindingResult result) {
+        if (result.hasFieldErrors()) {
+            List<ObjectError> list = result.getAllErrors();
+            List<String> errorlists = new ArrayList<>();
+            for (ObjectError objectError : list) {
+                errorlists.add(objectError.getDefaultMessage());
+            }
+            return new ResponseEntity<>("Please input userName and password !", HttpStatus.BAD_REQUEST);
+        }
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
 

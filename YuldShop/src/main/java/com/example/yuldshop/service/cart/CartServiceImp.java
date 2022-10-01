@@ -35,7 +35,7 @@ public class CartServiceImp implements ICartService{
     }
 
     @Override
-    public Cart findByUserId(Long userId) {
+    public Optional<Cart> findByUserId(Long userId) {
         return cartRepository.findByUserId(userId);
     }
 

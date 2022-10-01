@@ -64,10 +64,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 .antMatchers("/", "/customers/**","/users/register","/api/products/**","/file/image",
-                        "/login","/api/categories","/api/categories","/api/customers","/api/users/**","/products").permitAll()
+                        "/login","/api/categories","/api/categories","/api/customers","/api/users/**","/products","/api/carts/find").permitAll()
                 .antMatchers("/products/create","/products/admin").hasAnyAuthority("ADMIN")
                 .antMatchers("/resources/**").permitAll()
-                .antMatchers("/users/update").hasAnyAuthority("USER")
+                .antMatchers("/users/update","/api/carts/{id}").hasAnyAuthority("USER")
                 .antMatchers(
                         "/v2/api-docs",
                         "/swagger-resources/configuration/ui",

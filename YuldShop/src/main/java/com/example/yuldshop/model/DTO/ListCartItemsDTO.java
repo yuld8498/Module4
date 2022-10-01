@@ -31,6 +31,10 @@ public class ListCartItemsDTO {
     @NotNull(message = "amount is not null")
     private BigDecimal amount;
 
+    private String imgUrl;
+
+    private boolean checked;
+
     @Override
     public String toString() {
         return "ListCartItemsDTO{" +
@@ -40,6 +44,8 @@ public class ListCartItemsDTO {
                 ", price=" + price +
                 ", quantity=" + quantity +
                 ", amount=" + amount +
+                ", imgUrl=" + imgUrl +
+                ", checked=" + checked +
                 '}';
     }
 
@@ -50,6 +56,8 @@ public class ListCartItemsDTO {
                 .setProductId(productId)
                 .setAmount(amount)
                 .setQuantity(quantity)
-                .setPrice(price);
+                .setPrice(price)
+                .setChecked(checked)
+                .setImgUrl(imgUrl);
     }
 }

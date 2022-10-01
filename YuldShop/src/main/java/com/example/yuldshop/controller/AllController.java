@@ -61,14 +61,20 @@ public class AllController {
     @GetMapping("/products")
     public ModelAndView showListProduct(){
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("/product/list");
         if (!getPrincipal().equals("")){
-            modelAndView.addObject("user", getUserDTO(getPrincipal()));
-           modelAndView.addObject("role",getUserDTO(getPrincipal()).getRole());
+            UserDTO userDTO = getUserDTO(getPrincipal());
+            modelAndView.addObject("user",userDTO);
+           modelAndView.addObject("role",userDTO.getRole());
+           if (userDTO.getRole().getCode().equalsIgnoreCase("admin")){
+               modelAndView.setViewName("/product/listProductsAdmin");
+               System.out.println("this AA");
+               return modelAndView;
+           }
         }else {
             modelAndView.addObject("user", null);
             modelAndView.addObject("role", null);
         }
+        modelAndView.setViewName("/product/list");
         return modelAndView;
     }
 

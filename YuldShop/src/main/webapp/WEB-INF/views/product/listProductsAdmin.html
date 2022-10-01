@@ -336,6 +336,12 @@
         }
     })
 
+    //manager cart
+
+    $("#CartBtn").on("click",()=>{
+
+    })
+
     //deleted product
     function showConfirmDeleted(){
         $(".btn-deletedP").on('click', function (){
@@ -372,7 +378,7 @@
     //             {data : "id"},
     //             { data: "imgUrl" ,
     //                 "render": function ( data) {
-    //                     return '<img src=data width="150px">';}
+    //                     return '<img src="'+data+'" width="150px">'}
     //             },
     //             {data :"productName"},
     //             {data :"category.category"},

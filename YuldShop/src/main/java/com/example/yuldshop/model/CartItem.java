@@ -17,12 +17,12 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Entity
 @Accessors(chain = true)
-public class CartItem{
+public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="user_id")
+    @Column(name = "user_id")
     private Long userId;
 
     @Column(name = "product_id")
@@ -39,6 +39,11 @@ public class CartItem{
     @Column(precision = 9, scale = 0, nullable = false)
     private BigDecimal amount;
 
+    @Column(name = "imgUrl", length = 1024)
+    private String imgUrl;
+
+    @Column(name = "checked", columnDefinition = "boolean default false")
+    private boolean checked;
     @ManyToOne
     @JoinColumn(name = "cart_id", referencedColumnName = "id", nullable = false)
     private Cart cart;
@@ -54,16 +59,19 @@ public class CartItem{
                 ", quantity=" + quantity +
                 ", amount=" + amount +
                 ", cart=" + cart +
+                ", imgUrl=" + imgUrl +
                 '}';
     }
 
-    public ListCartItemsDTO toCartDTO(){
+    public ListCartItemsDTO toCartDTO() {
         return new ListCartItemsDTO()
                 .setId(id)
                 .setProductName(productName)
                 .setPrice(price)
                 .setQuantity(quantity)
                 .setAmount(amount)
-                .setProductId(productId);
+                .setChecked(checked)
+                .setProductId(productId)
+                .setImgUrl(imgUrl);
     }
 }

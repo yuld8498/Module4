@@ -59,13 +59,15 @@ class Product {
 }
 
 class CartItems {
-    constructor(id, productId, productName, price, quantity, amount) {
+    constructor(id, productId, productName, price, quantity, amount,imgUrl,checked) {
         this.id=id;
         this.productId =productId;
         this.productName =productName;
         this.price =price;
         this.quantity =quantity;
         this.amount =amount;
+        this.imgUrl = imgUrl;
+        this.checked=checked;
     }
 }
 
