@@ -18,10 +18,9 @@ public class OrderItems extends BasicEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
-    @JoinColumn(name = "status_id", referencedColumnName = "id")
-    private OrderStatus orderStatus;
+
     private int quantity;
+
     private BigDecimal price;
     
     @ManyToOne

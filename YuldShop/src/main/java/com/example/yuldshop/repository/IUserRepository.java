@@ -13,6 +13,8 @@ public interface IUserRepository extends JpaRepository<User, Long> {
 
     boolean existsByUsernameEquals(String userName);
     Optional<User> findByUsername(String userName);
+    Optional<User> findByUsernameAndDeletedIsFalse(String userName);
+
     @Query("SELECT NEW com.example.yuldshop.model.DTO.UserDTO (" +
             "u.id, " +
             "u.username" +

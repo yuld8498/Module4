@@ -1,4 +1,3 @@
-
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <th:block th:replace="/layout/header::header"/>
@@ -23,17 +22,17 @@
                             <div class="form-group">
                                 <label>Full Name</label>
                                 <input type="text" name="fullName" placeholder="Enter your full name..."
-                                       id="fullName" class="form-control" th:value="${customer.fullName}">
+                                       id="fullName" class="form-control">
                             </div>
                             <div class="form-group">
                                 <label>Email</label>
                                 <input type="email" name="email" placeholder="Enter your email..." id="email"
-                                       class="form-control" th:value="${customer.email}">
+                                       class="form-control">
                             </div>
                             <div class="form-group">
                                 <label>Phone</label>
                                 <input type="tel" name="phone" placeholder="Enter your phone number..." id="phone"
-                                       class="form-control" th:value="${customer.phone}">
+                                       class="form-control">
                             </div>
                             <div class="form-group">
                                 <div for="province">province/city</div>
@@ -55,10 +54,10 @@
                             </div>
                             <div class="form-group">
                                 <div for="address">Address</div>
-                                <input type="text" name="address" id="address" class="w-25"
-                                       th:value="${customer.locationRegion.address}">
+                                <input type="text" name="address" id="address" class="w-25">
                             </div>
                             <input type="button" value="Register" class="btn btn-md btn-info" id="btn-create">
+                            <input type="button" value="Deleted Account" class="btn btn-danger" id="btnDeletedUser">
                         </form>
                     </div>
                 </div>
@@ -69,13 +68,13 @@
     </div>
     <!-- Container End -->
 </div>
-    <th:block th:replace="/layout/footerJS::footerJS"/>
+<th:block th:replace="/layout/footerJS::footerJS"/>
 <script>
     // let category = new Categories();
     let customer = new Customer();
     let locationRegion = new LocationRegion();
     let role = new Role();
-    let user =new User();
+    let user = new User();
 
     //province API
     function loadProvince() {
@@ -92,6 +91,7 @@
 
         })
     }
+
     loadProvince();
 
     //province
@@ -152,14 +152,15 @@
                 maxlength: 30
             }
         },
-        submitHandler:function(){
+        submitHandler: function () {
             doCreateCustomer();
         }
     })
-    $("#btn-create").on('click',()=>{
+    $("#btn-create").on('click', () => {
         $("#form-create").submit();
     })
-    function doCreateCustomer(){
+
+    function doCreateCustomer() {
         customer.fullName = $("#fullName").val();
         customer.phone = $("#phone").val();
         customer.email = $("#email").val();
@@ -171,37 +172,60 @@
         locationRegion.districtName = $("#districts option:selected").text();
         locationRegion.wardName = $("#ward option:selected").text();
         customer.locationRegion = locationRegion;
-        role.id=2;
-        role.code="USER";
-        user.role=role;
-        user.id=0;
-        customer.user=user;
+        role.id = 2;
+        role.code = "USER";
+        user.role = role;
+        user.id = 0;
+        customer.user = user;
         console.log(JSON.stringify(customer));
         console.log(locationRegion);
         $.ajax({
-            headers:{
+            headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            url:"http://localhost:8080/api/customers",
-            type:"POST",
-            data:JSON.stringify(customer)
-        }).done((data)=>{
+            url: "http://localhost:8080/api/customers",
+            type: "POST",
+            data: JSON.stringify(customer)
+        }).done((data) => {
             App.showSuccessAlert("Update information is successfully")
-        }).fail((error)=>{
+        }).fail((error) => {
             App.showErrorAlert("Update is fail, please check input again !")
         })
     }
 
     $('.dropdown-toggle').dropdown()
 
+    //deleted account
+
+    $("#btnDeletedUser").on("click", function () {
+        App.showConfirmDialog("You want delete you account ?").then((result)=>{
+            if (result.isConfirmed){
+                $.ajax({
+                    headers: {
+                        "Accept": 'application/json',
+                        "content-type": "application/json"
+                    },
+                    url:"http://localhost:8080/api/users/deleted",
+                    type:"POST"
+                }).done(()=>{
+                    window.location.href="/login"
+                }).fail((error)=>{
+                    App.showErrorAlert("Deleted is fail, please try again later !")
+                })
+            }
+        })
+    })
+
+
+    //load category is nav bar
     $.ajax({
         url: "http://localhost:8080/api/categories",
         type: "GET"
     }).done((data) => {
-        let str=``;
-        $.each(data,(i,item)=>{
-            str +=`<a class="dropdown-item" href="http://localhost:8080/api/products?category=${item.id}">${item.category}</a>`
+        let str = ``;
+        $.each(data, (i, item) => {
+            str += `<a class="dropdown-item" href="http://localhost:8080/api/products?category=${item.id}">${item.category}</a>`
         })
         document.getElementById("productCategories").innerHTML = str;
     }).fail((error) => {

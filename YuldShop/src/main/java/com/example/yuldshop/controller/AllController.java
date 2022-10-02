@@ -164,10 +164,7 @@ public class AllController {
         modelAndView.setViewName("/customer/updateUser");
         if (!getPrincipal().equals("")){
             User user = userService.findByUsername(getPrincipal()).get();
-            Customer customer = customerService.findByUser(user);
-            CustomerDTO customerDTO = customer.customerDTO(customer.getLocationRegion());
             modelAndView.addObject("user", getUserDTO(getPrincipal()));
-            modelAndView.addObject("customer", customerDTO);
             modelAndView.addObject("role",getUserDTO(getPrincipal()).getRole());
         }else {
             modelAndView.addObject("user", null);

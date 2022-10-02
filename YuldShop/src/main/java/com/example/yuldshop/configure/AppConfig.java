@@ -11,6 +11,10 @@ import com.example.yuldshop.service.category.CategoryService;
 import com.example.yuldshop.service.category.ICategoryService;
 import com.example.yuldshop.service.customer.CustomerServiceImp;
 import com.example.yuldshop.service.customer.ICustomerService;
+import com.example.yuldshop.service.order.IOrderService;
+import com.example.yuldshop.service.order.OrderServiceImp;
+import com.example.yuldshop.service.orderItems.IOrderItemService;
+import com.example.yuldshop.service.orderItems.OrderItemServiceImp;
 import com.example.yuldshop.service.product.IProductService;
 import com.example.yuldshop.service.product.ProductService;
 import com.example.yuldshop.service.user.IUserService;
@@ -80,6 +84,14 @@ public class AppConfig implements WebMvcConfigurer, ApplicationContextAware {
     @Bean
     public IRoleService roleService(){
         return new RoleService();
+    }
+    @Bean
+    public IOrderService orderService(){
+        return new OrderServiceImp();
+    }
+    @Bean
+    public IOrderItemService orderItemService(){
+        return new OrderItemServiceImp();
     }
 //    @Bean
 //    public IUserService userService(){

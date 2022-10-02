@@ -9,10 +9,7 @@ import com.example.yuldshop.service.jwt.JwtService;
 import com.example.yuldshop.service.user.IUserService;
 import com.example.yuldshop.untils.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,6 +20,9 @@ import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,7 +71,7 @@ public class ResUserController {
 
         String jwt = jwtService.generateTokenLogin(authentication);
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        User currentUser = userService.getByUsername(user.getUsername());
+        User currentUser = userService.findByUsername(user.getUsername()).get();
 
         JwtResponse jwtResponse = new JwtResponse(
                 jwt,
@@ -127,5 +127,30 @@ public class ResUserController {
             return new ResponseEntity<>("no valid field of user", HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    //deleted account
+    @PostMapping("/deleted")
+    public ResponseEntity<?> deletedAccount(HttpServletResponse response, HttpServletRequest request){
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies){
+            if (cookie.getName().equalsIgnoreCase("jwt")){
+                cookie.setMaxAge(0);
+                cookie.setValue("");
+                response.addCookie(cookie);
+            }
+        }
+        User user= userService.findByUsername(getUserNamePrincipal()).get();
+        user.setDeleted(true);
+        userService.save(user);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+    public String getUserNamePrincipal() {
+        String username = null;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails) principal).getUsername();
+        }
+        return username;
     }
 }

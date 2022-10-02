@@ -59,6 +59,11 @@ public class UserService implements IUserService{
     }
 
     @Override
+    public Optional<User> findByUsernameAndDeletedIsFalse(String username) {
+        return userRepository.findByUsernameAndDeletedIsFalse(username);
+    }
+
+    @Override
     public Optional<UserDTO> findUserDTOByUsername(String username) {
         return userRepository.findUserDTOByUsername(username);
     }

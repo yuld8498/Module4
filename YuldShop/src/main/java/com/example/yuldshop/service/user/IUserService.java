@@ -13,6 +13,7 @@ public interface IUserService extends IGenericService<User>, UserDetailsService 
     boolean existsByUserName(String userName);
 
     Optional<User> findByUsername(String username);
+    Optional<User> findByUsernameAndDeletedIsFalse(String username);
 
     Optional<UserDTO> findUserDTOByUsername(String username);
 }
