@@ -156,7 +156,6 @@
     }
 
     loadProduct();
-    loadCartOfUser();
 
     //showCreateForm
 
@@ -195,6 +194,7 @@
         cartItems.productName = $("#nameIf").val();
         cartItems.price = $("#priceIf").val();
         cartItems.quantity = $("#quantityIf").val();
+        cartItems.checked=false;
         cartItems.amount = cartItems.quantity * cartItems.price;
         $.ajax({
             headers: {
@@ -211,7 +211,7 @@
             if (a.text() !== null) {
                 a.replaceWith(newStr);
             } else {
-                $("#tableCart tbody").append(newStr);
+                $("#tableCart tbody").prepend(newStr);
             }
             onbuttonCartItems();
             App.showSuccessAlert("Add to cart is successfully !")
@@ -243,6 +243,7 @@
                         cartItems.amount = product.price;
                         cartItems.productName = product.productName;
                         cartItems.productId = product.id;
+                        cartItems.checked=false;
                         console.log(cartItems)
                         $.ajax({
                             headers: {
@@ -259,7 +260,7 @@
                             if (a.text() !== "") {
                                 a.replaceWith(newStr);
                             } else {
-                                $("#tableCart tbody").append(newStr);
+                                $("#tableCart tbody").prepend(newStr);
                             }
                             onbuttonCartItems();
                             App.showSuccessAlert("Add to cart is successfully !")
@@ -404,13 +405,13 @@
             url: "http://localhost:8080/api/carts/find",
             type: "GET"
         }).done((data) => {
-            let total=0;
+            let total = 0;
             offbuttonCartItems();
             $.each(data, (i, item) => {
-                if (item.checked ===true){
-                    total+=Number(item.amount)
+                if (item.checked === true) {
+                    total += Number(item.amount)
                 }
-                $("#tableCart tbody").append(renderCart(item));
+                $("#tableCart tbody").prepend(renderCart(item));
             })
             let footer = `
                     <tr id="footerCart">
@@ -437,9 +438,9 @@
         str += ` <tr id="tr_${item.id}">`
         let inputcheck = ``;
         if (item.checked === true) {
-            inputcheck = `<td><input type="checkbox" data-id="${item.id}" class="checked" checked></td>`
+            inputcheck = `<td><input type="checkbox" id="checked_${item.id}" data-id="${item.id}" class="checked" checked></td>`
         } else {
-            inputcheck = `<td><input type="checkbox" data-id="${item.id}" class="checked"></td>`
+            inputcheck = `<td><input type="checkbox" id="checked_${item.id}" data-id="${item.id}" class="checked"></td>`
         }
         str += inputcheck;
         str += `<td><img src="${item.imgUrl}" alt="" width="150px"></td>
@@ -455,8 +456,10 @@
     }
 
     $(".btnShowCart").on('click', function () {
+        $("#tableCart tbody").empty();
         $(".list-cart-menu").removeClass("d-none");
         $(".list-cart-menu").addClass("d-block");
+        loadCartOfUser();
     })
 
     $(document).click(function (e) {
@@ -473,29 +476,39 @@
     function letCheck() {
         $(".checked").on("change", function () {
             let test = $(this).prop("checked");
-                let number = $(this).data("id");
-                cartItems.checked = test;
-                $.ajax({
-                    headers:{
-                        "accept": "application/json",
-                        "content-type":"application/json"
-                    },
-                    type:"POST",
-                    url: "http://localhost:8080/api/carts/checked/"+number,
-                    data: JSON.stringify(cartItems)
-                }).done((data)=>{
-
-                }).fail((error)=>{
-                    App.showErrorAlert("An error occurred during processing. Please try again later !")
-                })
+            let number = $(this).data("id");
+            cartItems.checked = test;
+            $.ajax({
+                headers: {
+                    "accept": "application/json",
+                    "content-type": "application/json"
+                },
+                type: "POST",
+                url: "http://localhost:8080/api/carts/checked/" + number,
+                data: JSON.stringify(cartItems)
+            }).done((data) => {
+                cartItems = data;
+                let amountItem = cartItems.amount;
+                let totalAmount = $("#totalAmountOfCart").val();
+                if (test === true) {
+                    let newTotal = Number(totalAmount) + Number(amountItem);
+                    $("#totalAmountOfCart").val(newTotal);
+                } else {
+                    let newTotal = Number(totalAmount) - Number(amountItem);
+                    $("#totalAmountOfCart").val(newTotal);
+                }
+            }).fail((error) => {
+                App.showErrorAlert("An error occurred during processing. Please try again later !")
+            })
         })
     }
 
     function inputQuantityInCart() {
         $(".inputQuantity").on("keyup", function () {
             let idCartItems = $(this).data("id");
-            let datainput = $("#input_" + idCartItems).val();
-            cartItems.quantity = datainput;
+            let test = $("#checked_"+idCartItems).prop("checked");
+            let oldAmount =  $("#amount_" + idCartItems).text();
+            cartItems.quantity = $("#input_" + idCartItems).val();
             $.ajax({
                 headers: {
                     "accept": "application/json",
@@ -506,8 +519,14 @@
                 data: JSON.stringify(cartItems)
             }).done((data) => {
                 cartItems = data;
+                let newAmount = cartItems.amount;
                 $("#input_" + idCartItems).val(data.quantity);
                 $("#amount_" + idCartItems).text(data.amount);
+                let totalAmount = $("#totalAmountOfCart").val();
+                if (test === true) {
+                    let newTotal = Number(totalAmount) + Number(newAmount-oldAmount);
+                    $("#totalAmountOfCart").val(newTotal);
+                }
             }).fail((error) => {
                 let str = error.responseText.slice(2, error.responseText.length - 1);
                 $("#input_" + idCartItems).val(str.slice(str.indexOf(":") + 1, str.length));
@@ -519,7 +538,9 @@
     function minusQuantityInCart() {
         $(".btnMinus").on("click", function () {
             let idCartItems = $(this).data("id");
+            let test = $("#checked_"+idCartItems).prop("checked");
             let quantity = $("#input_" + idCartItems).val();
+            let amountItems = $("#amount_" + idCartItems).text();
             if (Number(quantity) === 1) {
                 App.showConfirmDialog("You want deleted this product in list ?").then((result) => {
                     if (result.isConfirmed) {
@@ -531,6 +552,11 @@
                             Type: "GET",
                             url: "http://localhost:8080/api/carts/deleted/" + idCartItems
                         }).done(() => {
+                            let totalAmount = $("#totalAmountOfCart").val();
+                            if (test === true) {
+                                let newTotal = Number(totalAmount) - Number(amountItems);
+                                $("#totalAmountOfCart").val(newTotal);
+                            }
                             $("#tr_" + idCartItems).remove();
                             App.showSuccessAlert("Deleted successfully !")
                         })
@@ -548,7 +574,12 @@
                     cartItems = data;
                     $("#amount_" + idCartItems).text(data.amount);
                     $("#input_" + idCartItems).val(data.quantity);
-                }).fail((error)=>{
+                    let totalAmount = $("#totalAmountOfCart").val();
+                    if (test === true) {
+                        let newTotal = Number(totalAmount) - Number(cartItems.price);
+                        $("#totalAmountOfCart").val(newTotal);
+                    }
+                }).fail((error) => {
                     App.showErrorAlert(error.responseText)
                 })
             }
@@ -558,6 +589,7 @@
     function addQuantityInCart() {
         $(".btnAdd").on("click", function () {
             let idCartItems = $(this).data("id");
+            let test = $("#checked_"+idCartItems).prop("checked");
             $.ajax({
                 headers: {
                     "accept": "application/json",
@@ -569,7 +601,12 @@
                 cartItems = data;
                 $("#input_" + idCartItems).val(data.quantity);
                 $("#amount_" + idCartItems).text(data.amount);
-            }).fail((error)=>{
+                let totalAmount = $("#totalAmountOfCart").val();
+                if (test === true) {
+                    let newTotal = Number(totalAmount) + Number(cartItems.price);
+                    $("#totalAmountOfCart").val(newTotal);
+                }
+            }).fail((error) => {
                 App.showErrorAlert(error.responseText)
             })
         })

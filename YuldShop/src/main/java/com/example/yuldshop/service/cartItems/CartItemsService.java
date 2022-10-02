@@ -41,7 +41,7 @@ public class CartItemsService implements ICartItemsService{
     }
 
     @Override
-    public Optional<CartItem> findByProductId(Long id) {
+    public Iterable<CartItem> findByProductId(Long id) {
         return cartItemsRepository.findByProductId(id);
     }
 

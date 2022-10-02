@@ -1,8 +1,10 @@
 package com.example.yuldshop.controller.rescontroller;
 
 import com.cloudinary.Cloudinary;
+import com.example.yuldshop.model.CartItem;
 import com.example.yuldshop.model.DTO.ProductDTO;
 import com.example.yuldshop.model.Product;
+import com.example.yuldshop.service.cartItems.ICartItemsService;
 import com.example.yuldshop.service.product.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,7 +32,7 @@ public class ResProductController {
     private IProductService productService;
 
     @Autowired
-    private Cloudinary cloudinary;
+    private ICartItemsService cartItemsService;
 
     @GetMapping
     public ResponseEntity<List<?>> findAllProduct() {
@@ -89,6 +91,11 @@ public class ResProductController {
         Product product = productService.findById(id).get();
         Long productId = product.getId();
         Product newProduct = productDTO.toProduct();
+        List<CartItem> cartItemList = (List<CartItem>) cartItemsService.findByProductId(productId);
+        for (CartItem cartItem:cartItemList){
+            cartItem.setPrice(newProduct.getPrice());
+            cartItemsService.save(cartItem);
+        }
         newProduct.setId(productId);
         productService.save(newProduct);
         return new ResponseEntity<>(newProduct.toProductDTO(), HttpStatus.OK);

@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface ICartItemsService extends IGenericService<CartItem> {
     List<CartItem> findByCartId(Long cartId);
 
-    Optional<CartItem> findByProductId(Long id);
+    Iterable<CartItem> findByProductId(Long id);
     Optional<CartItem> findByProductIdAndUserId(Long productId, Long userId);
 
     Iterable<CartItem> findByCheckedIsTrue();

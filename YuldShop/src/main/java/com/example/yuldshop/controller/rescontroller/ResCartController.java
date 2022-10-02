@@ -140,8 +140,8 @@ public class ResCartController {
     public ResponseEntity<?> checkedEntity(@PathVariable Long id, @RequestBody ListCartItemsDTO cartItemsDTO){
         CartItem cartItem = cartItemsService.findById(id).get();
         cartItem.setChecked(cartItemsDTO.isChecked());
-        cartItemsService.save(cartItem);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        CartItem newCartItem = cartItemsService.save(cartItem);
+        return new ResponseEntity<>(newCartItem.toCartDTO(),HttpStatus.OK);
     }
     //add to cart
     @PostMapping

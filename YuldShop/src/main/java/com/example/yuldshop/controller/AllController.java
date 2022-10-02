@@ -1,10 +1,13 @@
 package com.example.yuldshop.controller;
 
+import com.example.yuldshop.model.Customer;
+import com.example.yuldshop.model.DTO.CustomerDTO;
 import com.example.yuldshop.model.DTO.UserDTO;
 import com.example.yuldshop.model.Product;
 import com.example.yuldshop.model.Role;
 import com.example.yuldshop.model.User;
 import com.example.yuldshop.service.Role.IRoleService;
+import com.example.yuldshop.service.customer.ICustomerService;
 import com.example.yuldshop.service.jwt.JwtService;
 import com.example.yuldshop.service.product.IProductService;
 import com.example.yuldshop.service.user.IUserService;
@@ -34,6 +37,9 @@ public class AllController {
 
     @Autowired
     private IRoleService roleService;
+
+    @Autowired
+    private ICustomerService customerService;
 
     private String getPrincipal(){
         String username;
@@ -157,7 +163,11 @@ public class AllController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("/customer/updateUser");
         if (!getPrincipal().equals("")){
+            User user = userService.findByUsername(getPrincipal()).get();
+            Customer customer = customerService.findByUser(user);
+            CustomerDTO customerDTO = customer.customerDTO(customer.getLocationRegion());
             modelAndView.addObject("user", getUserDTO(getPrincipal()));
+            modelAndView.addObject("customer", customerDTO);
             modelAndView.addObject("role",getUserDTO(getPrincipal()).getRole());
         }else {
             modelAndView.addObject("user", null);

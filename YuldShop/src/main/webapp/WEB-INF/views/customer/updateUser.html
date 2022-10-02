@@ -23,17 +23,17 @@
                             <div class="form-group">
                                 <label>Full Name</label>
                                 <input type="text" name="fullName" placeholder="Enter your full name..."
-                                       id="fullName" class="form-control">
+                                       id="fullName" class="form-control" th:value="${customer.fullName}">
                             </div>
                             <div class="form-group">
                                 <label>Email</label>
                                 <input type="email" name="email" placeholder="Enter your email..." id="email"
-                                       class="form-control">
+                                       class="form-control" th:value="${customer.email}">
                             </div>
                             <div class="form-group">
                                 <label>Phone</label>
                                 <input type="tel" name="phone" placeholder="Enter your phone number..." id="phone"
-                                       class="form-control">
+                                       class="form-control" th:value="${customer.phone}">
                             </div>
                             <div class="form-group">
                                 <div for="province">province/city</div>
@@ -55,11 +55,8 @@
                             </div>
                             <div class="form-group">
                                 <div for="address">Address</div>
-                                <input type="text" name="address" id="address" class="w-25">
-                            </div>
-                            <div class="form-group">
-                                <label>Avatar</label>
-                                <input type="file" name="avatar" id="avatar" class="form-control">
+                                <input type="text" name="address" id="address" class="w-25"
+                                       th:value="${customer.locationRegion.address}">
                             </div>
                             <input type="button" value="Register" class="btn btn-md btn-info" id="btn-create">
                         </form>
@@ -79,6 +76,8 @@
     let locationRegion = new LocationRegion();
     let role = new Role();
     let user =new User();
+
+    //province API
     function loadProvince() {
         let str = `<option value="#">--Province--</option>`;
         $.ajax({
@@ -94,6 +93,8 @@
         })
     }
     loadProvince();
+
+    //province
     $("#province").on('change', function () {
         let district = $("#province").val();
         let str = `<option value="#">--Districts--</option>`;
@@ -109,6 +110,8 @@
 
         })
     })
+
+    //districs
     $("#districts").on('change', function () {
         let ward = $("#districts").val();
         let str = `<option value="#">--Ward--</option>`;
@@ -124,6 +127,7 @@
 
         })
     })
+
     $("#form-create").validate({
         rules: {
             fullName: {
@@ -139,36 +143,13 @@
             },
             phone: {
                 required: true,
-                minlength: 3,
-                maxlength: 25
+                minlength: 9,
+                maxlength: 30
             },
             address: {
                 required: true,
                 minlength: 3,
-                maxlength: 25
-            }
-        },
-        message: {
-            fullName: {
-                required: "Vui lòng nhập tên đầy đủ",
-                minlength: "Độ dài tối thiểu là 5 ký tự",
-                maxlength: "Độ dài tối đa là 35 ký tự"
-            },
-            email: {
-                required: "Vui lòng nhập email đầy đủ",
-                minlength: "Độ dài tối thiểu là 5 ký tự",
-                maxlength: "Độ dài tối đa là 35 ký tự",
-                email: "Vui lòng nhập đúng định dạng email"
-            },
-            phone: {
-                required: "Vui lòng nhập số điện thoại",
-                minlength: "Độ dài tối thiểu là 5 ký tự",
-                maxlength: "Độ dài tối đa là 35 ký tự"
-            },
-            address: {
-                required: "Vui lòng nhập địa chỉ",
-                minlength: "Độ dài tối thiểu là 5 ký tự",
-                maxlength: "Độ dài tối đa là 35 ký tự"
+                maxlength: 30
             }
         },
         submitHandler:function(){
@@ -208,7 +189,7 @@
         }).done((data)=>{
             App.showSuccessAlert("Update information is successfully")
         }).fail((error)=>{
-            App.showErrorAlert("Update is fail, please check input again")
+            App.showErrorAlert("Update is fail, please check input again !")
         })
     }
 

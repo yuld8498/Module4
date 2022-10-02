@@ -25,8 +25,10 @@ public class CustomerDTO {
     private String fullName;
     @NotEmpty(message = "Email is required")
     @Email(message = "Email is not valid")
+    @Length(min = 5, max = 30, message = "Full Name great than 5 character and less than 30 character")
     private String email;
     @Column(unique = true)
+    @Length(min = 5, max = 30, message = "Full Name great than 5 character and less than 30 character")
     private String phone;
 
     private UserDTO user;

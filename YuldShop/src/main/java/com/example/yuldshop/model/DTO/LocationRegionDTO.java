@@ -6,8 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Column;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -31,7 +33,8 @@ public class LocationRegionDTO {
     private Long wardId;
     @NotEmpty(message = "ward Name is empty")
     private String wardName;
-    @NotEmpty(message = "address  is empty")
+    @NotBlank(message = "address  is empty")
+    @Length(min = 3, max = 30, message ="Please enter no more than 30 characters" )
     private String address;
 
     @Override
