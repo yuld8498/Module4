@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class CartItemsService implements ICartItemsService{
+public class CartItemsService implements ICartItemsService {
     @Autowired
     private ICartItemsRepository cartItemsRepository;
 
@@ -47,11 +47,16 @@ public class CartItemsService implements ICartItemsService{
 
     @Override
     public Optional<CartItem> findByProductIdAndUserId(Long productId, Long userId) {
-        return cartItemsRepository.findByProductIdAndUserId(productId,userId);
+        return cartItemsRepository.findByProductIdAndUserId(productId, userId);
     }
 
     @Override
-    public Iterable<CartItem> findByCheckedIsTrue() {
-        return cartItemsRepository.findByCheckedIsTrue();
+    public Iterable<CartItem> findByCheckedIsTrue(Long userId) {
+        return cartItemsRepository.findByCheckedIsTrueAndUserId(userId);
+    }
+
+    @Override
+    public void deletedByUserIdAndCheckIsTrue(Long userId) {
+        cartItemsRepository.deleteByUserIdAndCheckedIsTrue(userId);
     }
 }

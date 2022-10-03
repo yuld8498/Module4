@@ -41,21 +41,21 @@ public class AllController {
     @Autowired
     private ICustomerService customerService;
 
-    private String getPrincipal(){
+    private String getPrincipal() {
         String username;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if(principal instanceof UserDetails){
+        if (principal instanceof UserDetails) {
             username = ((UserDetails) principal).getUsername();
-        }else {
-            username ="";
+        } else {
+            username = "";
         }
         return username;
     }
 
     //get role
 
-    private UserDTO getUserDTO(String userName){
+    private UserDTO getUserDTO(String userName) {
         User user = userService.findByUsername(userName).get();
         Role role = user.getRole();
         UserDTO userDTO = user.toUserDTO();
@@ -65,18 +65,17 @@ public class AllController {
 
     //products
     @GetMapping("/products")
-    public ModelAndView showListProduct(){
+    public ModelAndView showListProduct() {
         ModelAndView modelAndView = new ModelAndView();
-        if (!getPrincipal().equals("")){
+        if (!getPrincipal().equals("")) {
             UserDTO userDTO = getUserDTO(getPrincipal());
-            modelAndView.addObject("user",userDTO);
-           modelAndView.addObject("role",userDTO.getRole());
-           if (userDTO.getRole().getCode().equalsIgnoreCase("admin")){
-               modelAndView.setViewName("/product/listProductsAdmin");
-               System.out.println("this AA");
-               return modelAndView;
-           }
-        }else {
+            modelAndView.addObject("user", userDTO);
+            modelAndView.addObject("role", userDTO.getRole());
+            if (userDTO.getRole().getCode().equalsIgnoreCase("admin")) {
+                modelAndView.setViewName("/product/listProductsAdmin");
+                return modelAndView;
+            }
+        } else {
             modelAndView.addObject("user", null);
             modelAndView.addObject("role", null);
         }
@@ -85,13 +84,13 @@ public class AllController {
     }
 
     @GetMapping("/products/admin")
-    public ModelAndView showListProductAdmin(){
+    public ModelAndView showListProductAdmin() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("/product/listProductsAdmin");
-        if (!getPrincipal().equals("")){
+        if (!getPrincipal().equals("")) {
             modelAndView.addObject("user", getUserDTO(getPrincipal()));
-            modelAndView.addObject("role",getUserDTO(getPrincipal()).getRole());
-        }else {
+            modelAndView.addObject("role", getUserDTO(getPrincipal()).getRole());
+        } else {
             modelAndView.addObject("user", null);
             modelAndView.addObject("role", null);
         }
@@ -99,7 +98,7 @@ public class AllController {
     }
 
     @GetMapping("/products/create")
-    public ModelAndView showFormCreate(){
+    public ModelAndView showFormCreate() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("/product/create");
         return modelAndView;
@@ -107,20 +106,21 @@ public class AllController {
 
     //customer
     @GetMapping("/customers")
-    public ModelAndView beginToPage(){
+    public ModelAndView beginToPage() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("/customer/login");
-        if (!getPrincipal().equals("")){
+        if (!getPrincipal().equals("")) {
             modelAndView.addObject("user", getUserDTO(getPrincipal()));
-            modelAndView.addObject("role",getUserDTO(getPrincipal()).getRole());
-        }else {
+            modelAndView.addObject("role", getUserDTO(getPrincipal()).getRole());
+        } else {
             modelAndView.addObject("user", null);
             modelAndView.addObject("role", null);
         }
         return modelAndView;
     }
+
     @GetMapping("/customers/password")
-    public ModelAndView forgotPW(){
+    public ModelAndView forgotPW() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("/customer/forgotpassword");
         return modelAndView;
@@ -128,19 +128,19 @@ public class AllController {
 
     //login
     @GetMapping("/login")
-    public ModelAndView showformLogin(){
+    public ModelAndView showformLogin() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("/customer/login");
         return modelAndView;
     }
 
     @GetMapping("/logout")
-    public ModelAndView logOut(HttpServletRequest request, HttpServletResponse response){
+    public ModelAndView logOut(HttpServletRequest request, HttpServletResponse response) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("/product/list");
         Cookie[] cookies = request.getCookies();
-        for (Cookie cookie : cookies){
-            if (cookie.getName().equals("JWT")){
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("JWT")) {
                 cookie.setMaxAge(0);
                 response.addCookie(cookie);
                 return modelAndView;
@@ -152,21 +152,35 @@ public class AllController {
     //users
 
     @GetMapping("/users/register")
-    public ModelAndView beginToPageRegister(){
+    public ModelAndView beginToPageRegister() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("/user/register");
         return modelAndView;
     }
 
     @GetMapping("/users/update")
-    public ModelAndView createNewUser(){
+    public ModelAndView createNewUser() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("/customer/updateUser");
-        if (!getPrincipal().equals("")){
+        if (!getPrincipal().equals("")) {
             User user = userService.findByUsername(getPrincipal()).get();
             modelAndView.addObject("user", getUserDTO(getPrincipal()));
-            modelAndView.addObject("role",getUserDTO(getPrincipal()).getRole());
-        }else {
+            modelAndView.addObject("role", getUserDTO(getPrincipal()).getRole());
+        } else {
+            modelAndView.addObject("user", null);
+            modelAndView.addObject("role", null);
+        }
+        return modelAndView;
+    }
+
+    @GetMapping("/order")
+    public ModelAndView showListOder() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("/order/list");
+        if (!getPrincipal().equals("")) {
+            modelAndView.addObject("user", getUserDTO(getPrincipal()));
+            modelAndView.addObject("role", getUserDTO(getPrincipal()).getRole());
+        } else {
             modelAndView.addObject("user", null);
             modelAndView.addObject("role", null);
         }

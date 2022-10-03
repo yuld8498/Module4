@@ -10,7 +10,10 @@ public interface ICartItemsService extends IGenericService<CartItem> {
     List<CartItem> findByCartId(Long cartId);
 
     Iterable<CartItem> findByProductId(Long id);
+
     Optional<CartItem> findByProductIdAndUserId(Long productId, Long userId);
 
-    Iterable<CartItem> findByCheckedIsTrue();
+    Iterable<CartItem> findByCheckedIsTrue(Long userId);
+
+    void deletedByUserIdAndCheckIsTrue(Long userId);
 }

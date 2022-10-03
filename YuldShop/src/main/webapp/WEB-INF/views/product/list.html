@@ -84,7 +84,7 @@
             type: "POST",
             data: JSON.stringify(category)
         }).done((data) => {
-            App.showSuccessAlert("Add new Category is successfully !")
+            App.toastSuccess("Add new Category is successfully !")
             category = data;
             loadCategories();
             window.scroll()
@@ -194,7 +194,7 @@
         cartItems.productName = $("#nameIf").val();
         cartItems.price = $("#priceIf").val();
         cartItems.quantity = $("#quantityIf").val();
-        cartItems.checked=false;
+        cartItems.checked = false;
         cartItems.amount = cartItems.quantity * cartItems.price;
         $.ajax({
             headers: {
@@ -214,10 +214,10 @@
                 $("#tableCart tbody").prepend(newStr);
             }
             onbuttonCartItems();
-            App.showSuccessAlert("Add to cart is successfully !")
+            App.toastSuccess("Add to cart is successfully !")
         }).fail((error) => {
             if (error.statusCode().status === 400) {
-                App.showErrorAlert(error.text)
+                App.toastError(error.text)
             } else {
                 $("#mdInfo").modal("hide");
                 App.showConfirmDialog("Sign in to add to cart, Do you want to login to add to cart?").then((result => {
@@ -243,7 +243,7 @@
                         cartItems.amount = product.price;
                         cartItems.productName = product.productName;
                         cartItems.productId = product.id;
-                        cartItems.checked=false;
+                        cartItems.checked = false;
                         console.log(cartItems)
                         $.ajax({
                             headers: {
@@ -263,10 +263,10 @@
                                 $("#tableCart tbody").prepend(newStr);
                             }
                             onbuttonCartItems();
-                            App.showSuccessAlert("Add to cart is successfully !")
+                            App.toastSuccess("Add to cart is successfully !")
                         }).fail((error) => {
                             if (error.statusCode().status === 400) {
-                                App.showErrorAlert(error.text)
+                                App.toastError(error.text)
                             } else {
                                 $("#mdInfo").modal("hide");
                                 App.showConfirmDialog("Sign in to add to cart, Do you want to login to add to cart?").then((result => {
@@ -313,7 +313,7 @@
             data: JSON.stringify(product),
         }).done((data) => {
             product = data;
-            App.showSuccessAlert("Create New Product is success !")
+            App.toastSuccess("Create New Product is success !")
             renderProduct(product);
             // var img = new FormData();
             // img.append("image", document.getElementById("fileCe").files[0]);
@@ -322,7 +322,7 @@
             // xhr.open("POST", "http://localhost:8080/file/img");
             // xhr.send(img);
         }).fail((error) => {
-            App.showErrorAlert("error")
+            App.toastError("error")
             console.log(error)
         })
     }
@@ -345,7 +345,7 @@
             },
             priceCe: {
                 required: true,
-                min: 1000,
+                min: 100,
                 max: 1000000000
             },
             quantityCe: {
@@ -375,7 +375,7 @@
         }).done((data) => {
             product = data;
         }).fail((error) => {
-            App.showErrorAlert("Load file is fail, please reload page !")
+            App.toastError("Load file is fail, please reload page !")
         })
     }
 
@@ -428,6 +428,7 @@
                     </tr>`;
             $("#tableCart tbody").append(footer)
             onbuttonCartItems();
+            add2Order();
         }).fail((error) => {
             console.log(error)
         })
@@ -498,7 +499,7 @@
                     $("#totalAmountOfCart").val(newTotal);
                 }
             }).fail((error) => {
-                App.showErrorAlert("An error occurred during processing. Please try again later !")
+                App.toastError("An error occurred during processing. Please try again later !")
             })
         })
     }
@@ -506,8 +507,8 @@
     function inputQuantityInCart() {
         $(".inputQuantity").on("keyup", function () {
             let idCartItems = $(this).data("id");
-            let test = $("#checked_"+idCartItems).prop("checked");
-            let oldAmount =  $("#amount_" + idCartItems).text();
+            let test = $("#checked_" + idCartItems).prop("checked");
+            let oldAmount = $("#amount_" + idCartItems).text();
             cartItems.quantity = $("#input_" + idCartItems).val();
             $.ajax({
                 headers: {
@@ -524,13 +525,13 @@
                 $("#amount_" + idCartItems).text(data.amount);
                 let totalAmount = $("#totalAmountOfCart").val();
                 if (test === true) {
-                    let newTotal = Number(totalAmount) + Number(newAmount-oldAmount);
+                    let newTotal = Number(totalAmount) + Number(newAmount - oldAmount);
                     $("#totalAmountOfCart").val(newTotal);
                 }
             }).fail((error) => {
                 let str = error.responseText.slice(2, error.responseText.length - 1);
                 $("#input_" + idCartItems).val(str.slice(str.indexOf(":") + 1, str.length));
-                App.showErrorAlert(str.slice(0, str.indexOf(":") - 1))
+                App.toastError(str.slice(0, str.indexOf(":") - 1))
             })
         })
     }
@@ -538,7 +539,7 @@
     function minusQuantityInCart() {
         $(".btnMinus").on("click", function () {
             let idCartItems = $(this).data("id");
-            let test = $("#checked_"+idCartItems).prop("checked");
+            let test = $("#checked_" + idCartItems).prop("checked");
             let quantity = $("#input_" + idCartItems).val();
             let amountItems = $("#amount_" + idCartItems).text();
             if (Number(quantity) === 1) {
@@ -549,7 +550,7 @@
                                 "accept": "application/json",
                                 "content-type": "application/json"
                             },
-                            Type: "GET",
+                            type: "GET",
                             url: "http://localhost:8080/api/carts/deleted/" + idCartItems
                         }).done(() => {
                             let totalAmount = $("#totalAmountOfCart").val();
@@ -558,7 +559,7 @@
                                 $("#totalAmountOfCart").val(newTotal);
                             }
                             $("#tr_" + idCartItems).remove();
-                            App.showSuccessAlert("Deleted successfully !")
+                            App.toastSuccess("Deleted successfully !")
                         })
                     }
                 })
@@ -568,7 +569,7 @@
                         "accept": "application/json",
                         "content-type": "application/json"
                     },
-                    Type: "GET",
+                    type: "GET",
                     url: "http://localhost:8080/api/carts/minus/" + idCartItems
                 }).done((data) => {
                     cartItems = data;
@@ -580,7 +581,7 @@
                         $("#totalAmountOfCart").val(newTotal);
                     }
                 }).fail((error) => {
-                    App.showErrorAlert(error.responseText)
+                    App.toastError(error.responseText)
                 })
             }
         })
@@ -589,13 +590,13 @@
     function addQuantityInCart() {
         $(".btnAdd").on("click", function () {
             let idCartItems = $(this).data("id");
-            let test = $("#checked_"+idCartItems).prop("checked");
+            let test = $("#checked_" + idCartItems).prop("checked");
             $.ajax({
                 headers: {
                     "accept": "application/json",
                     "content-type": "application/json"
                 },
-                Type: "GET",
+                type: "GET",
                 url: "http://localhost:8080/api/carts/add/" + idCartItems
             }).done((data) => {
                 cartItems = data;
@@ -607,11 +608,45 @@
                     $("#totalAmountOfCart").val(newTotal);
                 }
             }).fail((error) => {
-                App.showErrorAlert(error.responseText)
+                App.toastError(error.responseText)
             })
         })
     }
 
+    //order by user
+    function add2Order() {
+        $("#btnAdd2Order").on("click", function () {
+            App.showConfirmDialog("You wan't order this Items ?").then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        headers: {
+                            "Accept": "application/json",
+                            "Content-type": "application/json"
+                        },
+                        type: "POST",
+                        url: "http://localhost:8080/api/orderItems/confirm"
+                    }).done((data) => {
+                        App.toastSuccess("Order is successfully !")
+                    }).fail((error) => {
+                        if (error.status === 422) {
+                            App.toastError("Cart is empty, please chose or add new items !")
+                        }
+                        if (error.status === 428) {
+                            App.showConfirmDialog("This account does not exist yet information customer, " +
+                                "You wan't additional ?").then((result) => {
+                                if (result.isConfirmed) {
+                                    // window.location.href="/users/update";
+                                }
+                            })
+                        }
+                        if (error.status === 400) {
+                            App.toastError("Cart is empty, please chose or add new items !")
+                        }
+                    })
+                }
+            })
+        })
+    }
 </script>
 </body>
 </html>

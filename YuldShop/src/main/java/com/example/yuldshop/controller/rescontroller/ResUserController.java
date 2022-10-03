@@ -4,10 +4,13 @@ import com.example.yuldshop.model.DTO.UserDTO;
 import com.example.yuldshop.model.JwtResponse;
 import com.example.yuldshop.model.Role;
 import com.example.yuldshop.model.User;
+import com.example.yuldshop.model.UserPrinciple;
 import com.example.yuldshop.service.Role.IRoleService;
 import com.example.yuldshop.service.jwt.JwtService;
 import com.example.yuldshop.service.user.IUserService;
 import com.example.yuldshop.untils.AppUtils;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,6 +27,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -107,7 +111,7 @@ public class ResUserController {
             for (ObjectError objectError : list) {
                 errorlists.add(objectError.getDefaultMessage());
             }
-            return new ResponseEntity<>("no valid field of user", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(errorlists, HttpStatus.BAD_REQUEST);
         }
 
         if (userService.existsByUserName(userDTO.getUsername())){
@@ -134,13 +138,12 @@ public class ResUserController {
     public ResponseEntity<?> deletedAccount(HttpServletResponse response, HttpServletRequest request){
         Cookie[] cookies = request.getCookies();
         for (Cookie cookie : cookies){
-            if (cookie.getName().equalsIgnoreCase("jwt")){
+            if (cookie.getName().equalsIgnoreCase("JWT")){
                 cookie.setMaxAge(0);
-                cookie.setValue("");
                 response.addCookie(cookie);
             }
         }
-        User user= userService.findByUsername(getUserNamePrincipal()).get();
+        User user = userService.findByUsername(getUserNamePrincipal()).get();
         user.setDeleted(true);
         userService.save(user);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

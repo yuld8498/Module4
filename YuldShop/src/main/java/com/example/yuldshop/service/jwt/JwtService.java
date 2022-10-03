@@ -54,4 +54,14 @@ public class JwtService {
                 .getBody().getSubject();
     }
 
+    public String deletedToken(Authentication authentication) {
+        UserPrinciple userPrincipal = (UserPrinciple) authentication.getPrincipal();
+
+        return Jwts.builder()
+                .setSubject((userPrincipal.getUsername()))
+                .setIssuedAt(new Date())
+                .setExpiration(new Date((0)))
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .compact();
+    }
 }

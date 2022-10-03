@@ -75,6 +75,9 @@ public class ResCartController {
             newCartItems.setQuantity(oldQuantity + 1);
             newCartItems.setAmount(product.getPrice().multiply(new BigDecimal(newCartItems.getQuantity())));
             CartItem resCartItems = cartItemsService.save(newCartItems);
+            Cart cart = cartService.findByUserId(user.getId()).get();
+            cart.setTotalAmount(getTotalAmount());
+            cartService.save(cart);
             return new ResponseEntity<>(resCartItems.toCartDTO(), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -95,6 +98,9 @@ public class ResCartController {
             newCartItems.setQuantity(oldQuantity - 1);
             newCartItems.setAmount(product.getPrice().multiply(new BigDecimal(newCartItems.getQuantity())));
             CartItem resCartItems = cartItemsService.save(newCartItems);
+            Cart cart = cartService.findByUserId(user.getId()).get();
+            cart.setTotalAmount(getTotalAmount());
+            cartService.save(cart);
             return new ResponseEntity<>(resCartItems.toCartDTO(), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -122,6 +128,9 @@ public class ResCartController {
             newCartItems.setQuantity(cartItemsDTO.getQuantity());
             newCartItems.setAmount(product.getPrice().multiply(new BigDecimal(newCartItems.getQuantity())));
             CartItem resCartItems = cartItemsService.save(newCartItems);
+            Cart cart = cartService.findByUserId(user.getId()).get();
+            cart.setTotalAmount(getTotalAmount());
+            cartService.save(cart);
             return new ResponseEntity<>(resCartItems.toCartDTO(), HttpStatus.OK);
         }
         return new ResponseEntity<>("Edit is fail,please reddit later !", HttpStatus.BAD_REQUEST);
@@ -132,17 +141,26 @@ public class ResCartController {
     public ResponseEntity<?> deletedCartItems(@PathVariable Long id) {
         Optional<CartItem> cartItem = cartItemsService.findById(id);
         cartItemsService.remove(id);
+        User user = userService.findByUsername(getUserNamePrincipal()).get();
+        Cart cart = cartService.findByUserId(user.getId()).get();
+        cart.setTotalAmount(getTotalAmount());
+        cartService.save(cart);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     //checked
     @PostMapping("/checked/{id}")
-    public ResponseEntity<?> checkedEntity(@PathVariable Long id, @RequestBody ListCartItemsDTO cartItemsDTO){
+    public ResponseEntity<?> checkedEntity(@PathVariable Long id, @RequestBody ListCartItemsDTO cartItemsDTO) {
         CartItem cartItem = cartItemsService.findById(id).get();
         cartItem.setChecked(cartItemsDTO.isChecked());
         CartItem newCartItem = cartItemsService.save(cartItem);
-        return new ResponseEntity<>(newCartItem.toCartDTO(),HttpStatus.OK);
+        User user = userService.findByUsername(getUserNamePrincipal()).get();
+        Cart cart = cartService.findByUserId(user.getId()).get();
+        cart.setTotalAmount(getTotalAmount());
+        cartService.save(cart);
+        return new ResponseEntity<>(newCartItem.toCartDTO(), HttpStatus.OK);
     }
+
     //add to cart
     @PostMapping
     public ResponseEntity<?> addNewCartItems(@Validated @RequestBody ListCartItemsDTO cartItemsDTO, BindingResult result) {
@@ -178,6 +196,8 @@ public class ResCartController {
         cartItem.setUserId(user.getId());
         cartItem.setCart(cart);
         CartItem newCartItems = cartItemsService.save(cartItem);
+        cart.setTotalAmount(getTotalAmount());
+        cartService.save(cart);
         return new ResponseEntity<>(newCartItems.toCartDTO(), HttpStatus.OK);
     }
 
@@ -192,14 +212,15 @@ public class ResCartController {
         return username;
     }
 
-    //check login
-    public boolean checkLogin() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            if (!((UserDetails) principal).getUsername().isEmpty()) {
-                return true;
-            }
+    //get total
+    public BigDecimal getTotalAmount() {
+        BigDecimal total = new BigDecimal(0);
+        User user = userService.findByUsername(getUserNamePrincipal()).get();
+        List<CartItem> cartItems = (List<CartItem>) cartItemsService.findByCheckedIsTrue(user.getId());
+        for (CartItem cartItem : cartItems) {
+            BigDecimal amount = new BigDecimal(String.valueOf(cartItem.getAmount()));
+            total = total.add(amount);
         }
-        return false;
+        return total;
     }
 }

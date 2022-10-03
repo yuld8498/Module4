@@ -59,15 +59,33 @@ class Product {
 }
 
 class CartItems {
-    constructor(id, productId, productName, price, quantity, amount,imgUrl,checked) {
-        this.id=id;
-        this.productId =productId;
-        this.productName =productName;
-        this.price =price;
-        this.quantity =quantity;
-        this.amount =amount;
+    constructor(id, productId, productName, price, quantity, amount, imgUrl, checked) {
+        this.id = id;
+        this.productId = productId;
+        this.productName = productName;
+        this.price = price;
+        this.quantity = quantity;
+        this.amount = amount;
         this.imgUrl = imgUrl;
-        this.checked=checked;
+        this.checked = checked;
+    }
+}
+
+class OrderItems {
+    constructor(id, quantity, districtName, provinceName, wardName, address, productId, productName, orderId,
+                price, idCustomer, customerName) {
+        this.id = id;
+        this.quantity = quantity;
+        this.districtName = districtName;
+        this.provinceName = provinceName;
+        this.wardName = wardName;
+        this.address = address;
+        this.productId = productId;
+        this.productName = productName;
+        this.orderId = orderId;
+        this.price = price;
+        this.idCustomer = idCustomer;
+        this.customerName = customerName;
     }
 }
 
@@ -82,6 +100,7 @@ class App {
             confirmButtonText: "Yes, delete it !"
         });
     };
+
     static showConfirmDialog(message) {
         return Swal.fire({
             icon: "warning",
@@ -110,4 +129,22 @@ class App {
             text: t,
         });
     };
+
+    static toastSuccess(t) {
+        iziToast.success({
+            title: 'OK',
+            position: 'bottomLeft',
+            timeout: 1500,
+            message: t
+        });
+    }
+
+    static toastError(t) {
+        iziToast.error({
+            title: 'ERROR',
+            position: 'bottomLeft',
+            timeout: 2000,
+            message: t
+        });
+    }
 }

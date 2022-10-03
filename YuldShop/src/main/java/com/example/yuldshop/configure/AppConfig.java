@@ -66,31 +66,37 @@ public class AppConfig implements WebMvcConfigurer, ApplicationContextAware {
     }
 
     @Bean
-    public ICustomerService customerService(){
+    public ICustomerService customerService() {
         return new CustomerServiceImp();
     }
+
     @Bean
-    public ILocationRegionService locationRegionService(){
+    public ILocationRegionService locationRegionService() {
         return new LocationRegionService();
     }
+
     @Bean
-    public IProductService productService(){
+    public IProductService productService() {
         return new ProductService();
     }
+
     @Bean
-    public ICategoryService categoryService(){
+    public ICategoryService categoryService() {
         return new CategoryService();
     }
+
     @Bean
-    public IRoleService roleService(){
+    public IRoleService roleService() {
         return new RoleService();
     }
+
     @Bean
-    public IOrderService orderService(){
+    public IOrderService orderService() {
         return new OrderServiceImp();
     }
+
     @Bean
-    public IOrderItemService orderItemService(){
+    public IOrderItemService orderItemService() {
         return new OrderItemServiceImp();
     }
 //    @Bean
@@ -180,7 +186,7 @@ public class AppConfig implements WebMvcConfigurer, ApplicationContextAware {
     Properties additionalProperties() {
         Properties properties = new Properties();
         properties.setProperty("hibernate.hbm2ddl.auto", "update");
-        properties.setProperty("hibernate.show_sql", "true");
+        properties.setProperty("hibernate.show_sql", "false");
         properties.setProperty("hibernate.format_sql", "true");
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect");
         return properties;
@@ -191,29 +197,30 @@ public class AppConfig implements WebMvcConfigurer, ApplicationContextAware {
         registry.addResourceHandler("/access/**").addResourceLocations("/access/");
     }
 
-//    @Bean
+    //    @Bean
 //    public MessageSource messageSource() {
 //        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
 //        messageSource.setBasenames("validation-message");
 //        return messageSource;
 //    }
-@Bean
-public CommonsMultipartResolver multipartResolver() {
+    @Bean
+    public CommonsMultipartResolver multipartResolver() {
         int maxUploadSizeInMb = 10 * 1024 * 1024;     //10mb
-    CommonsMultipartResolver resolver = new CommonsMultipartResolver();
-    resolver.setDefaultEncoding("UTF-8");
-    resolver.setMaxUploadSize(maxUploadSizeInMb * 2);
-    resolver.setMaxUploadSizePerFile(maxUploadSizeInMb); //bytes
-    return resolver;
-}
-@Bean
-    public Cloudinary cloudinary(){
-    Cloudinary cloudinary =new Cloudinary(ObjectUtils.asMap(
-            "cloud_name","dkm0vpby1",
-            "api_key","526871447322655",
-            "api_secret","YKXgHVCCh-qqaFSOLOUv_6qXDr8",
-            "secure", true
-    ));
-    return cloudinary;
-}
+        CommonsMultipartResolver resolver = new CommonsMultipartResolver();
+        resolver.setDefaultEncoding("UTF-8");
+        resolver.setMaxUploadSize(maxUploadSizeInMb * 2);
+        resolver.setMaxUploadSizePerFile(maxUploadSizeInMb); //bytes
+        return resolver;
+    }
+
+    @Bean
+    public Cloudinary cloudinary() {
+        Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
+                "cloud_name", "dkm0vpby1",
+                "api_key", "526871447322655",
+                "api_secret", "YKXgHVCCh-qqaFSOLOUv_6qXDr8",
+                "secure", true
+        ));
+        return cloudinary;
+    }
 }

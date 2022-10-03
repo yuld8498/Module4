@@ -22,6 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private IUserService userService;
+
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
         return new JwtAuthenticationFilter();
@@ -56,18 +57,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.formLogin().loginPage("/login")
-                        .usernameParameter("input-userName")
-                                .passwordParameter("input-password");
+                .usernameParameter("input-userName")
+                .passwordParameter("input-password");
         http.formLogin().defaultSuccessUrl("/products").failureUrl("/login?error");
         http.csrf().ignoringAntMatchers("/**");
         http.httpBasic().authenticationEntryPoint(restServicesEntryPoint());
 
         http.authorizeRequests()
-                .antMatchers("/", "/customers/**","/users/register","/api/products/**","/file/image",
-                        "/login","/api/categories","/api/categories","/api/customers","/api/users/**","/products","/api/carts/find").permitAll()
-                .antMatchers("/products/create","/products/admin").hasAnyAuthority("ADMIN")
+                .antMatchers( "/","/customers/**", "/users/register", "/api/products/**", "/file/image",
+                        "/login", "/api/categories", "/api/customers", "/api/users/**", "/products", "/api/carts/find").permitAll()
+                .antMatchers("/products/create", "/products/admin",
+                        "order","/api/orders","/api/orders/{id}","/api/orders/find/{id}").hasAnyAuthority("ADMIN")
                 .antMatchers("/resources/**").permitAll()
-                .antMatchers("/users/update","/api/carts/{id}").hasAnyAuthority("USER")
+                .antMatchers("/users/update", "/api/carts/{id}",
+                        "/api/orderItems/confirm").hasAnyAuthority("USER")
                 .antMatchers(
                         "/v2/api-docs",
                         "/swagger-resources/configuration/ui",

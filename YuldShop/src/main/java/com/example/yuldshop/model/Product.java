@@ -29,7 +29,7 @@ public class Product extends BasicEntity {
     private String productName;
     private String description;
 
-    @Min(0)
+    @Min(100)
     @Max(1000000000)
     private BigDecimal price;
     @Column(columnDefinition = "Integer default 0")

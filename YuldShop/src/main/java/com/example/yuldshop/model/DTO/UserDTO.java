@@ -3,9 +3,12 @@ package com.example.yuldshop.model.DTO;
 import com.example.yuldshop.model.User;
 import lombok.*;
 import lombok.experimental.Accessors;
+import org.hibernate.validator.constraints.Length;
+
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 
@@ -19,11 +22,13 @@ public class UserDTO {
     private Long id;
 
     @NotBlank(message = "The user name is required")
-    @Size(max = 50, message = "The length of email must be between 5 and 50 characters")
+    @Length(min = 5,max = 30,message = "The length of username must be between 5 and 30 characters")
     private String username;
 
     @NotBlank(message = "The password is required")
-    @Size(max = 30, message = "Maximum password length 30 characters")
+    @Length(min = 8,max = 30,message = "The length of password must be between 5 and 30 characters")
+    @Pattern(regexp = "^([a-zA-Z0-9])(?=.*[\\W]).{8,}$",
+            message = "Password must have at least 8 characters, including at least 1 uppercase character, 1 lowercase character, number and special character")
     private String password;
 
     @Valid

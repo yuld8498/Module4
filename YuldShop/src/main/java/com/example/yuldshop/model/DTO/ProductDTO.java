@@ -34,7 +34,7 @@ public class ProductDTO {
     @Max(value = 1000, message = "quantity is Less than or Equal 1000")
     private int quantity;
     @NotNull(message = "price is not null")
-    @Min(value = 1000, message = "price is great than 1000")
+    @Min(value = 100, message = "price is great than 1000")
     @Max(value = 1000000000, message = "quantity is Less than or Equal 1 billion")
     private BigDecimal price;
 
@@ -55,7 +55,8 @@ public class ProductDTO {
                 ", categoryDTO=" + category +
                 '}';
     }
-    public Product toProduct(){
+
+    public Product toProduct() {
         return new Product()
                 .setId(id)
                 .setProductName(productName)

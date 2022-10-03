@@ -17,17 +17,17 @@
                         <form action="#" class="form-register" id="form-register">
                             <h5>Account</h5>
                             <div class="form-group">
-                                <label>User Name</label>
+                                <label for="userNameRe">User Name</label>
                                 <input type="text" name="userNameRe" placeholder="Enter your user name..."
                                        id="userNameRe" class="form-control">
                             </div>
                             <div class="form-group">
-                                <label>Password</label>
+                                <label for="passwordRe">Password</label>
                                 <input type="password" name="passwordRe" placeholder="Enter your password..."
                                        id="passwordRe" class="form-control">
                             </div>
                             <div class="form-group">
-                                <label>Confirm Password</label>
+                                <label for="confirmPasswordRe">Confirm Password</label>
                                 <input type="password" name="confirmPasswordRe" placeholder="Confirm Password..."
                                        id="confirmPasswordRe" class="form-control">
                             </div>
@@ -48,35 +48,71 @@
     let role = new Role();
 
 
-    $("#btn-register").on('click', () => {
-        let confirmPW = $("#confirmPasswordRe").val();
-        user.username = $("#userNameRe").val();
-        user.password = $("#passwordRe").val();
-        user.id = 0;
-        role.id = 2;
-        role.code = "USER";
-        role.name = "ROLE_USER";
-        user.role = role;
-        if (confirmPW !== user.password) {
-            return App.showErrorAlert("confirm password and password is not match")
-        }
-        $.ajax({
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
+   function createNewUser(){
+           let confirmPW = $("#confirmPasswordRe").val();
+           user.username = $("#userNameRe").val();
+           user.password = $("#passwordRe").val();
+           user.id = 0;
+           role.id = 2;
+           role.code = "USER";
+           role.name = "ROLE_USER";
+           user.role = role;
+           if (confirmPW !== user.password) {
+               return App.showErrorAlert("confirm password and password is not match")
+           }
+           $.ajax({
+               headers: {
+                   'Accept': 'application/json',
+                   'Content-Type': 'application/json'
+               },
+               url: "http://localhost:8080/api/users/register",
+               type: "POST",
+               data: JSON.stringify(user)
+           }).done(() => {
+               App.toastSuccess("Register new user is success !")
+               $("#confirmPasswordRe").val("");
+               $("#userNameRe").val("");
+               $("#passwordRe").val("");
+           }).fail((error) => {
+               iziToast.error({
+                   title: 'ERROR',
+                   position: 'bottomLeft',
+                   timeout: 3000,
+                   message: error.responseText
+               });
+           })
+   }
+
+    $("#form-register").validate({
+        rules:{
+            userNameRe: {
+                required : true,
+                minlength: 8,
+                maxlength:30
             },
-            url: "http://localhost:8080/api/users/register",
-            type: "POST",
-            data: JSON.stringify(user)
-        }).done(() => {
-            App.showSuccessAlert("Register new user is success !")
-            $("#confirmPasswordRe").val("");
-            $("#userNameRe").val("");
-            $("#passwordRe").val("");
-        }).fail((error) => {
-            App.showErrorAlert(error.responseText)
-        })
+            passwordRe: {
+                required : true,
+                minlength: 8,
+                maxlength:30,
+                regexPassword: true
+            },
+            confirmPasswordRe: {
+                required : true,
+                equalTo : "#passwordRe"
+            }
+        },
+        submitHandler: function () {
+            createNewUser();
+        }
     })
+    $("#btn-register").on('click', () => {
+        $("#form-register").submit();
+    })
+
+    //jquery regex
+    jQuery.validator.addMethod("regexPassword", function (value, element){
+        return this.optional(element) || /^([a-zA-Z0-9])(?=.*[\W]).{8,}$/.test(value);
+    },"Password must have at least 8 characters, including at least 1 uppercase character, 1 lowercase character, number and special character");
 </script>
 </body>
 </html>
