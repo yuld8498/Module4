@@ -1,0 +1,71 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <th:block th:replace="/header :: header"/>
+    <title>Wellcome to Yuld Shop</title>
+</head>
+<body>
+<th:block th:if="city">
+    <div class="container">
+        <div class="row mt-5 border-1">
+            <div class="text-center bg-dark text-white row mb-2 justify-content-center w-100">
+                <span class="float-left font-weight-bold">Thành Phố &nbsp;</span>
+                <p th:text="${city.cityName}"></p>
+            </div>
+            <div class="col-lg-9">
+                <span class="float-left">Thành Phố &nbsp; </span>
+                <p th:text="${city.cityName}"></p>
+            </div>
+            <div class="col-lg-3">
+                <a href="/home" class="btn btn-outline-success float-right">Xem Danh Sách Thành Phố</a>
+            </div>
+        </div>
+        <div class="mt-3">
+            <div>
+                <span class="float-left">Tên: &nbsp;</span>
+                <p th:text="${city.cityName}"></p>
+            </div>
+            <div>
+                <span class="float-left">Quốc Gia:&nbsp; </span>
+                <p th:text="${city.country.countryName}"></p>
+            </div>
+            <div>
+                <span class="float-left">Diện tích: &nbsp;</span>
+                <p th:text="${city.area}"></p>
+            </div>
+            <div>
+                <span class="float-left">Dân Số: &nbsp;</span>
+                <p th:text="${city.population}"></p>
+            </div>
+            <div>
+                <span class="float-left">GDP: &nbsp;</span>
+                <p th:text="${city.GDP}"></p>
+            </div>
+            <div>
+                <span class="float-left">Giới thiệu: &nbsp;</span>
+                <p th:text="${city.description}"></p>
+            </div>
+        </div>
+        <div class="justify-content-end">
+            <a class="btn btn-outline-info" th:href="@{/home/edit/__${city.id}__}">Chỉnh Sửa</a>
+            <button class="btn btn-outline-danger btnDeleted" th:data-id="${city.id}" th:data-text="${city.cityName}">Xóa</button>
+        </div>
+    </div>
+</th:block>
+<th:block th:if="error">
+    <div th:text="${error}"></div>
+</th:block>
+<th:block th:replace="/footer::footer"/>
+<script>
+    $(".btnDeleted").on("click",function (){
+        let idCity =  $(this).data("id");
+        let cityName =  $(this).data("text");
+        let message = "Bạn có chắc muốn xóa thành " + cityName;
+        App.showConfirmDialog(message,"Xóa Thành Phố").then((result)=>{
+            if (result.isConfirmed){
+                window.location.href = "/home/deleted/"+idCity;
+            }
+        })
+    })
+</script>
+</body>
+</html>

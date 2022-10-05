@@ -1,0 +1,99 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <th:block th:replace="/header :: header"/>
+    <title>Wellcome to Yuld Shop</title>
+</head>
+<body>
+<th:block th:if="city">
+    <div class="container">
+        <div class="row mt-5 border-1">
+            <div class="text-center bg-dark text-white row mb-2 justify-content-center w-100">
+                <label class="float-left font-weight-bold">Thành Phố &nbsp;</label>
+                <p th:text="${city.cityName}"></p>
+            </div>
+            <div class="col-lg-9">
+                <label class="float-left">Thành Phố &nbsp; </label>
+                <p th:text="${city.cityName}"></p>
+            </div>
+            <div class="col-lg-3">
+                <a href="/home" class="btn btn-outline-success float-right">Xem Danh Sách Thành Phố</a>
+            </div>
+        </div>
+        <form method="post" th:object="${city}" id="form-create">
+            <div class="form-group row mt-3">
+                <label class="form-label col-2">Tên: &nbsp;</label>
+                <input th:field="${city.cityName}" class="form-control col-10" name="cityName">
+            </div>
+            <div class="form-group row">
+                <label class="form-label col-2">Quốc Gia:&nbsp; </label>
+                <select th:field="${city.country}">
+                    <th:block th:each="country : ${countries}">
+                            <option th:value="${country.id}" th:text="${country.countryName}"></option>
+                    </th:block>
+                </select>
+            </div>
+            <div class="form-group row">
+                <label class="form-label col-2">Diện tích: &nbsp;</label>
+                <input th:field="${city.area}" class="form-control col-10" name="area" type="number">
+            </div>
+            <div class="form-group row">
+                <label class="form-label col-2">Dân Số: &nbsp;</label>
+                <input th:field="${city.population}" class="form-control col-10" name="population" type="number">
+            </div>
+            <div class="form-group row">
+                <label class="form-label col-2">GDP: &nbsp;</label>
+                <input th:field="${city.GDP}" class="form-control col-10" name="GDP" type="number">
+            </div>
+            <div class="form-group row">
+                <label class="form-label col-2">Giới thiệu: &nbsp;</label>
+                <input th:field="${city.description}" class="form-control col-10" name="description">
+            </div>
+            <div class="justify-content-center row w-100">
+                <button class="btn btn-outline-success mr-2" type="submit">Thêm Mới</button>
+                <a th:href="@{/home}" class="btn btn-outline-danger" th:text="Thoát"></a>
+            </div>
+        </form>
+        <div class="bg-danger text-white w-75">
+            <th:block th:if="error">
+                <th:block th:each="string : ${error}">
+                    <div th:text="${string}"></div>
+                </th:block>
+            </th:block>
+        </div>
+    </div>
+</th:block>
+<th:block th:replace="/footer::footer"/>
+<script>
+    // $("#form-create").validate({
+    //     rules: {
+    //         cityName: {
+    //             required: true,
+    //             minlength: 3,
+    //             maxlength: 25
+    //         },
+    //         description: {
+    //             required: true,
+    //             minlength: 10,
+    //             maxlength: 200
+    //         },
+    //         area: {
+    //             required: true,
+    //             min: 1,
+    //             max: 100000000000,
+    //             pattern:/([0-9])+/
+    //         },
+    //         GDP: {
+    //             required: true,
+    //             min: 1,
+    //             max: 100000000000
+    //         },
+    //         population: {
+    //             required: true,
+    //             min: 1,
+    //             max: 100000000000
+    //         }
+    //     }
+    // })
+</script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <th:block th:replace="/header :: header"/>
+    <title>Wellcome to Yuld Shop</title>
+</head>
+<body>
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-lg-9">Danh Sách Thành Phố</div>
+        <div class="col-lg-3">
+            <a class="btn btn-outline-success float-right" th:href="@{/home/create}">Thêm Thành Phố</a>
+        </div>
+    </div>
+    <table class="table table-striped mt-2 border-1">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Thành Phố</th>
+            <th>Quốc Gia</th>
+            <th colspan="2"></th>
+        </tr>
+        </thead>
+        <tbody class="border-1">
+        <th:block th:each="city : ${cities}">
+          <tr>
+              <td th:text="${city.id}"></td>
+              <td><a  th:text="${city.cityName}" th:href="@{/home/__${city.id}__}"></a></td>
+              <td th:text="${city.country.countryName}"></td>
+              <td><a th:href="@{/home/edit/__${city.id}__}" class="float-right btn btn-link">Chỉnh sửa</a></td>
+              <td><button class="float-left btn btn-link btnDeleted" th:data-id="${city.id}" th:data-text="${city.cityName}">Xóa</button></td>
+          </tr>
+        </th:block>
+        </tbody>
+    </table>
+</div>
+<th:block th:replace="/footer::footer"/>
+<script>
+    $(".btnDeleted").on("click",function (){
+       let idCity =  $(this).data("id");
+       let cityName =  $(this).data("text");
+       let message = "Bạn có chắc muốn xóa thành " + cityName;
+       App.showConfirmDialog(message,"Xóa Thành Phố").then((result)=>{
+           if (result.isConfirmed){
+               window.location.href = "/home/deleted/"+idCity;
+           }
+       })
+    })
+</script>
+</body>
+</html>
