@@ -55,7 +55,7 @@
                 <td>${product.category.category}</td>
                 <td>${product.description}</td>
                 <td class="text-center">${product.price}</td>
-                <td>${product.quantity}</td>
+                <td class="text-right">${product.quantity}</td>
                 <td><button class="btn btn-secondary btn-updateP" data-id="${product.id}">Update</button></td>
                 <td><button class="btn btn-danger btn-deletedP" data-id="${product.id}">Delete</button></td>
             </tr>`
@@ -260,8 +260,15 @@
             data: JSON.stringify(product),
         }).done((data)=>{
             product =data;
+            $("#productNameCe").val("");
+            $("#descriptionCe").val("");
+            $("#quantityCe").val("");
+            $("#priceCe").val("");
+            $("#categoriesCe").val("");
+            $("#fileCe").val("");
+            $("#mdCreate").modal("hide");
             renderProductAdmin(product);
-            App.showSuccessAlert("Create new product is successfully !")
+            App.toastSuccess("Create New Product is success !")
         }).fail((err)=>{
             console.log(err)
         })
