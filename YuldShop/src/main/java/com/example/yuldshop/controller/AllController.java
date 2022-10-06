@@ -63,6 +63,25 @@ public class AllController {
         return userDTO;
     }
 
+    @GetMapping
+    public ModelAndView showProduct() {
+        ModelAndView modelAndView = new ModelAndView();
+        if (!getPrincipal().equals("")) {
+            UserDTO userDTO = getUserDTO(getPrincipal());
+            modelAndView.addObject("user", userDTO);
+            modelAndView.addObject("role", userDTO.getRole());
+            if (userDTO.getRole().getCode().equalsIgnoreCase("admin")) {
+                modelAndView.setViewName("/product/listProductsAdmin");
+                return modelAndView;
+            }
+        } else {
+            modelAndView.addObject("user", null);
+            modelAndView.addObject("role", null);
+        }
+        modelAndView.setViewName("/product/list");
+        return modelAndView;
+    }
+
     //products
     @GetMapping("/products")
     public ModelAndView showListProduct() {

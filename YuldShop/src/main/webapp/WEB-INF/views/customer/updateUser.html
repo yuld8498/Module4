@@ -190,7 +190,11 @@
         }).done((data) => {
             App.showSuccessAlert("Update information is successfully")
         }).fail((error) => {
-            App.showErrorAlert("Update is fail, please check input again !")
+            if (error.status === 400){
+                App.showErrorAlert(error.responseText)
+            }else {
+                App.showErrorAlert("Update is fail, please check input again !")
+            }
         })
     }
 

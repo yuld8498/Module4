@@ -26,13 +26,14 @@ public class Product extends BasicEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
+    @Column(name = "product_name")
     private String productName;
     private String description;
 
     @Min(100)
     @Max(1000000000)
     private BigDecimal price;
-    @Column(columnDefinition = "Integer default 0")
+  @Min(1)
     private int quantity;
     @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id")

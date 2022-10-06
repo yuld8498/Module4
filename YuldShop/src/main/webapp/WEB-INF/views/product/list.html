@@ -102,7 +102,7 @@
                         <div class="col-lg-3 col-md-6 col-sm-12 hei-450 mt-3 product-items">
                             <div class="p-3 h-100 w-100">
                                 <div class="h-75 w-100 p-2 img-wrapper">
-                                        <img class="w-100 m-auto ml-auto mr-auto blur zoom"
+                                        <img class="w-100 m-auto ml-auto mr-auto blur zoom max-width-500"
                                         src="${product.imgUrl}">
                                          <div class="w-100 m-auto ml-auto mr-auto content slide-down row zoom">
                                                  <div class="w-100 h-75">${product.description}</div>
@@ -113,7 +113,10 @@
                                         </div>
                                 </div>
                                 <div class="text-center">${product.productName}</div>
-                                <div class="text-center">${'$ ' + product.price}</div>
+                                <div class="text-center">${product.price.toLocaleString('en-US', {
+            style: 'currency',
+            currency: 'USD'
+        })}</div>
                             </div>
                         </div>`
         $("#list-products").prepend(str);
@@ -196,6 +199,11 @@
         cartItems.quantity = $("#quantityIf").val();
         cartItems.checked = false;
         cartItems.amount = cartItems.quantity * cartItems.price;
+        console.log(cartItems)
+        let regex = new RegExp("([0-9])+");
+        if (isNaN(cartItems.quantity) || isNaN(cartItems.price)) {
+            return App.showErrorAlert("Quantity and Price is a Number, Please input again !")
+        }
         $.ajax({
             headers: {
                 'Accept': 'application/json',
@@ -313,14 +321,15 @@
             data: JSON.stringify(product),
         }).done((data) => {
             product = data;
-            App.toastSuccess("Create New Product is success !")
+            $("#productNameCe").val("");
+            $("#descriptionCe").val("");
+            $("#quantityCe").val("");
+            $("#priceCe").val("");
+            $("#categoriesCe").val("");
+            $("#fileCe").val("");
+            $("mdCreate").modal("hide");
             renderProduct(product);
-            // var img = new FormData();
-            // img.append("image", document.getElementById("fileCe").files[0]);
-            // img.append("data", product.id);
-            // var xhr = new XMLHttpRequest();
-            // xhr.open("POST", "http://localhost:8080/file/img");
-            // xhr.send(img);
+            App.toastSuccess("Create New Product is success !")
         }).fail((error) => {
             App.toastError("error")
             console.log(error)
@@ -444,7 +453,7 @@
             inputcheck = `<td><input type="checkbox" id="checked_${item.id}" data-id="${item.id}" class="checked"></td>`
         }
         str += inputcheck;
-        str += `<td><img src="${item.imgUrl}" alt="" width="150px"></td>
+        str += `<td><img src="${item.imgUrl}" alt="" width="130px"></td>
                         <td>${item.productName}</td>
                         <td id="amount_${item.id}">${item.amount}</td>
                         <td>
@@ -490,6 +499,7 @@
             }).done((data) => {
                 cartItems = data;
                 let amountItem = cartItems.amount;
+                console.log(amountItem)
                 let totalAmount = $("#totalAmountOfCart").val();
                 if (test === true) {
                     let newTotal = Number(totalAmount) + Number(amountItem);

@@ -263,3 +263,10 @@ li{
     font-size: 22px;
     font-weight: bold;
 }
+
+.max-width-500{
+    max-width: 500px;
+}
+.a-pointer{
+cursor: pointer;
+}

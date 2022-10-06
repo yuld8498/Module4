@@ -60,8 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("input-userName")
                 .passwordParameter("input-password");
         http.formLogin().defaultSuccessUrl("/products").failureUrl("/login?error");
-        http.csrf().ignoringAntMatchers("/**");
-        http.httpBasic().authenticationEntryPoint(restServicesEntryPoint());
+        http.csrf().ignoringAntMatchers("/**").disable();
 
         http.authorizeRequests()
                 .antMatchers( "/","/customers/**", "/users/register", "/api/products/**", "/file/image",
@@ -96,9 +95,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login")
                 .deleteCookies("JWT")
-                .invalidateHttpSession(true)
-                .and()
-                .csrf().disable();
+                .invalidateHttpSession(true);
 
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler());

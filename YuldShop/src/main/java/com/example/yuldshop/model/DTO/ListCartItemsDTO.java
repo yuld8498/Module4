@@ -23,12 +23,14 @@ public class ListCartItemsDTO {
     @NotEmpty(message = "Product Name is not Empty")
     private String productName;
     @NotNull(message = "price is not null")
+    @Min(value = 1)
     private BigDecimal price;
     @NotNull(message = "quantity is not null")
     @Min(value = 1, message = "Quantity is great than zero !")
     @Max(value = 999, message = "Quantity is less than 1000")
     private int quantity;
     @NotNull(message = "amount is not null")
+    @Min(value = 1)
     private BigDecimal amount;
 
     private String imgUrl;
