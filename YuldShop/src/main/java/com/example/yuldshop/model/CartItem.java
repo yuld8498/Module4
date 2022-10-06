@@ -37,7 +37,7 @@ public class CartItem {
     @Column(nullable = false)
     private int quantity;
 
-    @Column(precision = 9, scale = 0, nullable = false)
+    @Column(precision = 9, scale = 0, nullable = false, columnDefinition = "Big decimal default 0")
     private BigDecimal amount;
 
     @Column(name = "imgUrl", length = 1024)

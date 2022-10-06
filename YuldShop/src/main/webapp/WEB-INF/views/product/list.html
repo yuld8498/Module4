@@ -424,7 +424,7 @@
             })
             let footer = `
                     <tr id="footerCart">
-                        <td class="font-weight-bold">Total Amount: </td>
+                        <td class="font-weight-bold">Total Amount ($): </td>
                         <td colspan="3">
                             <input type="text" id="totalAmountOfCart"
                             class="font-22 text-right user-select-none border-0" readonly value="${total}">
@@ -638,6 +638,7 @@
                     }).done((data) => {
                         App.toastSuccess("Order is successfully !")
                     }).fail((error) => {
+                        re
                         if (error.status === 422) {
                             App.toastError("Cart is empty, please chose or add new items !")
                         }

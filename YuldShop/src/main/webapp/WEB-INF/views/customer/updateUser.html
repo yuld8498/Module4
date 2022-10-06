@@ -229,7 +229,7 @@
     }).done((data) => {
         let str = ``;
         $.each(data, (i, item) => {
-            str += `<a class="dropdown-item" href="http://localhost:8080/api/products?category=${item.id}">${item.category}</a>`
+            str += `<a class="dropdown-item" href="http://localhost:8080/products?category=${item.id}">${item.category}</a>`
         })
         document.getElementById("productCategories").innerHTML = str;
     }).fail((error) => {

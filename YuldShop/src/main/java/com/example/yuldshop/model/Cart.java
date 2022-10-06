@@ -20,7 +20,7 @@ public class Cart extends BasicEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(precision = 12, scale = 0, nullable = false)
+    @Column(precision = 12, scale = 0, nullable = false, columnDefinition = "Big decimal default 0")
     private BigDecimal totalAmount;
 
     @OneToOne
