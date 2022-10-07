@@ -248,12 +248,10 @@
                     <form id="frmTransfer">
                         <div class="row">
                             <div class="col-lg-3">
-                                <input type="hidden" id="customerIdT">
                                 <label for="fullName">Sender ID</label>
                                 <input type="text" id="senderId" readonly class="form-control">
                             </div>
                             <div class="col-lg-3">
-                                <input type="hidden" id="customerIdT">
                                 <label for="fullName">Sender Name</label>
                                 <input type="text" id="senderName" readonly class="form-control">
                             </div>
@@ -300,6 +298,7 @@
         <!-- <script src="/js.js"></script> -->
         <script src="/app.js"></script>
         <script src="/banking-ajax/boostrap/js/jquery-3.6.0.js"></script>
+        <script src="/banking-ajax/boostrap/js/jquery.validate-1.19.3.min.js"></script>
         <script src="/banking-ajax/boostrap/sweetalert2/sweetalert2.min.js"></script>
         <script src="/banking-ajax/boostrap/js/bootstrap.min.js"></script>
         <script src="/banking-ajax/boostrap/js/bootstrap.bundle.min.js"></script>
@@ -511,21 +510,14 @@
                             customer.id = $("#customerIdUp").val();
                             customer.fullName = $("#fullNameUp").val();
                             customer.email = $("#emailUp").val();
-                            customer.phone = $("#PhoneUp").val();
-                            customer.address = $("#AddressUp").val();
-                            $.ajax({
-                                headers: {
-                                    Accept: 'application/json',
-                                    contentType: 'application/json; charset=utf-8'
-                                },
-                                url: 'http://localhost:3000/customers/' + customer.id,
-                                type: 'PATCH',
-                                data: customer
-                            }).done((data) => {
+                            customer.phone = $("#phoneUp").val();
+                            customer.address = $("#addressUp").val();
+                            console.log(customer);
+                            updateCustomer(customer).then(() => {
                                 rewrite(customer);
                                 App.showSuccessAlert("Update is successfully")
                                 $("#mdUpdate").modal("hide");
-                            }).fail((error) => {
+                            }).catch((error) => {
                                 App.showErrorAlert("Update is fail, please try again later")
                             })
                         }
@@ -534,21 +526,14 @@
                     customer.id = $("#customerIdUp").val();
                     customer.fullName = $("#fullNameUp").val();
                     customer.email = $("#emailUp").val();
-                    customer.phone = $("#PhoneUp").val();
-                    customer.address = $("#AddressUp").val();
-                    $.ajax({
-                        headers: {
-                            Accept: 'application/json',
-                            contentType: 'application/json; charset=utf-8'
-                        },
-                        url: 'http://localhost:3000/customers/' + customer.id,
-                        type: 'PATCH',
-                        data: customer
-                    }).done((data) => {
+                    customer.phone = $("#phoneUp").val();
+                    customer.address = $("#addressUp").val();
+                    console.log(customer);
+                    updateCustomer(customer).then(() => {
                         rewrite(customer);
                         App.showSuccessAlert("Update is successfully")
                         $("#mdUpdate").modal("hide");
-                    }).fail((error) => {
+                    }).catch((error) => {
                         App.showErrorAlert("Update is fail, please try again later")
                     })
                 }
@@ -564,32 +549,18 @@
                     App.showErrorAlert("transaction Amount is greater than 1000");
                 }
                 else {
-                    $.ajax({
-                        type: "GET",
-                        "url": "http://localhost:3000/customers/" + customerId,
+                    findCustomerById(customerId).then(() => {
+                        customer.balance = (+customer.balance) + (+transactionAmount);
+                        updateCustomer(customer).then(() => {
+                            $('#mdDeposits').modal('hide');
+                            App.showSuccessAlert("Deposit is successfully");
+                            rewrite(customer);
+                        }).catch(() => {
+                            App.showErrorAlert("Deposit is fail");
+                        })
+                    }).catch(() => {
+                        App.showErrorAlert("Deposit is fail, please try again later");
                     })
-                        .done((data) => {
-                            customer = data;
-                            console.log(customer.id);
-                            customer.balance = (+customer.balance) + (+transactionAmount);
-                            console.log(customer);
-                            $.ajax({
-                                type: "PATCH",
-                                url: "http://localhost:3000/customers/" + customerId,
-                                data: customer,
-                            })
-                                .done((data) => {
-                                    $('#mdDeposits').modal('hide');
-                                    App.showSuccessAlert("Deposit is successfully");
-                                    rewrite(customer);
-
-                                }).fail((error) => {
-                                    App.showErrorAlert("Deposit is fail");
-                                })
-                        })
-                        .fail((error) => {
-                            App.showErrorAlert("Deposit is fail, please try again later");
-                        })
                 }
             });
 
@@ -606,27 +577,20 @@
                     App.showErrorAlert("transaction Amount is less than balance");
                 }
                 else {
-                    $.ajax({
-                        type: "GET",
-                        "url": "http://localhost:3000/customers/" + customer.id
-                    }).done((data) => {
-                        customer = data;
+                    findCustomerById(customer.id).then(() => {
                         customer.balance = +(customer.balance) - +(transactionAmount);
-                        $.ajax({
-                            type: "PATCH",
-                            "url": "http://localhost:3000/customers/" + customer.id,
-                            data: customer
-                        }).done((data) => {
+                        updateCustomer(customer).then((data) => {
                             customer = data;
                             rewrite(customer);
                             App.showSuccessAlert("Withdraw is successfully");
                             $("#mdWithdraw").modal("hide");
-                        }).fail((error) => {
+                        }).catch((error) => {
                             App.showErrorAlert("Withdraw is fail");
                         })
-                    }).fail((error) => {
-                        App.showErrorAlert("Withdraw is fail");
                     })
+                        .catch((error) => {
+                            App.showErrorAlert("Withdraw is fail");
+                        })
                 }
             });
 
@@ -696,10 +660,7 @@
             function showBoxDeposit() {
                 $('.btnDeposits').on('click', function () {
                     let id = $(this).data('id');
-                    $.ajax({
-                        "type": "GET",
-                        "url": "http://localhost:3000/customers/" + id
-                    })
+                    findCustomerById(id)
                         .done((data) => {
                             $('#customerIdDe').val(data.id);
                             $('#fullNameDe').val(data.fullName);
@@ -737,11 +698,7 @@
                 $('.btnTransfer').on('click', function () {
                     console.log("a");
                     let id = $(this).data('id');
-                    $.ajax({
-                        "type": "GET",
-                        "url": "http://localhost:3000/customers/" + id
-                    })
-                        .done((data) => {
+                   findCustomerById(id).then((data) => {
                             $('#senderId').val(data.id);
                             $('#senderName').val(data.fullName);
                             $('#senderEmail').val(data.email);
@@ -772,11 +729,7 @@
             function showBoxWithdraw() {
                 $('.btnWithdraw').on('click', function () {
                     let id = $(this).data('id');
-                    $.ajax({
-                        "type": "GET",
-                        "url": "http://localhost:3000/customers/" + id
-                    })
-                        .done((data) => {
+                        findCustomerById(id).then((data) => {
                             $('#customerIdWd').val(data.id);
                             $('#fullNameWd').val(data.fullName);
                             $('#emailWd').val(data.email);
@@ -784,7 +737,7 @@
 
                             $('#mdWithdraw').modal('show');
                         })
-                        .fail((error) => {
+                        .catch((error) => {
                             App.SweetAlert.showAlertError('Invalid ID customer');
                         })
                 });
@@ -798,16 +751,12 @@
                             if (result.isConfirmed) {
                                 findCustomerById(id).then((result => {
                                     customer.deleted = 1;
-                                    $.ajax({
-                                        "type": "PATCH",
-                                        "url": "http://localhost:3000/customers/" + id,
-                                        "data": customer
-                                    })
-                                        .done((data) => {
+                                    updateCustomer(customer)
+                                        .then((data) => {
                                             $('#tr_' + id).remove();
                                             App.showSuccessAlert('The customer has been deactived');
                                         })
-                                        .fail((error) => {
+                                        .catch((error) => {
                                             App.SweetAlert.showAlertError('Deactive customer fail');
                                         });
                                 })

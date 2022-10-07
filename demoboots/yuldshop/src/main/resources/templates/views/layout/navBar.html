@@ -1,0 +1,59 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<th:block th:fragment="navBar">
+    <div class="header">
+        <div class="container">
+            <!-- star header -->
+            <div class="header mt-3">
+                <div class="row bd">
+                    <!-- star logo -->
+                    <div class="col-lg-3 col-md-12">
+                        <img src="/access/logo.jpg" alt="" class="w-100">
+                    </div>
+                    <div class="col-lg-9 col-md-12 justify-content-end">
+                        <div class="float-right">
+                            <a class="btn btn-lg btn-secondary" href="http://localhost:8080/login">
+                                <i class="fa-solid fa-user"></i>
+                            </a>
+                        </div>
+                        <div class="float-right mr-2">
+                            <div class="btn-group dropleft">
+                                <button type="button" class="btn btn-secondary dropdown-toggle"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <li class=" fa-solid fa-cart-shopping"></li>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <div class="dropdown-item wid-200">
+                                        <h4 class="dropdown-item">Cart Items</h4>
+                                        <div class="dropdown-divider"></div>
+                                        <div class="dropdown-item">
+                                            Sign in to purchase.
+                                            <a href="/login">Sign in!</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end logo -->
+                </div>
+            </div>
+            <!-- end header -->
+            <div class="nav nav-tabs">
+                <ul class="list-group list-group-horizontal-lg float-left justify-content-around w-100 bg-secondary">
+                    <a class="btn btn-secondary" href="http://localhost:8080/products">Home</a>
+                    <li class="btn btn-secondary" href="#">Introduce</li>
+                    <li class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Product
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2" id="productCategories">
+                        </div>
+                    </li>
+                    <li class="btn btn-secondary">Contact</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+</html>

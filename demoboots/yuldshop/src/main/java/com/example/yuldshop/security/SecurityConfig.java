@@ -60,7 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("input-userName")
                 .passwordParameter("input-password");
         http.formLogin().defaultSuccessUrl("/products").failureUrl("/login?error");
-        http.csrf().ignoringAntMatchers("/**");
+        http.csrf().ignoringAntMatchers("/**").disable();
         http.httpBasic().authenticationEntryPoint(restServicesEntryPoint());
 
         http.authorizeRequests()

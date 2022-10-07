@@ -1870,8 +1870,8 @@
       "email": "vanyfuwul@mailinator.com",
       "phone": "+1 (102) 507-6716",
       "address": "Similique dicta aliq",
-      "balance": 0,
-      "deleted": 0,
+      "balance": "1000",
+      "deleted": "0",
       "id": 277
     },
     {
@@ -1879,8 +1879,8 @@
       "email": "kopyxe@mailinator.com",
       "phone": "+1 (956) 749-6412",
       "address": "Omnis voluptatem Qu",
-      "balance": 0,
-      "deleted": 0,
+      "balance": "0",
+      "deleted": "1",
       "id": 278
     },
     {
@@ -1888,8 +1888,8 @@
       "email": "rugedow@mailinator.com",
       "phone": "+1 (655) 381-7697",
       "address": "Vel in rerum dolorem",
-      "balance": 0,
-      "deleted": 0,
+      "balance": "0",
+      "deleted": "1",
       "id": 279
     },
     {
@@ -1906,7 +1906,7 @@
       "email": "mugyjypawo@mailinator.com",
       "phone": "+1 (508) 551-8237",
       "address": "Voluptatem Itaque d",
-      "balance": "890",
+      "balance": "1890",
       "deleted": "0",
       "id": 281
     },
@@ -1914,10 +1914,18 @@
       "fullName": "Illa Hol1comb",
       "email": "geja@mailinator.com",
       "phone": "+1 (768) 275-2498",
-      "address": "Quis aut atque conse",
-      "balance": "1000",
+      "address": "Quis aut at1e conse",
+      "balance": "7900",
       "deleted": "0",
       "id": 282
+    },
+    {
+      "id": 1,
+      "fullName": "NV1",
+      "phone": "1111",
+      "balance": "1000",
+      "email": "nv1@co.cc",
+      "address": "NV1"
     }
   ],
   "deposits": [],

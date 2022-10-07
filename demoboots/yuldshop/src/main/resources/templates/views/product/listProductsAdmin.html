@@ -1,0 +1,394 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <th:block th:replace="/layout/header :: header"/>
+    <title>Wellcome to Yuld Shop</title>
+</head>
+<body>
+<th:block th:replace="/layout/headerAdmin::headerAdmin"/>
+<div id="list-products-admin" class="container">
+    <h4 class="mt-3">Product Management</h4>
+    <table class="w-100  mt-3 table table-hover table-striped" id="table-products">
+        <thead>
+        <th>#</th>
+        <th>Image</th>
+        <th>Product Name</th>
+        <th>Product Type</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th colspan="2" class="text-center">Action</th>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+<th:block th:replace="/modal/Create :: modalCreate"/>
+<th:block th:replace="/modal/Update::modalUpdate"/>
+<th:block th:replace="/modal/createCategories::modalCreateCategory"/>
+<th:block th:replace="/layout/footerJS::footerJS"/>
+<script>
+    let product = new Product();
+    let category = new Categories();
+
+    $('.dropdown-toggle').dropdown()
+
+
+//load product
+    function loadProduct() {
+        $.ajax({
+            url: "http://localhost:8080/api/products",
+            type: "GET"
+        }).done((data) => {
+            $.each(data, (i, item) => {
+                product = item;
+                renderProductAdmin(product);
+            })
+        })
+    }
+
+    function renderProductAdmin(product) {
+        unbindAll();
+        let str = ` <tr id="${'tr_' + product.id}">
+                <td>${product.id}</td>
+                <td><img src="${product.imgUrl}" alt="" style="width: 150px"></td>
+                <td>${product.productName}</td>
+                <td>${product.category.category}</td>
+                <td>${product.description}</td>
+                <td class="text-center">${product.price}</td>
+                <td>${product.quantity}</td>
+                <td><button class="btn btn-secondary btn-updateP" data-id="${product.id}">Update</button></td>
+                <td><button class="btn btn-danger btn-deletedP" data-id="${product.id}">Delete</button></td>
+            </tr>`
+        $("#table-products tbody").prepend(str);
+        handlerFunction();
+    }
+
+    loadProduct()
+
+ //load categories
+    function loadCategories() {
+        $.ajax({
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            url: "http://localhost:8080/api/categories",
+            type: "GET"
+        }).done((data) => {
+            let str = `<button class="dropdown-item btn-category" onclick="loadProductByCategoryAdmin(-1)">ALL</button>`;
+            let list = `<option value="#">--categories--</option>`;
+            $.each(data, (i, item) => {
+                str += `<button class="dropdown-item btn-category" onclick="loadProductByCategoryAdmin(${item.id})">${item.category}</button>`
+                list += `<option value="${item.id}">${item.category}</option>`
+            })
+            document.getElementById("productCategories").innerHTML = str;
+            document.getElementById("categoriesUp").innerHTML = list;
+            document.getElementById("categoriesCe").innerHTML = list;
+        }).fail((error) => {
+        })
+    }
+
+    function loadProductByCategoryAdmin(id) {
+        let url = "http://localhost:8080/api/products/category/" + id;
+        if (id === -1) {
+            url = "http://localhost:8080/api/products"
+        }
+        $.ajax({
+            url: url,
+            type: "GET",
+        }).done((data) => {
+            $("#table-products tbody tr").remove()
+            $.each(data, (i, item) => {
+                product =item;
+                renderProductAdmin(product);
+            })
+        }).fail((error) => {
+            console.log(error)
+        })
+    }
+
+    loadCategories();
+
+ //update product
+    function updateProduct() {
+        $(".btn-updateP").on("click", function () {
+            let id = $(this).data('id');
+            findProductById(id).then((data) => {
+                $("#productNameUp").val(data.productName)
+                $("#priceUp").val(data.price)
+                $("#quantityUp").val(data.quantity)
+                $("#descriptionUp").val(data.description)
+                $("#fileUp").val(data.imgUrl)
+                $("#categoriesUp").val(data.category)
+                $("#modalUpdate").modal("show");
+            })
+        })
+    }
+
+ //validator form update
+    $("#form-updateP").validate({
+        rules: {
+            productNameUp: {
+                required: true,
+                minlength: 3,
+                maxlength: 20
+            },
+            descriptionUp: {
+                required: true,
+                minlength: 10,
+                maxlength: 100
+            },
+            priceUp: {
+                required: true,
+                min: 1000,
+                max: 1000000000
+            },
+            quantityUp: {
+                required: true,
+                min: 1,
+                max: 1000
+            },
+            fileUp: {
+                required: true
+            },
+            categoriesUp:{
+                required:true
+            }
+        },
+        submitHandler: function () {
+            updateProductById(product.id);
+        }
+    })
+    //end validator
+   function updateProductById(id){
+            product.productName = $("#productNameUp").val()
+            product.price = $("#priceUp").val()
+            product.quantity = $("#quantityUp").val()
+            product.description = $("#descriptionUp").val()
+            product.imgUrl = $("#fileUp").val()
+            category.id = $("#categoriesUp").val()
+            category.category = $( "#categoriesUp option:selected" ).text();
+            product.category = category;
+            product.deleted =false;
+            console.log(product)
+            $.ajax({
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                url: "http://localhost:8080/api/products/" + id,
+                type: "PATCH",
+                data: JSON.stringify(product)
+            }).done((data) => {
+                product =data;
+                let currentRow = $("#tr_"+product.id);
+                console.log(currentRow)
+                let updateRow = ` <tr id="${'#tr_' + product.id}">
+                <td>${product.id}</td>
+                <td><img src="${product.imgUrl}" alt="" style="width: 150px"></td>
+                <td>${product.productName}</td>
+                 <td>${product.category.category}</td>
+                <td>${product.description}</td>
+                <td class="text-center">${product.price}</td>
+                <td>${product.quantity}</td>
+                <td><button class="btn btn-secondary btn-updateP" data-id="${product.id}">Update</button></td>
+                <td><button class="btn btn-danger btn-deteleP" data-id="${product.id}">Delete</button></td>
+            </tr>`
+                console.log(product)
+                currentRow.replaceWith(updateRow);
+                unbindAll();
+                handlerFunction();
+                App.showSuccessAlert("Update is successfully !")
+                $("#productNameUp").val("");
+                $("#priceUp").val("");
+                $("#quantityUp").val("");
+                $("#descriptionUp").val("");
+                $("#fileUp").val("");
+                $("#categoriesUp").val(data.category)
+                $("#modalUpdate").modal("hide");
+            }).fail((err) => {
+                console.log(err);
+            })
+    }
+
+    $("#btnUpdateByAdmin").on('click',()=>{
+        $("#form-updateP").submit();
+    })
+    //end update
+
+    function findProductById(id) {
+        return $.ajax({
+            url: "http://localhost:8080/api/products/" + id,
+            type: "GET"
+        }).done((data) => {
+            product = data;
+        }).fail((error) => {
+            console.log(error)
+        })
+    }
+
+    function handlerFunction() {
+        updateProduct();
+        showConfirmDeleted()
+    }
+
+    function unbindAll() {
+        $(".btn-updateP").off("click");
+        $(".btn-deteleP").off("click");
+        $(".btn-deletedP").off('click')
+    }
+
+
+    //create new product
+    function createNewProduct(){
+        product.id = 0;
+        product.productName = $("#productNameCe").val();
+        product.description = $("#descriptionCe").val();
+        product.quantity = $("#quantityCe").val();
+        product.price = $("#priceCe").val();
+        category.id = $("#categoriesCe").val();
+        category.category = $("#categoriesCe option:selected").text();
+        product.category = category;
+        product.imgUrl = $("#fileCe").val();
+        $.ajax({
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            url: "http://localhost:8080/api/products",
+            type: "POST",
+            data: JSON.stringify(product),
+        }).done((data)=>{
+            product =data;
+            renderProductAdmin(product);
+            App.showSuccessAlert("Create new product is successfully !")
+        }).fail((err)=>{
+            console.log(err)
+        })
+    }
+    $(".formCreateCategory").on("click",()=>{
+        showBoxCreateCategory();
+    })
+    function showBoxCreateCategory(){
+        $("#mdCreateCategory").modal("show");
+    }
+    $("#btn-create-category").on('click', ()=>{
+        category.id = 0;
+        category.category = $("#categoryCe").val()
+        $.ajax({
+            headers:{
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            url: "http://localhost:8080/api/categories",
+            type: "POST",
+            data: JSON.stringify(category)
+        }).done((data)=>{
+            App.showSuccessAlert("Add new Category is successfully !")
+            category =data;
+            loadCategories();
+            window.scroll()
+            $("#categoryCe").val("");
+            $("#mdCreateCategory").modal("hide");
+        }).fail((err)=>{
+            console.log(err)
+        })
+    })
+
+    //showCreateForm
+    function showBoxCreate() {
+        $("#mdCreate").modal("show");
+    }
+    $("#create-products").on('click',()=>{
+        showBoxCreate();
+    })
+    $("#btn-create-product").on('click',()=>{
+        $("#form-create").submit();
+    })
+    $("#form-create").validate({
+        rules: {
+            productNameCe: {
+                required: true,
+                minlength: 3,
+                maxlength: 20
+            },
+            descriptionCe: {
+                required: true,
+                minlength: 10,
+                maxlength: 100
+            },
+            priceCe: {
+                required: true,
+                min: 1000,
+                max: 1000000000
+            },
+            quantityCe: {
+                required: true,
+                min: 1,
+                max: 1000
+            },
+            fileCe:{
+                required: true
+            }
+        },
+        submitHandler: function () {
+            createNewProduct();
+        }
+    })
+
+    //manager cart
+
+    $("#CartBtn").on("click",()=>{
+
+    })
+
+    //deleted product
+    function showConfirmDeleted(){
+        $(".btn-deletedP").on('click', function (){
+            let id = $(this).data('id');
+            App.showDeleteConfirmDialog()
+                .then((result=>{
+                    if (result.isConfirmed){
+                        findProductById(id).then((result)=>{
+                            $.ajax({
+                                headers: {
+                                    'Accept': 'application/json',
+                                    'Content-Type': 'application/json'
+                                },
+                                url: "http://localhost:8080/api/products/delete/"+id,
+                                type: "PATCH",
+                            }).done((data)=>{
+                                $("#tr_"+id).remove();
+                            }).fail((error)=>{
+                                console.log(error)
+                            })
+                        })
+                    }
+                }))
+        })
+    }
+
+    // $(document).ready(function () {
+    //     $('#table-products').DataTable({
+    //       ajax:{
+    //           url:"/api/products",
+    //           dataSrc: ''
+    //       },
+    //         columns:[
+    //             {data : "id"},
+    //             { data: "imgUrl" ,
+    //                 "render": function ( data) {
+    //                     return '<img src="'+data+'" width="150px">'}
+    //             },
+    //             {data :"productName"},
+    //             {data :"category.category"},
+    //             {data: "description"},
+    //             {data: "price"},
+    //             {data:"quantity"}
+    //         ]
+    //     });
+    //
+    // });
+</script>
+</body>
+</html>

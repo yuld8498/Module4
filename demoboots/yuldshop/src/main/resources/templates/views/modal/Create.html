@@ -1,0 +1,61 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<th:block th:fragment="modalCreate">
+  <div class="modal fade overflow-auto" id="mdCreate" tabindex="-1" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Create PRODUCT</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-alert-danger hide">
+          </div>
+          <div class="return-customer" data-spy="scroll">
+            <h3 class="mb-1 custom-title">CREATE NEW PRODUCT</h3>
+            <form action="#" class="form-register" id="form-create" enctype="multipart/form-data">
+              <h5>Product Information</h5>
+              <div class="form-group">
+                <label for="productNameCe">Product Name</label>
+                <input type="text" name="productNameCe" placeholder="Enter product name..."
+                       id="productNameCe" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="descriptionCe">Description</label>
+                <input type="text" name="descriptionCe" placeholder="Enter product description..."
+                       id="descriptionCe"
+                       class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="quantityCe">Quantity</label>
+                <input type="number" name="quantityCe" placeholder="Enter quantity..." id="quantityCe"
+                       class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="priceCe">Price</label>
+                <input type="text" name="priceCe" id="priceCe" placeholder="Enter price..."
+                       class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="fileCe">Img Url</label>
+                <input type="text" name="fileCe" id="fileCe" placeholder="Enter Img Url..."
+                       class="form-control">
+              </div>
+              <div class="form-group">
+                <div for="categoriesCe">Categories</div>
+                <select name="categoriesCe" id="categoriesCe" class="w-25">
+                </select>
+              </div>
+              <a class="btn btn-outline-secondary" onclick="showBoxCreateCategory()">Add New Category</a>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+          <button type="button" id="btn-create-product" class="btn btn-outline-primary">Create Product</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</th:block>

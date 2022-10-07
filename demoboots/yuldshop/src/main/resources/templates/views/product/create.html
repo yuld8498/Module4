@@ -1,0 +1,168 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <th:block th:replace="/layout/header :: header"/>
+    <title>Forgot Password</title>
+</head>
+<body>
+
+<div>
+    <div th:if="${user != null}">
+        <div th:if="${role.getCode().equalsIgnoreCase('user')}">
+            <th:block th:replace="/layout/navBar-login::navBar-login"/>
+        </div>
+        <div th:if="${role.getCode().equalsIgnoreCase('admin')}">
+            <th:block th:replace="/layout/headerAdmin::headerAdmin"/>
+        </div>
+    </div>
+    <div th:if="${user == null}">
+        <th:block th:replace="/layout/navBar::navBar"/>
+    </div>
+</div>
+
+<div class="log-in ptb-100 ptb-sm-60">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="well">
+                    <div class="return-customer">
+                        <h3 class="mb-1 custom-title">CREATE NEW PRODUCT</h3>
+                        <form action="#" class="form-register" id="form-create" enctype="multipart/form-data">
+                            <h5>Product Information</h5>
+                            <div class="form-group">
+                                <label for="productNameCe">Product Name</label>
+                                <input type="text" name="productNameCe" placeholder="Enter product name..."
+                                       id="productNameCe" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="descriptionCe">Description</label>
+                                <input type="text" name="descriptionCe" placeholder="Enter product description..."
+                                       id="descriptionCe"
+                                       class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="quantityCe">Quantity</label>
+                                <input type="number" name="quantityCe" placeholder="Enter quantity..." id="quantityCe"
+                                       class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="priceCe">Price</label>
+                                <input type="text" name="priceCe" id="priceCe" placeholder="Enter price..."
+                                       class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="fileCe">Price</label>
+                                <input type="file" name="fileCe" id="fileCe" placeholder="Enter price..."
+                                       class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <div for="categoriesCe">Categories</div>
+                                <select name="categoriesCe" id="categoriesCe" class="w-25">
+                                </select>
+                            </div>
+                            <input type="button" value="Register" class="btn btn-md btn-info" id="btn-create-product">
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Returning Customer End -->
+        </div>
+        <!-- Row End -->
+    </div>
+    <!-- Container End -->
+</div>
+
+<div>
+    <th:block th:replace="/layout/footerJS::footerJS"/>
+</div>
+<script>
+    let product = new Product();
+    let category = new Categories();
+    let img = new Img();
+
+    $('.dropdown-toggle').dropdown()
+    $.ajax({
+        url: "http://localhost:8080/api/categories",
+        type: "GET"
+    }).done((data) => {
+        let str = ``;
+        let list = `<option value="#">--categories--</option>`;
+        $.each(data, (i, item) => {
+            str += `<a class="dropdown-item" href="http://localhost:8080/api/products?category=${item.id}">${item.category}</a>`
+            list += `<option value="${item.id}">${item.category}</option>`
+        })
+        document.getElementById("productCategories").innerHTML = str;
+
+        document.getElementById("categoriesCe").innerHTML = list;
+    }).fail((error) => {
+        console.log(error)
+    })
+
+    function createNewProduct() {
+        product.id = 0;
+        product.productName = $("#productNameCe").val();
+        product.description = $("#descriptionCe").val();
+        product.quantity = $("#quantityCe").val();
+        product.price = $("#priceCe").val();
+        category.id = $("#categoriesCe").val();
+        category.category = $("#categoriesCe option:selected").text();
+        product.category = category;
+        product.img = img;
+        $.ajax({
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            url: "http://localhost:8080/api/products",
+            type: "POST",
+            data: JSON.stringify(product),
+        }).done((data) => {
+            product =data;
+            App.showSuccessAlert("Create New Product is success !")
+            console.log(data)
+            var img = new FormData();
+            img.append("image", document.getElementById("fileCe").files[0]);
+            img.append("data", product.id);
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "http://localhost:8080/file/img");
+            xhr.send(img);
+            alert(img.values());
+        }).fail((error) => {
+            App.showErrorAlert("error")
+            console.log(error)
+        })
+    }
+
+    $("#form-create").validate({
+        rules: {
+            productNameCe: {
+                required: true,
+                minlength: 3,
+                maxlength: 20
+            },
+            descriptionCe: {
+                required: true,
+                minlength: 10,
+                maxlength: 100
+            },
+            priceCe: {
+                required: true,
+                min: 1000,
+                max: 1000000000
+            },
+            quantityCe: {
+                required: true,
+                min: 1,
+                max: 1000
+            }
+        },
+        submitHandler: function () {
+            createNewProduct();
+        }
+    })
+
+    $("#btn-create-product").on('click',()=>{
+        $("#form-create").submit();
+    })
+</script>
+</body>
+</html>

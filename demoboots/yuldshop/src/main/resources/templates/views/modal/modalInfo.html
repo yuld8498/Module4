@@ -1,0 +1,56 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<th:block th:fragment="modalInfo">
+    <div class="modal fade overflow-auto" id="mdInfo" tabindex="-1" data-backdrop="static" data-keyboard="false" hide>
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="exampleModalLabel">PRODUCT INFORMATION</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-alert-danger show">
+                    </div>
+                    <form id="form-info">
+                        <div class="return-customer row" data-spy="scroll">
+                            <div class="col-lg-6 col-md-12 text-center">
+                                <img id="imgIf" alt="#">
+                            </div>
+                            <div class="col-lg-6 col-md-12">
+                                <div class="mb-1 custom-title">
+                                    <input type="text" id="nameIf" name="nameIf"
+                                           class="font-weight-bold border-0 user-select-none mb-1">
+                                </div>
+                                <div>
+                                    <label for="priceIf"><b>Price : </b></label>
+                                    <input type="text" id="priceIf"
+                                           class="font-md border-0 user-select-none mb-1" name="priceIf" value="1">
+                                </div>
+                                <div>
+                                    <label for="descriptionIf"><b>Description : </b></label>
+                                    <input type="text" id="descriptionIf" class="font-md border-0 w-100 user-select-none"
+                                           name="descriptionIf" value="1">
+                                </div>
+                                <div>
+                                    <label for="typeIf"><b>Type : </b></label>
+                                    <input type="text" id="typeIf" class="font-md border-0 user-select-none mt-2"
+                                           name="typeIf" value="1">
+                                </div>
+                                <div>
+                                    <label for="quantityIf"><b>Quantity : </b></label>
+                                    <input type="number" id="quantityIf" class="font-md info-input user-select-none mt-1"
+                                           name="quantityIf" value="1">
+                                    <div>
+                                    </div>
+                                    <input class="btn btn-outline-danger mt-1" id="btn-add2cart" value="ADD to card">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+</html>

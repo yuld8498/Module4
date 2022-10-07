@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/banking-ajax/boostrap/sweetalert2/sweetalert2.min.css">
+    <script src="https://kit.fontawesome.com/dccec83b30.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/banking-ajax/boostrap/css/bootstrap.min.css">
+</head>
+
+<body>
+<div style="width: 400px; background-color: gray; height: 200px;" >
+ <table class="table table-striped">
+  <tbody class="w-100 text-center">
+    <tr>
+      <td><input type="checkbox" data-id="1" class="checked"></td>
+      <td>ádsd</td>
+      <td>190000</td>
+      <td>
+        <span class="btn btn-danger"><li class="fa-solid fa-minus"></li></span>
+        <span><input type="text" class="w-25"></span>
+        <span class="btn btn-success"><li class="fa-solid fa-add"></li></span>
+      </td>
+    </tr>
+    <tr>
+      <td><input type="checkbox" data-id="2" class="checked"></td>
+      <td>ádsd</td>
+      <td>190000</td>
+      <td>
+        <span class="btn btn-danger"><li class="fa-solid fa-minus"></li></span>
+        <span><input type="text" class="w-25"></span>
+        <span class="btn btn-success"><li class="fa-solid fa-add"></li></span>
+      </td>
+    </tr>
+  </tbody>
+ </table>
+ <button class="btn btn-primary" id="clicks"
+ onclick="ValidatePetSelection()">
+  hello</button>
+</div>
+<script src="/app.js"></script>
+<script src="/banking-ajax/boostrap/js/jquery-3.6.0.js"></script>
+<script src="/banking-ajax/boostrap/js/jquery.validate-1.19.3.min.js"></script>
+<script src="/banking-ajax/boostrap/sweetalert2/sweetalert2.min.js"></script>
+<script src="/banking-ajax/boostrap/js/bootstrap.min.js"></script>
+<script src="/banking-ajax/boostrap/js/bootstrap.bundle.min.js"></script>
+<script src="/banking-ajax/boostrap/js/popper-v1.16.0.min.js"></script>
+<script src="https://kit.fontawesome.com/dccec83b30.js" crossorigin="anonymous"></script>
+<script>
+  function ValidatePetSelection()  
+{  
+    var checkboxes = document.getElementsByClassName("checked");  
+    var numberOfCheckedItems = 0;  
+    for(var i = 0; i < checkboxes.length; i++)  
+    {  
+        if(checkboxes[i].checked){
+         let a= $(checkboxes[i]).data("id");
+         console.log(a)
+        }  
+    }  
+}  
+</script>
+</body>
+
+
+</html>

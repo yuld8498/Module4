@@ -1,0 +1,100 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <th:block th:replace="/layout/header :: header"/>
+    <title>Wellcome to Yuld Shop</title>
+</head>
+<body>
+<div>
+    <th:block th:replace="/layout/navBar :: navBar"/>
+</div>
+<div class="log-in ptb-100 ptb-sm-60">
+    <div class="container">
+        <div class="row">
+            <!-- New Customer Start -->
+            <div class="col-md-6">
+                <div class="well mb-sm-3">
+                    <div class="new-customer">
+                        <h3 class="custom-title">new customer</h3>
+                        <p class="mb-1 mt-1"><strong>Register</strong></p>
+                        <p>By creating an account you will be able to shop faster, be up to date on an order's status,
+                            and keep track of the orders you have previously made</p>
+                        <a class="btn btn-danger" href="http://localhost:8080/users/register">continue</a>
+                    </div>
+                </div>
+            </div>
+            <!-- New Customer End -->
+            <!-- Returning Customer Start -->
+            <div class="col-md-6">
+                <div class="well">
+                    <div class="return-customer">
+                        <h3 class="mb-1 custom-title">returnng customer</h3>
+                        <p class="mb-1"><strong>I am a returning customer</strong></p>
+                        <form>
+                            <div class="form-group">
+                                <label>User Name</label>
+                                <input type="text" name="input-userName" placeholder="Enter your user name..." id="input-userName"
+                                       class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Password</label>
+                                <input type="password" name="input-password" placeholder="Password" id="input-password"
+                                       class="form-control">
+                            </div>
+                            <p class="lost-password"><a href="http://localhost:8080/customers/password">Forgot
+                                password?</a></p>
+                            <input type="button"  value="Login" class="btn btn-md btn-info" id="btn-login">
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Returning Customer End -->
+        </div>
+        <!-- Row End -->
+    </div>
+    <!-- Container End -->
+</div>
+<div>
+    <th:block th:replace="/layout/footerJS::footerJS"/>
+</div>
+<script>
+let user = new User();
+
+    $('.dropdown-toggle').dropdown()
+    $.ajax({
+        url: "http://localhost:8080/api/categories",
+        type: "GET"
+    }).done((data) => {
+        let str = ``;
+        $.each(data, (i, item) => {
+            str += `<a class="dropdown-item" href="http://localhost:8080/api/products?category=${item.id}">${item.category}</a>`
+        })
+        document.getElementById("productCategories").innerHTML = str;
+    }).fail((error) => {
+    })
+
+    $("#btn-login").on('click',()=>{
+        let users={
+            username: $("#input-userName").val(),
+            password:  $("#input-password").val()
+        }
+        $.ajax({
+            headers:{
+                "accept":"application/json",
+               "content-type":"application/json"
+            },
+            type: "POST",
+            url: "http://localhost:8080/api/users/login",
+            data: JSON.stringify(users)
+        }).done((data)=>{
+            user = data;
+            console.log(user)
+            window.location.href="/products";
+        }).fail((error)=>{
+            App.showErrorAlert("User name or password is wrong, please check again !")
+        })
+    })
+
+
+</script>
+</body>
+</html>

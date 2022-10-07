@@ -1,0 +1,242 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <th:block th:replace="/layout/header :: header"/>
+    <title>Wellcome to Yuld Shop</title>
+</head>
+<body>
+<div>
+    <th:block th:replace="/layout/headerAdmin::headerAdmin"/>
+</div>
+<div id="list-products-admin" class="container">
+    <h4 class="mt-3">Product Management</h4>
+    <table class="w-100  mt-3 table table-hover table-striped" id="table-order">
+        <thead>
+        <th>#</th>
+        <th>Customer ID</th>
+        <th>Customer Name</th>
+        <th class="text-center">Location</th>
+        <th>Product ID</th>
+        <th>Product Name</th>
+        <th>Quantity</th>
+        <th>Total Amount</th>
+        <th colspan="2" class="text-center">Action</th>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+<!--modal-->
+<!--modal create-->
+<th:block th:replace="/modal/Create :: modalCreate"/>
+<!--modal create category-->
+<th:block th:replace="/modal/createCategories :: modalCreateCategory"/>
+
+<!--modal info-->
+<th:block th:replace="/modal/modalInfo :: modalInfo"/>
+<!--end modal-->
+<div>
+    <th:block th:replace="/layout/footerJS::footerJS"/>
+</div>
+<script>
+    let product = new Product();
+    let category = new Categories();
+    let cartItems = new CartItems();
+    let orderItem = new OrderItems();
+    cartItems.checked = false;
+
+    $('.dropdown-toggle').dropdown()
+
+
+    //load categories
+    function loadCategories() {
+        $.ajax({
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            url: "http://localhost:8080/api/categories",
+            type: "GET"
+        }).done((data) => {
+            let str = `<button class="dropdown-item btn-category" onclick="loadProductByCategory(-1)">ALL</button>`;
+            let list = `<option value="#">--categories--</option>`;
+            $.each(data, (i, item) => {
+                str += `<button class="dropdown-item btn-category" onclick="loadProductByCategory(${item.id})">${item.category}</button>`
+                list += `<option value="${item.id}">${item.category}</option>`
+            })
+            document.getElementById("productCategories").innerHTML = str;
+            document.getElementById("categoriesCe").innerHTML = list;
+        }).fail((error) => {
+        })
+    }
+
+    loadCategories();
+
+    //show box create category
+    function showBoxCreateCategory() {
+        $("#mdCreateCategory").modal("show");
+    }
+
+    //create new category
+    $("#btn-create-category").on('click', () => {
+        category.id = 0;
+        category.category = $("#categoryCe").val()
+        $.ajax({
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            url: "http://localhost:8080/api/categories",
+            type: "POST",
+            data: JSON.stringify(category)
+        }).done((data) => {
+            App.showSuccessAlert("Add new Category is successfully !")
+            category = data;
+            loadCategories();
+            window.scroll()
+            $("#categoryCe").val("");
+            $("#mdCreateCategory").modal("hide");
+        }).fail((err) => {
+            console.log(err)
+        })
+    })
+
+    //showCreateForm
+
+    function showModalInfo() {
+        $("#mdInfo").modal("show");
+    }
+
+    function showBoxInfo() {
+        $(".btnShowInfo").on("click", function () {
+            let id = $(this).data("id");
+            findProductById(id).then((result) => {
+                product = result;
+                console.log(product)
+                $("#imgIf").attr("src", product.imgUrl);
+                $("#nameIf").val(product.productName)
+                $("#priceIf").val(product.price)
+                $("#typeIf").val(product.category.category)
+                $("#descriptionIf").val(product.description)
+                $("#btn-add2cart").data("id", product.id)
+            })
+            $("#mdInfo").modal("show");
+        })
+    }
+
+    $("#create-products").on('click', () => {
+        $("#mdCreate").modal("show");
+    })
+
+
+    //create new product
+    function createNewProduct() {
+        product.id = 0;
+        product.productName = $("#productNameCe").val();
+        product.description = $("#descriptionCe").val();
+        product.quantity = $("#quantityCe").val();
+        product.price = $("#priceCe").val();
+        category.id = $("#categoriesCe").val();
+        category.category = $("#categoriesCe option:selected").text();
+        product.category = category;
+        product.imgUrl = $("#fileCe").val();
+        $.ajax({
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            url: "http://localhost:8080/api/products",
+            type: "POST",
+            data: JSON.stringify(product),
+        }).done((data) => {
+            product = data;
+            App.showSuccessAlert("Create New Product is success !")
+            renderProduct(product);
+            // var img = new FormData();
+            // img.append("image", document.getElementById("fileCe").files[0]);
+            // img.append("data", product.id);
+            // var xhr = new XMLHttpRequest();
+            // xhr.open("POST", "http://localhost:8080/file/img");
+            // xhr.send(img);
+        }).fail((error) => {
+            App.showErrorAlert("error")
+            console.log(error)
+        })
+    }
+
+    //end create
+
+    //validator form create
+    var imageReg = /[\/.](gif|jpg|jpeg|tiff|png)$/i;
+    $("#form-create").validate({
+        rules: {
+            productNameCe: {
+                required: true,
+                minlength: 3,
+                maxlength: 20
+            },
+            descriptionCe: {
+                required: true,
+                minlength: 10,
+                maxlength: 100
+            },
+            priceCe: {
+                required: true,
+                min: 100,
+                max: 1000000000
+            },
+            quantityCe: {
+                required: true,
+                min: 1,
+                max: 1000
+            },
+            fileCe: {
+                required: true
+            }
+        },
+        submitHandler: function () {
+            createNewProduct();
+        }
+    })
+
+    $("#btn-create-product").on('click', () => {
+        $("#form-create").submit();
+    })
+
+    //render order
+    function renderOrder(orderItem){
+        let str=`<tr id="tr_${orderItem.id}">
+                            <td class="text-center">${orderItem.id}</td>
+                            <td>${orderItem.idCustomer}</td>
+                            <td>${orderItem.customerName}</td>
+                            <td>${orderItem.address} - ${orderItem.wardName} - ${orderItem.districtName} - ${orderItem.provinceName} </td>
+                            <td class="text-center">${orderItem.productId}</td>
+                            <td>${orderItem.productName}</td>
+                            <td class="text-center">${orderItem.quantity}</td>
+                            <td>${orderItem.price}</td>
+                            <td><button class="btn btn-primary">Hello</button></td>
+                            <td><button class="btn btn-primary">Hello</button></td>
+                    </tr>`;
+
+        $("#table-order tbody").append(str);
+    }
+
+    //get order
+    function getAllOrder(){
+        $.ajax({
+            headers:{
+                "accept":"application/json",
+                "content-type":"application/json"
+            },
+            url:"http://localhost:8080/api/orderItems",
+            type:"GET"
+        }).done((data)=>{
+            $.each(data,(i,item)=>{
+                orderItem = item;
+                renderOrder(orderItem);
+            })
+        })
+    }
+    getAllOrder();
+</script>
+</body>
+</html>

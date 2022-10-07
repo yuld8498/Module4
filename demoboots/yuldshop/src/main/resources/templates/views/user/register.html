@@ -1,0 +1,118 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <th:block th:replace="/layout/header::header"/>
+    <title>Register New User</title>
+</head>
+<body>
+<th:block th:replace="/layout/navBar::navBar"/>
+<div class="log-in ptb-100 ptb-sm-60">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="well">
+                    <div class="return-customer">
+                        <h3 class="mb-1 custom-title">REGISTER ACCOUNT</h3>
+                        <p class="mb-1"><strong>If you already have an account with us, please login at the login
+                            page.</strong></p>
+                        <form action="#" class="form-register" id="form-register">
+                            <h5>Account</h5>
+                            <div class="form-group">
+                                <label for="userNameRe">User Name</label>
+                                <input type="text" name="userNameRe" placeholder="Enter your user name..."
+                                       id="userNameRe" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="passwordRe">Password</label>
+                                <input type="password" name="passwordRe" placeholder="Enter your password..."
+                                       id="passwordRe" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="confirmPasswordRe">Confirm Password</label>
+                                <input type="password" name="confirmPasswordRe" placeholder="Confirm Password..."
+                                       id="confirmPasswordRe" class="form-control">
+                            </div>
+                            <input type="button" value="Register" class="btn btn-md btn-info" id="btn-register">
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Returning Customer End -->
+        </div>
+        <!-- Row End -->
+    </div>
+    <!-- Container End -->
+</div>
+<th:block th:replace="/layout/footerJS::footerJS"/>
+<script>
+    let user = new User();
+    let role = new Role();
+
+
+   function createNewUser(){
+           let confirmPW = $("#confirmPasswordRe").val();
+           user.username = $("#userNameRe").val();
+           user.password = $("#passwordRe").val();
+           user.id = 0;
+           role.id = 2;
+           role.code = "USER";
+           role.name = "ROLE_USER";
+           user.role = role;
+           if (confirmPW !== user.password) {
+               return App.showErrorAlert("confirm password and password is not match")
+           }
+           $.ajax({
+               headers: {
+                   'Accept': 'application/json',
+                   'Content-Type': 'application/json'
+               },
+               url: "http://localhost:8080/api/users/register",
+               type: "POST",
+               data: JSON.stringify(user)
+           }).done(() => {
+               App.toastSuccess("Register new user is success !")
+               $("#confirmPasswordRe").val("");
+               $("#userNameRe").val("");
+               $("#passwordRe").val("");
+           }).fail((error) => {
+               iziToast.error({
+                   title: 'ERROR',
+                   position: 'bottomLeft',
+                   timeout: 3000,
+                   message: error.responseText
+               });
+           })
+   }
+
+    $("#form-register").validate({
+        rules:{
+            userNameRe: {
+                required : true,
+                minlength: 8,
+                maxlength:30
+            },
+            passwordRe: {
+                required : true,
+                minlength: 8,
+                maxlength:30,
+                regexPassword: true
+            },
+            confirmPasswordRe: {
+                required : true,
+                equalTo : "#passwordRe"
+            }
+        },
+        submitHandler: function () {
+            createNewUser();
+        }
+    })
+    $("#btn-register").on('click', () => {
+        $("#form-register").submit();
+    })
+
+    //jquery regex
+    jQuery.validator.addMethod("regexPassword", function (value, element){
+        return this.optional(element) || /^([a-zA-Z0-9])(?=.*[\W]).{8,}$/.test(value);
+    },"Password must have at least 8 characters, including at least 1 uppercase character, 1 lowercase character, number and special character");
+</script>
+</body>
+</html>
